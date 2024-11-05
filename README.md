@@ -5,6 +5,7 @@ Qur'an App
 Dicoding final project flutter fundamental.
 
 ## Statemanagement
+
 - GetX
 - BLOC
 
@@ -31,7 +32,7 @@ Dicoding final project flutter fundamental.
 
 - build_runner
 
-![Screenshot 1](/assets/images/home.png)
-![Screenshot 2](/assets/images/search.png)
-![Screenshot 3](/assets/images/detail.png)
-![Screenshot 4](/assets/images/bookmark_page.png)
+![Home Page](/assets/images/home.png width="200")
+![Search Page](/assets/images/search.png)
+![Detail Page](/assets/images/detail.png)
+![Bookmark Page](/assets/images/bookmark_page.png)
