@@ -32,9 +32,21 @@ Dicoding final project flutter fundamental.
 
 - build_runner
 
-<img src="/assets/images/search.png" alt="Home Page" width="200"/>
-
-![Home Page](/assets/images/home.png)
-![Search Page](/assets/images/search.png)
-![Detail Page](/assets/images/detail.png)
-![Bookmark Page](/assets/images/bookmark_page.png)
+<table>
+    <tr>
+        <td>
+            <img src="/assets/images/home.png" width="300"/>
+        </td>
+        <td>
+            <img src="/assets/images/detail.png" width="300"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="/assets/images/search.png" width="300"/>
+        </td>
+        <td>
+            <img src="/assets/images/bookmark_page.png" width="300"/>
+        </td>
+    </tr>
+</table>
