@@ -1,4 +1,12 @@
 class MyImage {
+  static final MyImage _instance = MyImage._internal();
+
+  MyImage._internal();
+
+  factory MyImage() {
+    return _instance;
+  }
+
   static const String bgSplash = 'assets/images/bg_splash.png';
   static const String quran = 'assets/images/quran.png';
   static const String menu = 'assets/images/menu.png';

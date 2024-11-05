@@ -4,6 +4,14 @@ import 'package:quran_app/data/model/detail_model.dart';
 import 'package:quran_app/data/model/surah_model.dart';
 
 class QuranDatasource {
+  static final QuranDatasource _instance = QuranDatasource._internal();
+
+  QuranDatasource._internal();
+
+  factory QuranDatasource() {
+    return _instance;
+  }
+
   Future<HTTPModel> getSurah() async {
     try {
       String response = await C.dioGet(

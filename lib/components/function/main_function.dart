@@ -18,10 +18,16 @@ part 'navigation_com.dart';
 part 'datetime_com.dart';
 part 'get_storage_com.dart';
 
-MainFunction get C => MainFunction._internal();
+MainFunction get C => MainFunction();
 
 class MainFunction with ApiService, NavigationCom, DatetimeComponent, GetStorageComponent {
+  static final MainFunction _instance = MainFunction._internal();
+
   MainFunction._internal();
+
+  factory MainFunction() {
+    return _instance;
+  }
 
   String cleanString(String input) {
     return input.replaceAll(RegExp(r'[\u0000-\u001F\u007F-\u009F\u202E\u2060\u200B-\u200F\u202A-\u202E]'), '');

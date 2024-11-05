@@ -3,6 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:quran_app/data/constant/color.dart';
 
 class MainStyle {
+  static final MainStyle _instance = MainStyle._internal();
+
+  MainStyle._internal();
+
+  factory MainStyle() {
+    return _instance;
+  }
+
   static ThemeData light = ThemeData(
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColorConfig.white,
@@ -26,7 +34,7 @@ class MainStyle {
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
         systemNavigationBarColor: AppColorConfig.bgBottom,
         systemNavigationBarIconBrightness: Brightness.light,
         systemNavigationBarDividerColor: AppColorConfig.bgBottom,

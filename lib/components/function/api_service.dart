@@ -1,7 +1,7 @@
 part of 'main_function.dart';
 
 mixin ApiService {
-  Future<String> dioGet({String? url, String? requestName}) async {
+  Future<String> dioGet({required String url, required String requestName}) async {
     http.Dio dio = http.Dio();
     dynamic cResponse;
     try {

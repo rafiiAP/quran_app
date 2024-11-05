@@ -16,8 +16,14 @@ part 'button_widget.dart';
 part 'padding_widget.dart';
 part 'input_widget.dart';
 
-MainWidget get W => MainWidget._internal();
+MainWidget get W => MainWidget();
 
 class MainWidget with BottomsheetWidget, TextWidget, ButtonWidget, PaddingWidget, InputWidget {
+  static final MainWidget _instance = MainWidget._internal();
+
   MainWidget._internal();
+
+  factory MainWidget() {
+    return _instance;
+  }
 }
