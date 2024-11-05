@@ -46,7 +46,7 @@ Dicoding final project flutter fundamental.
             <img src="/assets/images/search.png" width="300"/>
         </td>
         <td>
-            <img src="/assets/images/bookmark_page.png" style="width: 400px; height: 600px;"/>
+            <img src="/assets/images/bookmark_page.png" style="width: 260px; height: 510px;"/>
         </td>
     </tr>
 </table>
