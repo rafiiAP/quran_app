@@ -9,7 +9,7 @@ import 'package:quran_app/data/constant/image.dart';
 import 'package:quran_app/data/model/surah_model.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
 import 'package:quran_app/presentation/controller/dashboard/home_getx.dart';
-import 'package:quran_app/presentation/controller/detail_surah/bloc/detail_surah_bloc.dart';
+import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});

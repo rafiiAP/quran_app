@@ -78,9 +78,6 @@ mixin ApiService {
             data: data,
             options: http.Options(
               headers: headers,
-              // receiveDataWhenStatusError: true,
-              // sendTimeout: 300,
-              // receiveTimeout: 300,
             ),
           )
           .timeout(Duration(

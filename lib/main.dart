@@ -9,7 +9,7 @@ import 'package:quran_app/components/style.dart';
 import 'package:quran_app/data/db/database_helper.dart';
 import 'package:quran_app/main_getx.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
-import 'package:quran_app/presentation/controller/detail_surah/bloc/detail_surah_bloc.dart';
+import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
 
 import 'data/constant/color.dart';
 import 'injection.dart' as di;

@@ -4,9 +4,10 @@ import 'package:quran_app/data/datasources/quran/quran_datasource.dart';
 import 'package:quran_app/data/model/detail_model.dart';
 import 'package:quran_app/data/model/surah_model.dart';
 import 'package:quran_app/domain/repositories/quran_repository.dart';
+import 'package:quran_app/injection.dart';
 
 class QuranRepositoryImpl extends QuranRepository {
-  QuranDatasource quranDatasource = QuranDatasource();
+  final quranDatasource = locator<QuranDatasource>();
 
   @override
   Future<Either<Failure, HTTPModel>> getSurah() async {

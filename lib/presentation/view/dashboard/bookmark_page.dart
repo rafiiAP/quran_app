@@ -6,7 +6,7 @@ import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
 import 'package:quran_app/presentation/controller/dashboard/bookmark_getx.dart';
-import 'package:quran_app/presentation/controller/detail_surah/bloc/detail_surah_bloc.dart';
+import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
 
 class BookmarkPage extends StatelessWidget {
   BookmarkPage({super.key});

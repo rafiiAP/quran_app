@@ -4,14 +4,6 @@ import 'package:quran_app/data/model/detail_model.dart';
 import 'package:quran_app/data/model/surah_model.dart';
 
 class QuranDatasource {
-  static final QuranDatasource _instance = QuranDatasource._internal();
-
-  QuranDatasource._internal();
-
-  factory QuranDatasource() {
-    return _instance;
-  }
-
   Future<HTTPModel> getSurah() async {
     try {
       String response = await C.dioGet(
@@ -33,8 +25,9 @@ class QuranDatasource {
         requestName: 'getDetailSurah',
       );
       return HttpDetailModel.fromJson(response);
+    } on DioException catch (e) {
+      throw Exception(e.toString());
     } catch (e) {
-      C.showLog(log: e.toString());
       throw Exception(e.toString());
     }
   }
