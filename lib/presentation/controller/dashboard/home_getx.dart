@@ -6,8 +6,7 @@ import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/config.dart';
 import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
-import 'package:quran_app/domain/use_case/quran_usecase.dart';
-import 'package:quran_app/injection.dart';
+
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
 import 'package:quran_app/presentation/view/serach_page/search_page.dart';
@@ -15,8 +14,6 @@ import 'package:quran_app/presentation/view/serach_page/search_page.dart';
 import '../../view/detail_surah/detail_surah_page.dart';
 
 class HomeGetx extends GetxController {
-  final quranUsecase = locator<QuranUsecase>();
-
   Rx<List<SurahEntity>> surahList = Rx<List<SurahEntity>>([]);
 
   var cNamaLatin = ''.obs;
