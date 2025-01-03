@@ -6,7 +6,7 @@ import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/db/database_helper.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
-import 'package:quran_app/data/model/detail_model.dart';
+import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
 import 'package:quran_app/presentation/view/detail_surah/detail_surah_page.dart';
 
@@ -47,9 +47,9 @@ class BookmarkGetx extends GetxController {
     context.read<DetailSurahBloc>().add(DetailSurahEvent.getDetailSurah(data.nomorSurah));
   }
 
-  onSuccesDetailSurah(DetailModel data) {
+  onSuccesDetailSurah(DetailEntity data) {
     W.endwait();
 
-    C.to(() => DetailSurahPage(detailModel: data))!.then((_) => init());
+    C.to(() => DetailSurahPage(detailEntity: data))!.then((_) => init());
   }
 }

@@ -6,7 +6,7 @@ import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/constant/image.dart';
-import 'package:quran_app/data/model/surah_model.dart';
+import 'package:quran_app/domain/entity/surah_entity.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
 import 'package:quran_app/presentation/controller/dashboard/home_getx.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
@@ -87,8 +87,8 @@ class HomePage extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: c.surahList.value.length,
                     itemBuilder: (context, index) {
-                      SurahModel surahModel = c.surahList.value[index];
-                      return listSurah(surahModel);
+                      SurahEntity surahEntity = c.surahList.value[index];
+                      return listSurah(surahEntity);
                     },
                   ),
                 ),
@@ -160,10 +160,10 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  listSurah(SurahModel surahModel) {
+  listSurah(SurahEntity surahEntity) {
     return InkWell(
       onTap: () {
-        c.getDetailSurah(surahModel);
+        c.getDetailSurah(surahEntity);
       },
       borderRadius: BorderRadius.circular(15),
       child: Column(
@@ -186,7 +186,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     child: W.textBody(
-                      text: surahModel.nomor.toString(),
+                      text: surahEntity.nomor.toString(),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -195,12 +195,12 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       W.textBody(
-                        text: surahModel.namaLatin!,
+                        text: surahEntity.namaLatin,
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
                       W.textBody(
-                        text: '${surahModel.tempatTurun!} - ${surahModel.jumlahAyat!} ayat',
+                        text: '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
                         fontWeight: FontWeight.w500,
                         color: AppColorConfig.grey,
                       ),
@@ -209,7 +209,7 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               W.textBody(
-                text: surahModel.nama!,
+                text: surahEntity.nama,
                 color: AppColorConfig.primary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

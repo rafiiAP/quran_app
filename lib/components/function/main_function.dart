@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:quran_app/data/model/surah_model.dart';
+import 'package:quran_app/domain/entity/surah_entity.dart';
 
 import '../../data/constant/config.dart';
 import '../widgets/main_widget.dart';

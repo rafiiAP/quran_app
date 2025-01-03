@@ -329,7 +329,7 @@ mixin _$DetailSurahState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(DetailModel detailModel) loaded,
+    required TResult Function(DetailEntity detailModel) loaded,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -337,7 +337,7 @@ mixin _$DetailSurahState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(DetailModel detailModel)? loaded,
+    TResult? Function(DetailEntity detailModel)? loaded,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -345,7 +345,7 @@ mixin _$DetailSurahState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(DetailModel detailModel)? loaded,
+    TResult Function(DetailEntity detailModel)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -441,7 +441,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(DetailModel detailModel) loaded,
+    required TResult Function(DetailEntity detailModel) loaded,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -452,7 +452,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(DetailModel detailModel)? loaded,
+    TResult? Function(DetailEntity detailModel)? loaded,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -463,7 +463,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(DetailModel detailModel)? loaded,
+    TResult Function(DetailEntity detailModel)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -558,7 +558,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(DetailModel detailModel) loaded,
+    required TResult Function(DetailEntity detailModel) loaded,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -569,7 +569,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(DetailModel detailModel)? loaded,
+    TResult? Function(DetailEntity detailModel)? loaded,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -580,7 +580,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(DetailModel detailModel)? loaded,
+    TResult Function(DetailEntity detailModel)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -638,7 +638,7 @@ abstract class _$$SuccessImplCopyWith<$Res> {
           _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
       __$$SuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({DetailModel detailModel});
+  $Res call({DetailEntity detailModel});
 }
 
 /// @nodoc
@@ -654,13 +654,13 @@ class __$$SuccessImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? detailModel = freezed,
+    Object? detailModel = null,
   }) {
     return _then(_$SuccessImpl(
-      freezed == detailModel
+      null == detailModel
           ? _value.detailModel
           : detailModel // ignore: cast_nullable_to_non_nullable
-              as DetailModel,
+              as DetailEntity,
     ));
   }
 }
@@ -671,7 +671,7 @@ class _$SuccessImpl implements _Success {
   const _$SuccessImpl(this.detailModel);
 
   @override
-  final DetailModel detailModel;
+  final DetailEntity detailModel;
 
   @override
   String toString() {
@@ -683,13 +683,12 @@ class _$SuccessImpl implements _Success {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuccessImpl &&
-            const DeepCollectionEquality()
-                .equals(other.detailModel, detailModel));
+            (identical(other.detailModel, detailModel) ||
+                other.detailModel == detailModel));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(detailModel));
+  int get hashCode => Object.hash(runtimeType, detailModel);
 
   /// Create a copy of DetailSurahState
   /// with the given fields replaced by the non-null parameter values.
@@ -704,7 +703,7 @@ class _$SuccessImpl implements _Success {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(DetailModel detailModel) loaded,
+    required TResult Function(DetailEntity detailModel) loaded,
     required TResult Function(String message) error,
   }) {
     return loaded(detailModel);
@@ -715,7 +714,7 @@ class _$SuccessImpl implements _Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(DetailModel detailModel)? loaded,
+    TResult? Function(DetailEntity detailModel)? loaded,
     TResult? Function(String message)? error,
   }) {
     return loaded?.call(detailModel);
@@ -726,7 +725,7 @@ class _$SuccessImpl implements _Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(DetailModel detailModel)? loaded,
+    TResult Function(DetailEntity detailModel)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -775,9 +774,9 @@ class _$SuccessImpl implements _Success {
 }
 
 abstract class _Success implements DetailSurahState {
-  const factory _Success(final DetailModel detailModel) = _$SuccessImpl;
+  const factory _Success(final DetailEntity detailModel) = _$SuccessImpl;
 
-  DetailModel get detailModel;
+  DetailEntity get detailModel;
 
   /// Create a copy of DetailSurahState
   /// with the given fields replaced by the non-null parameter values.
@@ -856,7 +855,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(DetailModel detailModel) loaded,
+    required TResult Function(DetailEntity detailModel) loaded,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -867,7 +866,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(DetailModel detailModel)? loaded,
+    TResult? Function(DetailEntity detailModel)? loaded,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -878,7 +877,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(DetailModel detailModel)? loaded,
+    TResult Function(DetailEntity detailModel)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {

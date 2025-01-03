@@ -1,8 +1,8 @@
-import 'package:quran_app/data/model/detail_model.dart';
-import 'package:quran_app/data/model/surah_model.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:equatable/equatable.dart';
+import 'package:quran_app/domain/entity/detail_entity.dart';
+import 'package:quran_app/domain/entity/surah_entity.dart';
 
 abstract class Failure extends Equatable {
   final String message;
@@ -25,7 +25,7 @@ class ResponseFailure extends Failure {
 }
 
 abstract class QuranRepository {
-  Future<Either<Failure, HTTPModel>> getSurah();
+  Future<Either<Failure, List<SurahEntity>>> getSurah();
 
-  Future<Either<Failure, HttpDetailModel>> getDetailSurah({required int nomor});
+  Future<Either<Failure, DetailEntity>> getDetailSurah({required int nomor});
 }

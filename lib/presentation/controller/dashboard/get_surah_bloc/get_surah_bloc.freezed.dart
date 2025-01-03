@@ -293,7 +293,7 @@ mixin _$GetSurahState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SurahModel> surah) success,
+    required TResult Function(List<SurahEntity> surah) success,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -301,7 +301,7 @@ mixin _$GetSurahState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SurahModel> surah)? success,
+    TResult? Function(List<SurahEntity> surah)? success,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -309,7 +309,7 @@ mixin _$GetSurahState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SurahModel> surah)? success,
+    TResult Function(List<SurahEntity> surah)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -405,7 +405,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SurahModel> surah) success,
+    required TResult Function(List<SurahEntity> surah) success,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -416,7 +416,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SurahModel> surah)? success,
+    TResult? Function(List<SurahEntity> surah)? success,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -427,7 +427,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SurahModel> surah)? success,
+    TResult Function(List<SurahEntity> surah)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -522,7 +522,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SurahModel> surah) success,
+    required TResult Function(List<SurahEntity> surah) success,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -533,7 +533,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SurahModel> surah)? success,
+    TResult? Function(List<SurahEntity> surah)? success,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -544,7 +544,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SurahModel> surah)? success,
+    TResult Function(List<SurahEntity> surah)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -602,7 +602,7 @@ abstract class _$$SuccessImplCopyWith<$Res> {
           _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
       __$$SuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<SurahModel> surah});
+  $Res call({List<SurahEntity> surah});
 }
 
 /// @nodoc
@@ -624,7 +624,7 @@ class __$$SuccessImplCopyWithImpl<$Res>
       null == surah
           ? _value._surah
           : surah // ignore: cast_nullable_to_non_nullable
-              as List<SurahModel>,
+              as List<SurahEntity>,
     ));
   }
 }
@@ -632,11 +632,11 @@ class __$$SuccessImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SuccessImpl implements _Success {
-  const _$SuccessImpl(final List<SurahModel> surah) : _surah = surah;
+  const _$SuccessImpl(final List<SurahEntity> surah) : _surah = surah;
 
-  final List<SurahModel> _surah;
+  final List<SurahEntity> _surah;
   @override
-  List<SurahModel> get surah {
+  List<SurahEntity> get surah {
     if (_surah is EqualUnmodifiableListView) return _surah;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_surah);
@@ -672,7 +672,7 @@ class _$SuccessImpl implements _Success {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SurahModel> surah) success,
+    required TResult Function(List<SurahEntity> surah) success,
     required TResult Function(String message) error,
   }) {
     return success(surah);
@@ -683,7 +683,7 @@ class _$SuccessImpl implements _Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SurahModel> surah)? success,
+    TResult? Function(List<SurahEntity> surah)? success,
     TResult? Function(String message)? error,
   }) {
     return success?.call(surah);
@@ -694,7 +694,7 @@ class _$SuccessImpl implements _Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SurahModel> surah)? success,
+    TResult Function(List<SurahEntity> surah)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -743,9 +743,9 @@ class _$SuccessImpl implements _Success {
 }
 
 abstract class _Success implements GetSurahState {
-  const factory _Success(final List<SurahModel> surah) = _$SuccessImpl;
+  const factory _Success(final List<SurahEntity> surah) = _$SuccessImpl;
 
-  List<SurahModel> get surah;
+  List<SurahEntity> get surah;
 
   /// Create a copy of GetSurahState
   /// with the given fields replaced by the non-null parameter values.
@@ -824,7 +824,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SurahModel> surah) success,
+    required TResult Function(List<SurahEntity> surah) success,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -835,7 +835,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SurahModel> surah)? success,
+    TResult? Function(List<SurahEntity> surah)? success,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -846,7 +846,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SurahModel> surah)? success,
+    TResult Function(List<SurahEntity> surah)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {

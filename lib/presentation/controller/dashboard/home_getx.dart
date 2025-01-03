@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/config.dart';
-import 'package:quran_app/data/model/detail_model.dart';
-import 'package:quran_app/data/model/surah_model.dart';
+import 'package:quran_app/domain/entity/detail_entity.dart';
+import 'package:quran_app/domain/entity/surah_entity.dart';
 import 'package:quran_app/domain/use_case/quran_usecase.dart';
 import 'package:quran_app/injection.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
@@ -17,7 +17,7 @@ import '../../view/detail_surah/detail_surah_page.dart';
 class HomeGetx extends GetxController {
   final quranUsecase = locator<QuranUsecase>();
 
-  Rx<List<SurahModel>> surahList = Rx<List<SurahModel>>([]);
+  Rx<List<SurahEntity>> surahList = Rx<List<SurahEntity>>([]);
 
   var cNamaLatin = ''.obs;
   var nNomorAyat = 0.obs;
@@ -45,22 +45,22 @@ class HomeGetx extends GetxController {
     context.read<GetSurahBloc>().add(const GetSurahEvent.getSurah());
   }
 
-  onSuccesGetSurah(List<SurahModel> data) {
+  onSuccesGetSurah(List<SurahEntity> data) {
     W.endwait();
     surahList.value = data;
   }
 
-  getDetailSurah(SurahModel data) {
-    C.setString(cKey: AppConfig.cacheNamaLatin, cValue: data.namaLatin!);
-    C.setInt(cKey: AppConfig.cacheNomorAyat, nValue: data.nomor!);
+  getDetailSurah(SurahEntity data) {
+    C.setString(cKey: AppConfig.cacheNamaLatin, cValue: data.namaLatin);
+    C.setInt(cKey: AppConfig.cacheNomorAyat, nValue: data.nomor);
     BuildContext context = Get.context!;
-    context.read<DetailSurahBloc>().add(DetailSurahEvent.getDetailSurah(data.nomor!));
+    context.read<DetailSurahBloc>().add(DetailSurahEvent.getDetailSurah(data.nomor));
   }
 
-  onSuccesDetailSurah(DetailModel data) {
+  onSuccesDetailSurah(DetailEntity data) {
     W.endwait();
 
-    C.to(() => DetailSurahPage(detailModel: data))!.then((_) {
+    C.to(() => DetailSurahPage(detailEntity: data))!.then((_) {
       getLastRead();
     });
   }

@@ -18,16 +18,16 @@ mixin GetStorageComponent {
 
   Future setModel({
     required String cKey,
-    required SurahModel cValue,
+    required SurahEntity cValue,
   }) async {
     return gs.write(cKey, cValue);
   }
 
-  SurahModel getModel({
+  SurahEntity getModel({
     required String cKey,
   }) {
     C.showLog(log: '--${gs.read(cKey)}');
-    return gs.read(cKey) ?? SurahModel();
+    return gs.read(cKey);
   }
 
   String getString({

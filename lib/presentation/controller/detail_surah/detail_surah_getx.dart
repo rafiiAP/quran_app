@@ -5,12 +5,12 @@ import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/db/database_helper.dart';
-import 'package:quran_app/data/model/detail_model.dart';
+import 'package:quran_app/domain/entity/detail_entity.dart';
 
 class DetailSurahGetx extends GetxController {
   DatabaseHelper dbHelper = DatabaseHelper();
 
-  onTapShare(AyatModel ayatModel) {
+  onTapShare(AyatDetailEntity ayatModel) {
     Clipboard.setData(
       ClipboardData(
         text: '${ayatModel.teksArab}\n${ayatModel.teksIndonesia}',
@@ -20,7 +20,7 @@ class DetailSurahGetx extends GetxController {
     });
   }
 
-  onTapList(BuildContext context, AyatModel ayatModel, DetailModel detailModel) {
+  onTapList(BuildContext context, AyatDetailEntity ayatModel, DetailEntity detailModel) {
     W.showBottomSheet(
       backgroundColor: C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.white,
       bottomSheet: Container(

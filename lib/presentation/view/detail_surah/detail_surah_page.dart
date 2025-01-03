@@ -4,12 +4,12 @@ import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/constant/image.dart';
-import 'package:quran_app/data/model/detail_model.dart';
+import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_getx.dart';
 
 class DetailSurahPage extends StatelessWidget {
-  final DetailModel detailModel;
-  DetailSurahPage({super.key, required this.detailModel});
+  final DetailEntity detailEntity;
+  DetailSurahPage({super.key, required this.detailEntity});
 
   final c = Get.put(DetailSurahGetx());
 
@@ -18,7 +18,7 @@ class DetailSurahPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        title: W.title(text: detailModel.namaLatin!),
+        title: W.title(text: detailEntity.namaLatin),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -29,12 +29,12 @@ class DetailSurahPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 32),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: detailModel.ayat!.length,
+              itemCount: detailEntity.ayat.length,
               itemBuilder: (context, index) {
-                AyatModel ayatModel = detailModel.ayat![index];
+                AyatDetailEntity ayatDetailEntity = detailEntity.ayat[index];
                 return InkWell(
                   onTap: () {
-                    c.onTapList(context, ayatModel, detailModel);
+                    c.onTapList(context, ayatDetailEntity, detailEntity);
                   },
                   child: Column(
                     children: [
@@ -51,7 +51,7 @@ class DetailSurahPage extends StatelessWidget {
                               radius: 13,
                               backgroundColor: AppColorConfig.primary,
                               child: W.textBody(
-                                text: ayatModel.nomorAyat.toString(),
+                                text: ayatDetailEntity.nomorAyat.toString(),
                                 color: AppColorConfig.white,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -59,7 +59,7 @@ class DetailSurahPage extends StatelessWidget {
                             const Spacer(),
                             GestureDetector(
                               onTap: () {
-                                c.onTapShare(ayatModel);
+                                c.onTapShare(ayatDetailEntity);
                               },
                               child: const Icon(
                                 Icons.share,
@@ -78,7 +78,7 @@ class DetailSurahPage extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                ayatModel.teksArab!,
+                                ayatDetailEntity.teksArab,
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class DetailSurahPage extends StatelessWidget {
                             ),
                             W.paddingheight16(),
                             Text(
-                              ayatModel.teksLatin!,
+                              ayatDetailEntity.teksLatin,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontStyle: FontStyle.italic,
@@ -97,7 +97,7 @@ class DetailSurahPage extends StatelessWidget {
                             ),
                             W.paddingheight5(),
                             W.textBody(
-                              text: ayatModel.teksIndonesia!,
+                              text: ayatDetailEntity.teksIndonesia,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
@@ -136,13 +136,13 @@ class DetailSurahPage extends StatelessWidget {
       child: Column(
         children: [
           W.textBody(
-            text: detailModel.namaLatin!,
+            text: detailEntity.namaLatin,
             color: AppColorConfig.white,
             fontSize: 26,
             fontWeight: FontWeight.w500,
           ),
           W.textBody(
-            text: detailModel.arti!,
+            text: detailEntity.arti,
             color: AppColorConfig.white,
             fontSize: 18,
             fontWeight: FontWeight.w500,
@@ -153,7 +153,7 @@ class DetailSurahPage extends StatelessWidget {
                 color: AppColorConfig.white,
               )),
           W.textBody(
-            text: '${detailModel.tempatTurun!} - ${detailModel.jumlahAyat} Ayat',
+            text: '${detailEntity.tempatTurun} - ${detailEntity.jumlahAyat} Ayat',
             color: AppColorConfig.white,
             fontWeight: FontWeight.w500,
             fontSize: 16,

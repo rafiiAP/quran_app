@@ -1,58 +1,60 @@
 import 'dart:convert';
 
-class HttpDetailModel {
-  int? code;
-  String? message;
-  DetailModel? data;
+import 'package:equatable/equatable.dart';
+import 'package:quran_app/domain/entity/detail_entity.dart';
 
-  HttpDetailModel({
-    this.code,
-    this.message,
-    this.data,
+class ResponseDetailModel extends Equatable {
+  final int code;
+  final String message;
+  final DetailModel data;
+
+  const ResponseDetailModel({
+    required this.code,
+    required this.message,
+    required this.data,
   });
 
-  factory HttpDetailModel.fromJson(String str) => HttpDetailModel.fromMap(json.decode(str));
+  factory ResponseDetailModel.fromJson(String str) => ResponseDetailModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory HttpDetailModel.fromMap(Map<String, dynamic> json) => HttpDetailModel(
+  factory ResponseDetailModel.fromMap(Map<String, dynamic> json) => ResponseDetailModel(
         code: json["code"],
         message: json["message"],
-        data: json["data"] == null ? null : DetailModel.fromMap(json["data"]),
+        data: DetailModel.fromMap(json["data"]),
       );
 
   Map<String, dynamic> toMap() => {
         "code": code,
         "message": message,
-        "data": data?.toMap(),
+        "data": data.toMap(),
       };
+
+  @override
+  List<Object?> get props => [code, message, data];
 }
 
-class DetailModel {
-  int? nomor;
-  String? nama;
-  String? namaLatin;
-  int? jumlahAyat;
-  String? tempatTurun;
-  String? arti;
-  String? deskripsi;
-  Map<String, String>? audioFull;
-  List<AyatModel>? ayat;
-  dynamic suratSelanjutnya;
-  dynamic suratSebelumnya;
+class DetailModel extends Equatable {
+  final int nomor;
+  final String nama;
+  final String namaLatin;
+  final int jumlahAyat;
+  final String tempatTurun;
+  final String arti;
+  final String deskripsi;
+  final Map<String, String> audioFull;
+  final List<AyatDetailModel> ayat;
 
-  DetailModel({
-    this.nomor,
-    this.nama,
-    this.namaLatin,
-    this.jumlahAyat,
-    this.tempatTurun,
-    this.arti,
-    this.deskripsi,
-    this.audioFull,
-    this.ayat,
-    this.suratSelanjutnya,
-    this.suratSebelumnya,
+  const DetailModel({
+    required this.nomor,
+    required this.nama,
+    required this.namaLatin,
+    required this.jumlahAyat,
+    required this.tempatTurun,
+    required this.arti,
+    required this.deskripsi,
+    required this.audioFull,
+    required this.ayat,
   });
 
   factory DetailModel.fromJson(String str) => DetailModel.fromMap(json.decode(str));
@@ -67,14 +69,8 @@ class DetailModel {
         tempatTurun: json["tempatTurun"],
         arti: json["arti"],
         deskripsi: json["deskripsi"],
-        audioFull: Map.from(json["audioFull"]!).map((k, v) => MapEntry<String, String>(k, v)),
-        ayat: json["ayat"] == null ? [] : List<AyatModel>.from(json["ayat"]!.map((x) => AyatModel.fromMap(x))),
-        suratSelanjutnya: json["suratSelanjutnya"] is bool
-            ? json["suratSelanjutnya"]
-            : SuratSelanjutnya.fromMap(json["suratSelanjutnya"]),
-        suratSebelumnya: json["suratSebelumnya"] is bool
-            ? json["suratSebelumnya"]
-            : SuratSelanjutnya.fromMap(json["suratSebelumnya"]),
+        audioFull: Map.from(json["audioFull"]).map((k, v) => MapEntry<String, String>(k, v)),
+        ayat: List<AyatDetailModel>.from(json["ayat"].map((x) => AyatDetailModel.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -85,38 +81,52 @@ class DetailModel {
         "tempatTurun": tempatTurun,
         "arti": arti,
         "deskripsi": deskripsi,
-        "audioFull": Map.from(audioFull!).map((k, v) => MapEntry<String, dynamic>(k, v)),
-        "ayat": ayat == null ? [] : List<dynamic>.from(ayat!.map((x) => x.toMap())),
-        "suratSelanjutnya": suratSelanjutnya?.toMap(),
-        "suratSebelumnya": suratSebelumnya,
+        "audioFull": Map.from(audioFull).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "ayat": List<dynamic>.from(ayat.map((x) => x.toMap())),
       };
+
+  DetailEntity toEntity() {
+    return DetailEntity(
+        nomor: nomor,
+        nama: nama,
+        namaLatin: namaLatin,
+        jumlahAyat: jumlahAyat,
+        tempatTurun: tempatTurun,
+        arti: arti,
+        deskripsi: deskripsi,
+        audioFull: audioFull,
+        ayat: ayat.map((x) => x.toEntity()).toList());
+  }
+
+  @override
+  List<Object?> get props => [nomor, nama, namaLatin, jumlahAyat, tempatTurun, arti, deskripsi, audioFull, ayat];
 }
 
-class AyatModel {
-  int? nomorAyat;
-  String? teksArab;
-  String? teksLatin;
-  String? teksIndonesia;
-  Map<String, String>? audio;
+class AyatDetailModel extends Equatable {
+  final int nomorAyat;
+  final String teksArab;
+  final String teksLatin;
+  final String teksIndonesia;
+  final Map<String, String> audio;
 
-  AyatModel({
-    this.nomorAyat,
-    this.teksArab,
-    this.teksLatin,
-    this.teksIndonesia,
-    this.audio,
+  const AyatDetailModel({
+    required this.nomorAyat,
+    required this.teksArab,
+    required this.teksLatin,
+    required this.teksIndonesia,
+    required this.audio,
   });
 
-  factory AyatModel.fromJson(String str) => AyatModel.fromMap(json.decode(str));
+  factory AyatDetailModel.fromJson(String str) => AyatDetailModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory AyatModel.fromMap(Map<String, dynamic> json) => AyatModel(
+  factory AyatDetailModel.fromMap(Map<String, dynamic> json) => AyatDetailModel(
         nomorAyat: json["nomorAyat"],
         teksArab: json["teksArab"],
         teksLatin: json["teksLatin"],
         teksIndonesia: json["teksIndonesia"],
-        audio: Map.from(json["audio"]!).map((k, v) => MapEntry<String, String>(k, v)),
+        audio: Map.from(json["audio"]).map((k, v) => MapEntry<String, String>(k, v)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -124,38 +134,19 @@ class AyatModel {
         "teksArab": teksArab,
         "teksLatin": teksLatin,
         "teksIndonesia": teksIndonesia,
-        "audio": Map.from(audio!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "audio": Map.from(audio).map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
-}
 
-class SuratSelanjutnya {
-  int? nomor;
-  String? nama;
-  String? namaLatin;
-  int? jumlahAyat;
+  AyatDetailEntity toEntity() {
+    return AyatDetailEntity(
+      nomorAyat: nomorAyat,
+      teksArab: teksArab,
+      teksLatin: teksLatin,
+      teksIndonesia: teksIndonesia,
+      audio: audio,
+    );
+  }
 
-  SuratSelanjutnya({
-    this.nomor,
-    this.nama,
-    this.namaLatin,
-    this.jumlahAyat,
-  });
-
-  factory SuratSelanjutnya.fromJson(String str) => SuratSelanjutnya.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory SuratSelanjutnya.fromMap(Map<String, dynamic> json) => SuratSelanjutnya(
-        nomor: json["nomor"],
-        nama: json["nama"],
-        namaLatin: json["namaLatin"],
-        jumlahAyat: json["jumlahAyat"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "nomor": nomor,
-        "nama": nama,
-        "namaLatin": namaLatin,
-        "jumlahAyat": jumlahAyat,
-      };
+  @override
+  List<Object?> get props => [nomorAyat, teksArab, teksLatin, teksIndonesia, audio];
 }

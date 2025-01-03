@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
-import 'package:quran_app/data/model/detail_model.dart';
+import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -46,14 +46,14 @@ class DatabaseHelper {
   }
 
   // Insert data into tables
-  insertOrUpdateBookmark(AyatModel ayatModel, DetailModel detailModel) async {
+  insertOrUpdateBookmark(AyatDetailEntity ayatDetailEntity, DetailEntity detailEntity) async {
     final dbClient = await db;
 
     // Cek apakah data dengan nama_latin tertentu sudah ada
     List<Map> existingData = await dbClient.query(
       'bookmark',
       where: 'teks_indonesia = ?',
-      whereArgs: [ayatModel.teksIndonesia],
+      whereArgs: [ayatDetailEntity.teksIndonesia],
     );
 
     C.showLog(log: '---> $existingData');
@@ -63,12 +63,12 @@ class DatabaseHelper {
       await dbClient.insert(
         'bookmark',
         {
-          "nomor_surah": detailModel.nomor,
-          "nama_latin": detailModel.namaLatin,
-          "nomor_ayat": ayatModel.nomorAyat,
-          "teks_arab": ayatModel.teksArab,
-          "teks_indonesia": ayatModel.teksIndonesia,
-          "teks_latin": ayatModel.teksLatin,
+          "nomor_surah": detailEntity.nomor,
+          "nama_latin": detailEntity.namaLatin,
+          "nomor_ayat": ayatDetailEntity.nomorAyat,
+          "teks_arab": ayatDetailEntity.teksArab,
+          "teks_indonesia": ayatDetailEntity.teksIndonesia,
+          "teks_latin": ayatDetailEntity.teksLatin,
         },
       );
       Get.snackbar('Sukses', 'Data berhasil disimpan');

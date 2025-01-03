@@ -6,7 +6,7 @@ mixin ApiService {
     dynamic cResponse;
     try {
       C.showLog(log: '$requestName : $url');
-      http.Response response = await dio.get(url!);
+      http.Response response = await dio.get(url);
       cResponse = response.data;
       C.showLog(log: '$requestName response : $cResponse');
     } on http.DioException catch (e) {

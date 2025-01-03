@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:quran_app/components/style.dart';
 import 'package:quran_app/data/db/database_helper.dart';
+import 'package:quran_app/domain/use_case/quran_usecase.dart';
 import 'package:quran_app/main_getx.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
@@ -61,10 +62,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => GetSurahBloc(),
+          create: (context) => GetSurahBloc(quranUsecase: di.locator<QuranUsecase>()),
         ),
         BlocProvider(
-          create: (context) => DetailSurahBloc(),
+          create: (context) => DetailSurahBloc(quranUsecase: di.locator<QuranUsecase>()),
         ),
       ],
       child: GetMaterialApp(

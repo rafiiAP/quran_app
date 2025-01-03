@@ -1,14 +1,17 @@
 import 'dart:convert';
 
-class HTTPModel {
-  int? code;
-  String? message;
-  List<SurahModel>? data;
+import 'package:equatable/equatable.dart';
+import 'package:quran_app/domain/entity/surah_entity.dart';
 
-  HTTPModel({
-    this.code,
-    this.message,
-    this.data,
+class HTTPModel extends Equatable {
+  final int code;
+  final String message;
+  final List<SurahModel> data;
+
+  const HTTPModel({
+    required this.code,
+    required this.message,
+    required this.data,
   });
 
   factory HTTPModel.fromJson(String str) => HTTPModel.fromMap(json.decode(str));
@@ -18,35 +21,38 @@ class HTTPModel {
   factory HTTPModel.fromMap(Map<String, dynamic> json) => HTTPModel(
         code: json["code"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<SurahModel>.from(json["data"]!.map((x) => SurahModel.fromMap(x))),
+        data: List<SurahModel>.from(json["data"].map((x) => SurahModel.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "code": code,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
+        "data": List<dynamic>.from(data.map((x) => x.toMap())),
       };
+
+  @override
+  List<Object?> get props => [code, message, data];
 }
 
-class SurahModel {
-  int? nomor;
-  String? nama;
-  String? namaLatin;
-  int? jumlahAyat;
-  String? tempatTurun;
-  String? arti;
-  String? deskripsi;
-  Map<String, String>? audioFull;
+class SurahModel extends Equatable {
+  final int nomor;
+  final String nama;
+  final String namaLatin;
+  final int jumlahAyat;
+  final String tempatTurun;
+  final String arti;
+  final String deskripsi;
+  final Map<String, String> audioFull;
 
-  SurahModel({
-    this.nomor,
-    this.nama,
-    this.namaLatin,
-    this.jumlahAyat,
-    this.tempatTurun,
-    this.arti,
-    this.deskripsi,
-    this.audioFull,
+  const SurahModel({
+    required this.nomor,
+    required this.nama,
+    required this.namaLatin,
+    required this.jumlahAyat,
+    required this.tempatTurun,
+    required this.arti,
+    required this.deskripsi,
+    required this.audioFull,
   });
 
   factory SurahModel.fromJson(String str) => SurahModel.fromMap(json.decode(str));
@@ -61,7 +67,7 @@ class SurahModel {
         tempatTurun: json["tempatTurun"],
         arti: json["arti"],
         deskripsi: json["deskripsi"],
-        audioFull: Map.from(json["audioFull"]!).map((k, v) => MapEntry<String, String>(k, v)),
+        audioFull: Map.from(json["audioFull"]).map((k, v) => MapEntry<String, String>(k, v)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -72,6 +78,22 @@ class SurahModel {
         "tempatTurun": tempatTurun,
         "arti": arti,
         "deskripsi": deskripsi,
-        "audioFull": Map.from(audioFull!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "audioFull": Map.from(audioFull).map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
+
+  SurahEntity toEntity() {
+    return SurahEntity(
+      nomor: nomor,
+      nama: nama,
+      namaLatin: namaLatin,
+      jumlahAyat: jumlahAyat,
+      tempatTurun: tempatTurun,
+      arti: arti,
+      deskripsi: deskripsi,
+      audioFull: audioFull,
+    );
+  }
+
+  @override
+  List<Object?> get props => [nomor, nama, namaLatin, jumlahAyat, tempatTurun, arti, deskripsi, audioFull];
 }

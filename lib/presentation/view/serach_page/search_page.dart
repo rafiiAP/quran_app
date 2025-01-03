@@ -4,11 +4,11 @@ import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/constant/image.dart';
-import 'package:quran_app/data/model/surah_model.dart';
+import 'package:quran_app/domain/entity/surah_entity.dart';
 import 'package:quran_app/presentation/controller/serach/search_getx.dart';
 
 class SearchPage extends StatelessWidget {
-  final List<SurahModel> vaSurah;
+  final List<SurahEntity> vaSurah;
   SearchPage({super.key, required this.vaSurah});
 
   final c = Get.put(SearchGetx());
@@ -41,8 +41,8 @@ class SearchPage extends StatelessWidget {
                           : ListView.builder(
                               itemCount: c.vaSearch.value.length,
                               itemBuilder: (context, index) {
-                                SurahModel surahModel = c.vaSearch.value[index];
-                                return listSurah(surahModel);
+                                SurahEntity surahEntity = c.vaSearch.value[index];
+                                return listSurah(surahEntity);
                               },
                             ),
                 ),
@@ -54,10 +54,10 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  listSurah(SurahModel surahModel) {
+  listSurah(SurahEntity surahEntity) {
     return InkWell(
       onTap: () {
-        c.getDetailSurah(surahModel);
+        c.getDetailSurah(surahEntity);
       },
       borderRadius: BorderRadius.circular(15),
       child: Column(
@@ -80,7 +80,7 @@ class SearchPage extends StatelessWidget {
                       ),
                     ),
                     child: W.textBody(
-                      text: surahModel.nomor.toString(),
+                      text: surahEntity.nomor.toString(),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -89,12 +89,12 @@ class SearchPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       W.textBody(
-                        text: surahModel.namaLatin!,
+                        text: surahEntity.namaLatin,
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
                       W.textBody(
-                        text: '${surahModel.tempatTurun!} - ${surahModel.jumlahAyat!} ayat',
+                        text: '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
                         fontWeight: FontWeight.w500,
                         color: AppColorConfig.grey,
                       ),
@@ -103,7 +103,7 @@ class SearchPage extends StatelessWidget {
                 ],
               ),
               W.textBody(
-                text: surahModel.nama!,
+                text: surahEntity.nama,
                 color: AppColorConfig.primary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
