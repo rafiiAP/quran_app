@@ -25,12 +25,12 @@ class DetailSurahGetx extends GetxController {
       backgroundColor: C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.white,
       bottomSheet: Container(
         width: context.width,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 25, top: 16),
         decoration: BoxDecoration(
           color: C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.white,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+            topLeft: Radius.circular(50),
+            topRight: Radius.circular(50),
           ),
         ),
         child: W.buttonAKP(

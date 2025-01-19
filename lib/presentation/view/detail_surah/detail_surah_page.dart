@@ -42,7 +42,7 @@ class DetailSurahPage extends StatelessWidget {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color:
-                              C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.lightGrey.withOpacity(0.5),
+                              C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.lightGrey.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(

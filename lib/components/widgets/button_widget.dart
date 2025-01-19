@@ -98,10 +98,7 @@ mixin ButtonWidget {
       padding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 16),
       child: W.button(
         onPressed: onPressed,
-        child: W.textBody(
-          text: text,
-          color: textColor,
-        ),
+        child: W.textBody(text: text, color: textColor, fontWeight: FontWeight.bold),
       ),
     );
   }

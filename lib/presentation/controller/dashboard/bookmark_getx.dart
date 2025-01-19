@@ -35,7 +35,8 @@ class BookmarkGetx extends GetxController {
   onTapShare(BookmarkModel bookmarkModel) {
     Clipboard.setData(
       ClipboardData(
-        text: '${bookmarkModel.teksArab}\n${bookmarkModel.teksIndonesia}',
+        text:
+            '${bookmarkModel.namaLatin} : ${bookmarkModel.nomorSurah}\n${bookmarkModel.teksArab}\n${bookmarkModel.teksIndonesia}',
       ),
     ).then((_) {
       Get.snackbar('Sukses', 'Teks berhasil disalin');
