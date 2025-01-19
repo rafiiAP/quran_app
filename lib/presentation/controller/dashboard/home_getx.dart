@@ -43,7 +43,6 @@ class HomeGetx extends GetxController {
   }
 
   onSuccesGetSurah(List<SurahEntity> data) {
-    W.endwait();
     surahList.value = data;
   }
 
@@ -56,7 +55,6 @@ class HomeGetx extends GetxController {
 
   onSuccesDetailSurah(DetailEntity data) {
     W.endwait();
-
     C.to(() => DetailSurahPage(detailEntity: data))!.then((_) {
       getLastRead();
     });

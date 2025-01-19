@@ -10,6 +10,7 @@ import 'package:quran_app/domain/entity/surah_entity.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
 import 'package:quran_app/presentation/controller/dashboard/home_getx.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -33,70 +34,106 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ],
-        // leading: IconButton(
-        //   onPressed: () {},
-        //   icon: Image.asset(
-        //     MyImage.menu,
-        //   ),
-        // ),
       ),
-      body: BlocListener<DetailSurahBloc, DetailSurahState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            orElse: () {},
-            loading: () => W.wait(),
-            error: (message) {
-              W.endwait();
-              W.messageInfo(message: message);
-            },
-            loaded: (detailModel) => c.onSuccesDetailSurah(detailModel),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: ListView(
-            children: [
-              W.textBody(
-                text: "Assalamu'alaikum",
-                color: AppColorConfig.grey,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-              W.paddingheight5(),
-              W.textBody(
-                text: 'RAF',
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-              ),
-              W.paddingheight16(),
-              cardLastRead(),
-              W.paddingheight16(),
-              W.paddingheight16(),
-              BlocListener<GetSurahBloc, GetSurahState>(
-                listener: (context, state) {
-                  state.maybeWhen(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+          children: [
+            W.textBody(
+              text: "Assalamu'alaikum",
+              color: AppColorConfig.grey,
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+            W.paddingheight5(),
+            W.textBody(
+              text: 'RAF',
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+            W.paddingheight16(),
+            cardLastRead(),
+            W.paddingheight16(),
+            W.paddingheight16(),
+            BlocConsumer<GetSurahBloc, GetSurahState>(
+              listener: (context, state) {
+                state.maybeWhen(
                     orElse: () {},
-                    loading: () => W.wait(),
-                    error: (message) => W.endwait(),
-                    success: (surah) => c.onSuccesGetSurah(surah),
-                  );
-                },
-                child: Obx(
-                  () => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: c.surahList.value.length,
-                    itemBuilder: (context, index) {
-                      SurahEntity surahEntity = c.surahList.value[index];
-                      return listSurah(surahEntity);
-                    },
-                  ),
-                ),
-              )
-            ],
-          ),
+                    error: (message) => W.messageInfo(message: message),
+                    success: (surah) => c.onSuccesGetSurah(surah));
+              },
+              builder: (context, state) {
+                return state.maybeWhen(
+                  orElse: () {
+                    return Container();
+                  },
+                  loading: () {
+                    return ListView.builder(
+                      itemCount: 10,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return loadList();
+                      },
+                    );
+                  },
+                  success: (surah) {
+                    return BlocListener<DetailSurahBloc, DetailSurahState>(
+                      listener: (context, state) {
+                        state.maybeWhen(
+                          orElse: () {},
+                          error: (message) {
+                            W.messageInfo(message: message);
+                          },
+                          loading: () => W.wait(),
+                          loaded: (detailModel) => c.onSuccesDetailSurah(detailModel),
+                        );
+                      },
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: surah.length,
+                        itemBuilder: (context, index) {
+                          SurahEntity surahEntity = surah[index];
+                          return listSurah(surahEntity);
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+          ],
         ),
       ),
+    );
+  }
+
+  loadList() {
+    return Column(
+      children: [
+        W.paddingheight5(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                W.shimmer(width: 40, height: 40),
+                W.paddingWidtht16(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [W.shimmer(width: 200, height: 15), W.paddingheight5(), W.shimmer(width: 200, height: 15)],
+                ),
+              ],
+            ),
+            W.shimmer(width: 100, height: 30),
+          ],
+        ),
+        W.paddingheight5(),
+        const Divider(
+          color: AppColorConfig.grey,
+        ),
+      ],
     );
   }
 
