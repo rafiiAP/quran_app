@@ -27,6 +27,7 @@ Dicoding final project flutter fundamental.
 - sqflite
 - path
 - flutter_launcher_icons
+- shimmer
 
 ## Dev_Dependencies
 
