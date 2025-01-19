@@ -176,8 +176,9 @@ class HomePage extends StatelessWidget {
                 W.paddingheight5(),
                 Obx(
                   () => W.textBody(
-                    text: 'Ayat : ${c.nNomorAyat.value == 0 ? '-' : c.nNomorAyat.value}',
+                    text: 'Surah : ${c.nNomorAyat.value == 0 ? '-' : c.nNomorAyat.value}',
                     color: AppColorConfig.white,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
