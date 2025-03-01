@@ -34,12 +34,6 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.error),
-        onPressed: () {
-          throw Exception();
-        },
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(

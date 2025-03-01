@@ -4,11 +4,13 @@ import 'package:quran_app/data/constant/config.dart';
 
 import 'package:quran_app/presentation/view/dashboard/bookmark_page.dart';
 import 'package:quran_app/presentation/view/dashboard/home_page.dart';
+import 'package:quran_app/presentation/view/jadwal_sholat/jadwal_sholat_page.dart';
 
 class DashboardGetx extends GetxController {
   List vaPage = [
     HomePage(),
     BookmarkPage(),
+    JadwalSholatPage(),
   ];
 
   var nIndex = 0.obs;
