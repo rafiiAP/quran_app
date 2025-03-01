@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:quran_app/components/style.dart';
 import 'package:quran_app/data/db/database_helper.dart';
 import 'package:quran_app/domain/use_case/quran_usecase.dart';
+import 'package:quran_app/firebase_options.dart';
 import 'package:quran_app/main_getx.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
@@ -17,6 +20,18 @@ import 'injection.dart' as di;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   final DatabaseHelper databaseHelper = DatabaseHelper();
   databaseHelper.db;
   await GetStorage.init();

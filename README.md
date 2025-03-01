@@ -4,6 +4,14 @@ Qur'an App
 
 Dicoding final project flutter fundamental.
 
+fitur yang karang
+- penambahan text ayat yang terakhir di baca
+- tombol penanda terakhir di baca pada detail
+- ketika klik terakhir baca, maka akan langsung ke halaman terakhir dibaca dan langsung ke ayat terakhir dibaca
+- pada halaman bookmark ketika di klik harusnya langsung ke ayat yang disimpan
+- ketika sudah pernah menekan getstarted harusnya langsung ke halaman home
+
+
 ## Statemanagement
 
 - GetX
@@ -28,6 +36,9 @@ Dicoding final project flutter fundamental.
 - path
 - flutter_launcher_icons
 - shimmer
+- firebase_core
+- firebase_crashlytics
+
 
 ## Dev_Dependencies
 
