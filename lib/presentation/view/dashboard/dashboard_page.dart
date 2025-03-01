@@ -37,6 +37,14 @@ class DashboardPage extends StatelessWidget {
                 color: c.nIndex.value == 1 ? AppColorConfig.primary : AppColorConfig.grey,
               ),
             ),
+            BottomNavigationBarItem(
+              label: '',
+              icon: Image.asset(
+                MyImage.shalat,
+                width: 30,
+                color: c.nIndex.value == 2 ? AppColorConfig.primary : AppColorConfig.grey,
+              ),
+            ),
           ],
         ),
       ),

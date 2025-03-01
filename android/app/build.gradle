@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.raf.quran_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
