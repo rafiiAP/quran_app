@@ -8,7 +8,7 @@ part 'detail_surah_state.dart';
 part 'detail_surah_bloc.freezed.dart';
 
 class DetailSurahBloc extends Bloc<DetailSurahEvent, DetailSurahState> {
-  QuranUsecase quranUsecase;
+  RemoteUsecase quranUsecase;
 
   DetailSurahBloc({required this.quranUsecase}) : super(const _Initial()) {
     on<_GetDetailSurah>((event, emit) async {

@@ -109,7 +109,7 @@ mixin BottomsheetWidget {
     }
   }
 
-  Future messageInfo({
+  messageInfo({
     required String message,
   }) {
     return showBottomSheet(

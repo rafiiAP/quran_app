@@ -8,11 +8,11 @@ GetIt locator = GetIt.instance;
 
 void setup() {
   // usecase
-  locator.registerLazySingleton(() => QuranUsecase(locator()));
+  locator.registerLazySingleton(() => RemoteUsecase(locator()));
 
   // repository
-  locator.registerLazySingleton<QuranRepository>(() => QuranRepositoryImpl(quranDatasource: locator()));
+  locator.registerLazySingleton<RemoteRepository>(() => RemoteRepositoryImpl(quranDatasource: locator()));
 
   // data source
-  locator.registerLazySingleton<QuranDatasource>(() => QuranDatasourceImpl());
+  locator.registerLazySingleton<RemoteDatasource>(() => RemoteDatasourceImpl());
 }

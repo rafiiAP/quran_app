@@ -14,8 +14,10 @@ import 'package:quran_app/firebase_options.dart';
 import 'package:quran_app/main_getx.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
+import 'package:quran_app/presentation/controller/jadwal_sholat/bloc/jadwal_sholat_bloc.dart';
 
 import 'data/constant/color.dart';
+
 import 'injection.dart' as di;
 
 Future<void> main() async {
@@ -77,11 +79,14 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => GetSurahBloc(quranUsecase: di.locator<QuranUsecase>()),
+          create: (context) => GetSurahBloc(quranUsecase: di.locator<RemoteUsecase>()),
         ),
         BlocProvider(
-          create: (context) => DetailSurahBloc(quranUsecase: di.locator<QuranUsecase>()),
+          create: (context) => DetailSurahBloc(quranUsecase: di.locator<RemoteUsecase>()),
         ),
+        BlocProvider(
+          create: (context) => JadwalSholatBloc(usecase: di.locator<RemoteUsecase>()),
+        )
       ],
       child: GetMaterialApp(
         title: 'Quran App',
