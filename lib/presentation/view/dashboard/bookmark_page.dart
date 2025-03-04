@@ -49,7 +49,9 @@ class BookmarkPage extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.lightGrey.withOpacity(0.3),
+                        color: C.isDark(context)
+                            ? AppColorConfig.bgBottom
+                            : AppColorConfig.lightGrey.withValues(alpha: 0.4),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(

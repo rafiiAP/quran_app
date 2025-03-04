@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/bloc/jadwal_sholat_bloc.dart';
 // import 'package:quran_app/data/datasources/remote_api_datasource/remote_api_datasource.dart';
@@ -33,14 +32,14 @@ class JadwalSholatGetx extends GetxController {
   }
 
   void startTimer(JadwalSholatEntity data) {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       updateCountdown(data);
       startTimer(data);
     });
   }
 
   void updateSholat(JadwalSholatEntity data) {
-    Future.delayed(Duration(hours: 3)).then(
+    Future.delayed(const Duration(hours: 3)).then(
       (value) {
         getNextSholatText(data);
         getNextSholatText(data);

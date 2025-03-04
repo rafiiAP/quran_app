@@ -24,7 +24,7 @@ class SearchPage extends StatelessWidget {
               W.input(
                 controller: c.searchController,
                 color: C.isDark(context) ? AppColorConfig.white : AppColorConfig.black,
-                prefixIcon: Icon(Icons.search, color: AppColorConfig.grey.withOpacity(0.4)),
+                prefixIcon: Icon(Icons.search, color: AppColorConfig.grey.withValues(alpha: 0.4)),
                 onChanged: (val) => c.onSearch(surahList: vaSurah, value: val),
               ),
               W.paddingheight16(),
