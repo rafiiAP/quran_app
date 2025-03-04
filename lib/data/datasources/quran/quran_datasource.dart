@@ -1,14 +1,23 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:quran_app/components/function/main_function.dart';
+import 'package:quran_app/data/constant/config.dart';
 import 'package:quran_app/data/model/detail_model.dart';
+import 'package:quran_app/data/model/jadwal_sholat_model.dart';
 import 'package:quran_app/data/model/surah_model.dart';
 
-abstract class QuranDatasource {
+abstract class RemoteDatasource {
   Future<List<SurahModel>> getSurah();
   Future<DetailModel> getDetailSurah({required int nomor});
+  Future<JadwalSholatModel> getJadwalSholat({
+    required double latitude,
+    required double longitude,
+    required String date,
+  });
 }
 
-class QuranDatasourceImpl implements QuranDatasource {
+class RemoteDatasourceImpl implements RemoteDatasource {
   @override
   Future<List<SurahModel>> getSurah() async {
     try {
@@ -37,5 +46,22 @@ class QuranDatasourceImpl implements QuranDatasource {
     } catch (e) {
       throw Exception(e.toString());
     }
+  }
+
+  @override
+  Future<JadwalSholatModel> getJadwalSholat({
+    required double latitude,
+    required double longitude,
+    required String date,
+  }) async {
+    C.showLog(log: '--date: $date, latitude: $latitude, longitude: $longitude');
+    var result = await C.dioGet(
+        url: '${AppConfig.cUrlJadwalSholat}/$date?latitude=$latitude&longitude=$longitude',
+        requestName: 'getJadwalSholat');
+
+    JadwalSholatModel model = JadwalSholatDioModel.fromJson(result).data.timings;
+
+    C.showLog(log: '--JadwalSholatModel: ${jsonEncode(model)}');
+    return model;
   }
 }
