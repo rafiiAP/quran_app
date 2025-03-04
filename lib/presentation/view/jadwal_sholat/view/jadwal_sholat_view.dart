@@ -177,7 +177,7 @@ class JadwalSholatView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.location,
                     color: AppColorConfig.white,
                     size: 50,

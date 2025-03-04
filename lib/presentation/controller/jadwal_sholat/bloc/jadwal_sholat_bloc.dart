@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
 import 'package:quran_app/domain/use_case/quran_usecase.dart';
