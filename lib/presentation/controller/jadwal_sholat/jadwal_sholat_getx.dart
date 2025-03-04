@@ -20,6 +20,8 @@ class JadwalSholatGetx extends GetxController {
 
   @override
   void onInit() {
+    getLoacationName();
+    getTimeZone();
     super.onInit();
   }
 
@@ -27,8 +29,6 @@ class JadwalSholatGetx extends GetxController {
   void onReady() {
     jadwalSholat();
 
-    getLoacationName();
-    getTimeZone();
     super.onReady();
   }
 
