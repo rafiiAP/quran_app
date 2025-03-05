@@ -1,4 +1,4 @@
-part of 'get_surah_bloc.dart';
+part of 'get_surah_cubit.dart';
 
 @freezed
 class GetSurahState with _$GetSurahState {

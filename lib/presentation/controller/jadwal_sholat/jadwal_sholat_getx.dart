@@ -6,10 +6,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
-import 'package:quran_app/presentation/controller/jadwal_sholat/bloc/jadwal_sholat_bloc.dart';
 // import 'package:quran_app/data/datasources/remote_api_datasource/remote_api_datasource.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
 
 class JadwalSholatGetx extends GetxController {
   Rxn<Position> position = Rxn<Position>();
@@ -53,12 +53,10 @@ class JadwalSholatGetx extends GetxController {
     // Pastikan context masih valid setelah async selesai
     if (!context.mounted) return;
 
-    context.read<JadwalSholatBloc>().add(
-          JadwalSholatEvent.getJadwalSholat(
-            latitude: position.value!.latitude,
-            longitude: position.value!.longitude,
-            date: date,
-          ),
+    context.read<JadwalSholatCubit>().getPosts(
+          latitude: position.value!.latitude,
+          longitude: position.value!.longitude,
+          date: date,
         );
   }
 

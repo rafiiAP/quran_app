@@ -1,4 +1,4 @@
-part of 'jadwal_sholat_bloc.dart';
+part of 'jadwal_sholat_cubit.dart';
 
 @freezed
 class JadwalSholatState with _$JadwalSholatState {

@@ -12,9 +12,9 @@ import 'package:quran_app/data/db/database_helper.dart';
 import 'package:quran_app/domain/use_case/quran_usecase.dart';
 import 'package:quran_app/firebase_options.dart';
 import 'package:quran_app/main_getx.dart';
-import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
-import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
-import 'package:quran_app/presentation/controller/jadwal_sholat/bloc/jadwal_sholat_bloc.dart';
+import 'package:quran_app/presentation/controller/dashboard/get_surah_cubit/get_surah_cubit.dart';
+import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
+import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
 
 import 'data/constant/color.dart';
 
@@ -80,13 +80,13 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => GetSurahBloc(quranUsecase: di.locator<RemoteUsecase>()),
+          create: (context) => GetSurahCubit(quranUsecase: di.locator<RemoteUsecase>()),
         ),
         BlocProvider(
-          create: (context) => DetailSurahBloc(quranUsecase: di.locator<RemoteUsecase>()),
+          create: (context) => DetailSurahCubit(quranUsecase: di.locator<RemoteUsecase>()),
         ),
         BlocProvider(
-          create: (context) => JadwalSholatBloc(usecase: di.locator<RemoteUsecase>()),
+          create: (context) => JadwalSholatCubit(usecase: di.locator<RemoteUsecase>()),
         )
       ],
       child: GetMaterialApp(

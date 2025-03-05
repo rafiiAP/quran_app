@@ -7,7 +7,7 @@ import 'package:quran_app/data/constant/config.dart';
 
 import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
-import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
+import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
 import 'package:quran_app/presentation/view/detail_surah/detail_surah_page.dart';
 
 class SearchGetx extends GetxController {
@@ -18,7 +18,7 @@ class SearchGetx extends GetxController {
     C.setString(cKey: AppConfig.cacheNamaLatin, cValue: data.namaLatin);
     C.setInt(cKey: AppConfig.cacheNomorAyat, nValue: data.nomor);
     BuildContext context = Get.context!;
-    context.read<DetailSurahBloc>().add(DetailSurahEvent.getDetailSurah(data.nomor));
+    context.read<DetailSurahCubit>().getPosts(number: data.nomor);
   }
 
   onSuccesDetailSurah(DetailEntity data) {

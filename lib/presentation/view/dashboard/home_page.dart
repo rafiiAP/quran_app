@@ -7,9 +7,9 @@ import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/constant/image.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
-import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
+import 'package:quran_app/presentation/controller/dashboard/get_surah_cubit/get_surah_cubit.dart';
 import 'package:quran_app/presentation/controller/dashboard/home_getx.dart';
-import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
+import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
             cardLastRead(c),
             W.paddingheight16(),
             W.paddingheight16(),
-            BlocConsumer<GetSurahBloc, GetSurahState>(
+            BlocConsumer<GetSurahCubit, GetSurahState>(
               listener: (context, state) {
                 state.maybeWhen(
                     orElse: () {},
@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
                     );
                   },
                   success: (surah) {
-                    return BlocListener<DetailSurahBloc, DetailSurahState>(
+                    return BlocListener<DetailSurahCubit, DetailSurahState>(
                       listener: (context, state) {
                         state.maybeWhen(
                           orElse: () {},
@@ -84,7 +84,7 @@ class HomePage extends StatelessWidget {
                             W.messageInfo(message: message);
                           },
                           loading: () => W.wait(),
-                          loaded: (detailModel) => c.onSuccesDetailSurah(detailModel),
+                          success: (detailModel) => c.onSuccesDetailSurah(detailModel),
                         );
                       },
                       child: ListView.builder(
