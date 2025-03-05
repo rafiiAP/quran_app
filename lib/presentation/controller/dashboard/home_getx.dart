@@ -6,9 +6,9 @@ import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/config.dart';
 import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
+import 'package:quran_app/presentation/controller/dashboard/get_surah_cubit/get_surah_cubit.dart';
+import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
 
-import 'package:quran_app/presentation/controller/dashboard/get_surah_bloc/get_surah_bloc.dart';
-import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
 import 'package:quran_app/presentation/view/serach_page/search_page.dart';
 
 import '../../view/detail_surah/detail_surah_page.dart';
@@ -41,7 +41,8 @@ class HomeGetx extends GetxController {
 
   getSurah() {
     BuildContext context = Get.context!;
-    context.read<GetSurahBloc>().add(const GetSurahEvent.getSurah());
+    //memanggil data al-qur'an
+    context.read<GetSurahCubit>().getPosts();
   }
 
   onSuccesGetSurah(List<SurahEntity> data) {
@@ -52,7 +53,7 @@ class HomeGetx extends GetxController {
     C.setString(cKey: AppConfig.cacheNamaLatin, cValue: data.namaLatin);
     C.setInt(cKey: AppConfig.cacheNomorAyat, nValue: data.nomor);
     BuildContext context = Get.context!;
-    context.read<DetailSurahBloc>().add(DetailSurahEvent.getDetailSurah(data.nomor));
+    context.read<DetailSurahCubit>().getPosts(number: data.nomor);
   }
 
   onSuccesDetailSurah(DetailEntity data) {

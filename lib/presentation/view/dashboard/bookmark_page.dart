@@ -6,7 +6,7 @@ import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
 import 'package:quran_app/presentation/controller/dashboard/bookmark_getx.dart';
-import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
+import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
 
 class BookmarkPage extends StatelessWidget {
   BookmarkPage({super.key});
@@ -16,7 +16,7 @@ class BookmarkPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     c.init();
-    return BlocListener<DetailSurahBloc, DetailSurahState>(
+    return BlocListener<DetailSurahCubit, DetailSurahState>(
       listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
@@ -25,7 +25,7 @@ class BookmarkPage extends StatelessWidget {
             W.endwait();
             W.messageInfo(message: message);
           },
-          loaded: (detailModel) => c.onSuccesDetailSurah(detailModel),
+          success: (detailModel) => c.onSuccesDetailSurah(detailModel),
         );
       },
       child: Scaffold(
