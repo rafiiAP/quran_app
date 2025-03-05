@@ -24,7 +24,7 @@ class SearchPage extends StatelessWidget {
               W.input(
                 controller: c.searchController,
                 color: C.isDark(context) ? AppColorConfig.white : AppColorConfig.black,
-                prefixIcon: Icon(Icons.search, color: AppColorConfig.grey.withOpacity(0.4)),
+                prefixIcon: Icon(Icons.search, color: AppColorConfig.grey.withValues(alpha: 0.4)),
                 onChanged: (val) => c.onSearch(surahList: vaSurah, value: val),
               ),
               W.paddingheight16(),
@@ -66,47 +66,57 @@ class SearchPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 40,
-                    height: 40,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          MyImage.borderNum,
+              Flexible(
+                child: Row(
+                  children: [
+                    Container(
+                      // alignment: Alignment.center,
+                      width: 40,
+                      height: 40,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            MyImage.borderNum,
+                          ),
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: W.textBody(
+                          text: surahEntity.nomor.toString(),
+                          fontWeight: FontWeight.w500,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                    child: W.textBody(
-                      text: surahEntity.nomor.toString(),
-                      fontWeight: FontWeight.w500,
+                    W.paddingWidtht16(),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          W.textBody(
+                            text: surahEntity.namaLatin,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          W.textBody(
+                            text: '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
+                            fontWeight: FontWeight.w500,
+                            color: AppColorConfig.grey,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  W.paddingWidtht16(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      W.textBody(
-                        text: surahEntity.namaLatin,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                      ),
-                      W.textBody(
-                        text: '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
-                        fontWeight: FontWeight.w500,
-                        color: AppColorConfig.grey,
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-              W.textBody(
-                text: surahEntity.nama,
-                color: AppColorConfig.primary,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              Flexible(
+                child: W.textBody(
+                  text: surahEntity.nama,
+                  color: AppColorConfig.primary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
