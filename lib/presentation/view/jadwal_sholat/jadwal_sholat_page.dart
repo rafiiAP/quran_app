@@ -22,12 +22,6 @@ class JadwalSholatPage extends StatelessWidget {
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          W.messageInfo(message: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        },
-        child: const Icon(Icons.refresh),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: BlocBuilder<JadwalSholatBloc, JadwalSholatState>(
