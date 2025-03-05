@@ -33,6 +33,7 @@ fitur yang karang
 - freezed_annotation
 - flutter_bloc
 - geolocator
+- geocoding
 - dartz
 - equatable
 - get_it
@@ -43,6 +44,7 @@ fitur yang karang
 - shimmer
 - firebase_core
 - firebase_crashlytics
+- flutter_timezone
 
 
 ## Dev_Dependencies
