@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/bloc/jadwal_sholat_bloc.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_getx.dart';
@@ -9,12 +8,13 @@ import 'package:quran_app/presentation/view/jadwal_sholat/view/jadwal_sholat_vie
 import 'package:quran_app/presentation/view/jadwal_sholat/view/loading_sholat_view.dart';
 
 class JadwalSholatPage extends StatelessWidget {
-  JadwalSholatPage({super.key});
-  final c = Get.put(JadwalSholatGetx());
+  const JadwalSholatPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    C.showLog(log: '--${c.timezone.value}');
+    final c = Get.put(JadwalSholatGetx());
+    // c.determinePosition();
+    // C.showLog(log: '--${c.timezone.value}');
 
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +28,7 @@ class JadwalSholatPage extends StatelessWidget {
           builder: (context, state) {
             return state.maybeWhen(
               orElse: () {
-                return Container();
+                return const LoadingSholatView();
               },
               loading: () {
                 return const LoadingSholatView();

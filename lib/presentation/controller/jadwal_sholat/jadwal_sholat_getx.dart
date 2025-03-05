@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/bloc/jadwal_sholat_bloc.dart';
 // import 'package:quran_app/data/datasources/remote_api_datasource/remote_api_datasource.dart';
@@ -11,28 +12,51 @@ import 'package:geocoding/geocoding.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 
 class JadwalSholatGetx extends GetxController {
-  // JadwalSholatEntity data;
-  // JadwalSholatGetx({
-  //   required this.data,
-  // });
   var city = ''.obs, cSholat = ''.obs, countdownText = ''.obs, timezone = ''.obs;
 
   @override
   void onInit() {
+    //mengabil nama kota sekarang
     getLoacationName();
+    //mengambil timezone lokasi sekrang
     getTimeZone();
+
     super.onInit();
   }
 
   @override
   void onReady() {
-    jadwalSholat();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      jadwalSholat();
+    });
     super.onReady();
   }
 
+  void jadwalSholat() async {
+    // Simpan BuildContext sebelum operasi async
+    final BuildContext? context = Get.context;
+    if (context == null) return;
+
+    // Dapatkan tanggal sekarang
+    String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
+    // Ambil lokasi
+    Position position = await determinePosition();
+
+    // Pastikan context masih valid setelah async selesai
+    if (!context.mounted) return;
+
+    context.read<JadwalSholatBloc>().add(
+          JadwalSholatEvent.getJadwalSholat(
+            latitude: position.latitude,
+            longitude: position.longitude,
+            date: date,
+          ),
+        );
+  }
+
   void startTimer(JadwalSholatEntity data) {
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       updateCountdown(data);
       startTimer(data);
     });
@@ -205,74 +229,32 @@ class JadwalSholatGetx extends GetxController {
 
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
-  determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      // C.showLog(log: '--Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        // C.showLog(log: '--Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      // C.showLog(log: '--Location permissions are permanently denied, we cannot request permissions.');
-    }
-
+  Future? determinePosition() async {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
-  }
-
-  void jadwalSholat() async {
-    // Simpan BuildContext sebelum operasi async
-    final BuildContext? context = Get.context;
-    if (context == null) return;
-
-    // Dapatkan tanggal sekarang
-    String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
-
-    // Ambil lokasi
-    Position position = await determinePosition();
-
-    // Pastikan context masih valid setelah async selesai
-    if (!context.mounted) return;
-
-    context.read<JadwalSholatBloc>().add(
-          JadwalSholatEvent.getJadwalSholat(
-            latitude: position.latitude,
-            longitude: position.longitude,
-            date: date,
-          ),
-        );
+    try {
+      C.showLog(log: '--Fetching current location...');
+      final position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: 10));
+      C.showLog(log: '--Location fetched: ${position.latitude}, ${position.longitude}');
+      return position;
+    } catch (e) {
+      C.showLog(log: '--Error getting location: $e');
+      return null;
+    }
   }
 
   getLoacationName() async {
+    C.showLog(log: 'log: --baaa');
     Position position = await determinePosition();
+    C.showLog(log: '--baaa position: $position');
 
     // Ambil nama kota/kabupaten
     var placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    C.showLog(log: '--baaa placemarks: $placemarks');
 
     if (placemarks.isNotEmpty) {
       city.value = placemarks[0].locality ?? "Tidak diketahui";
-      // C.showLog(log: '--City: $city');
+      // C.showLog(log: '--baaa City: $city');
     }
   }
 

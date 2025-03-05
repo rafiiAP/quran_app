@@ -17,4 +17,5 @@ class MyImage {
   static const String bookNav = 'assets/images/book_nav.png';
   static const String lamp = 'assets/images/lamp.png';
   static const String shalat = 'assets/images/shalat.png';
+  static const String masjid = 'assets/images/masjid.png';
 }

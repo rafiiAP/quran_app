@@ -20,16 +20,18 @@ class HomeGetx extends GetxController {
   var nNomorAyat = 0.obs;
 
   @override
-  void onInit() {
+  void onReady() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      init();
+      getSurah();
     });
-    super.onInit();
+    super.onReady();
   }
 
-  init() {
+  @override
+  void onInit() {
     getLastRead();
-    getSurah();
+
+    super.onInit();
   }
 
   getLastRead() {

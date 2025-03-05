@@ -8,9 +8,9 @@ import 'package:quran_app/presentation/view/jadwal_sholat/jadwal_sholat_page.dar
 
 class DashboardGetx extends GetxController {
   List vaPage = [
-    HomePage(),
+    const HomePage(),
     BookmarkPage(),
-    JadwalSholatPage(),
+    const JadwalSholatPage(),
   ];
 
   var nIndex = 0.obs;
