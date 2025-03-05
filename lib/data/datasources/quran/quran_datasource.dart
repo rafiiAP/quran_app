@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/data/constant/config.dart';
@@ -54,14 +52,14 @@ class RemoteDatasourceImpl implements RemoteDatasource {
     required double longitude,
     required String date,
   }) async {
-    C.showLog(log: '--date: $date, latitude: $latitude, longitude: $longitude');
+    // C.showLog(log: '--date: $date, latitude: $latitude, longitude: $longitude');
     var result = await C.dioGet(
         url: '${AppConfig.cUrlJadwalSholat}/$date?latitude=$latitude&longitude=$longitude',
         requestName: 'getJadwalSholat');
 
     JadwalSholatModel model = JadwalSholatDioModel.fromJson(result).data.timings;
 
-    C.showLog(log: '--JadwalSholatModel: ${jsonEncode(model)}');
+    // C.showLog(log: '--JadwalSholatModel: ${jsonEncode(model)}');
     return model;
   }
 }

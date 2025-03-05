@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
+import 'package:quran_app/data/constant/image.dart';
 import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_getx.dart';
 
@@ -21,9 +22,20 @@ class JadwalSholatView extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  height: C.getHeight() * 0.18,
+                  height: C.getHeight() * 0.20,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      alignment: Alignment.bottomLeft,
+                      colorFilter: ColorFilter.mode(
+                        AppColorConfig.white,
+                        BlendMode.srcIn,
+                      ),
+                      scale: 3.5,
+                      image: AssetImage(
+                        MyImage.masjid,
+                      ),
+                    ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -43,7 +55,7 @@ class JadwalSholatView extends StatelessWidget {
                         AppColorConfig.white,
                         AppColorConfig.primary,
                       ],
-                      begin: Alignment.center,
+                      begin: Alignment.topCenter,
                       end: Alignment.bottomRight,
                     ),
                   ),
@@ -61,12 +73,14 @@ class JadwalSholatView extends StatelessWidget {
                         text: c.getTimeText(data),
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        color: AppColorConfig.primary,
                       ),
                       W.paddingheight5(),
                       Obx(
                         () => W.textBody(
                           text: c.countdownText.value,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
+                          color: AppColorConfig.primary,
                         ),
                       ),
                       W.paddingheight16(),
@@ -77,9 +91,20 @@ class JadwalSholatView extends StatelessWidget {
               W.paddingWidtht16(),
               Expanded(
                 child: Container(
-                  height: C.getHeight() * 0.18,
+                  height: C.getHeight() * 0.20,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      alignment: Alignment.bottomLeft,
+                      colorFilter: ColorFilter.mode(
+                        AppColorConfig.white,
+                        BlendMode.srcIn,
+                      ),
+                      scale: 3.5,
+                      image: AssetImage(
+                        MyImage.masjid,
+                      ),
+                    ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -99,7 +124,7 @@ class JadwalSholatView extends StatelessWidget {
                         AppColorConfig.white,
                         AppColorConfig.primary,
                       ],
-                      begin: Alignment.center,
+                      begin: Alignment.topCenter,
                       end: Alignment.bottomRight,
                     ),
                   ),
@@ -122,6 +147,7 @@ class JadwalSholatView extends StatelessWidget {
                       W.textBody(
                         text: c.getNextTime(data),
                         fontSize: 16,
+                        color: AppColorConfig.primary,
                         fontWeight: FontWeight.bold,
                       ),
                       W.paddingheight5(),
@@ -133,42 +159,6 @@ class JadwalSholatView extends StatelessWidget {
           );
         }),
         W.paddingheight16(),
-        // Container(
-        //   padding: const EdgeInsets.all(16),
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(20),
-        //     color: AppColorConfig.primary.withValues(
-        //       alpha: 0.5,
-        //     ),
-        //   ),
-        //   child: Row(
-        //     children: [
-        //       W.shimmer(width: 40, height: 40),
-        //       const Spacer(),
-        //       Column(
-        //         children: [
-        //           W.shimmer(width: 100, height: 15),
-        //           W.paddingheight5(),
-        //           W.shimmer(width: 100, height: 15),
-        //         ],
-        //       ),
-        //       const SizedBox(
-        //         height: 45,
-        //         child: VerticalDivider(),
-        //       ),
-        //       Column(
-        //         children: [
-        //           W.shimmer(width: 100, height: 15),
-        //           W.paddingheight5(),
-        //           W.shimmer(width: 100, height: 15),
-        //         ],
-        //       ),
-        //       const Spacer(),
-        //       W.shimmer(width: 40, height: 40),
-        //     ],
-        //   ),
-        // ),
-        // W.paddingheight16(),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColorConfig.primary),
@@ -183,26 +173,32 @@ class JadwalSholatView extends StatelessWidget {
                     size: 50,
                   ),
                   W.paddingWidtht16(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Obx(
-                        () => W.textBody(
-                          text: c.city.value,
-                          color: AppColorConfig.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(
+                          () => W.textBody(
+                            text: c.city.value,
+                            color: AppColorConfig.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      Obx(
-                        () => W.textBody(
-                          text: c.timezone.value,
-                          color: AppColorConfig.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                        Obx(
+                          () => W.textBody(
+                            text: c.timezone.value,
+                            color: AppColorConfig.white,
+                            fontSize: 18,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -210,7 +206,7 @@ class JadwalSholatView extends StatelessWidget {
               Row(
                 children: [
                   const Icon(
-                    Iconsax.moon,
+                    Iconsax.moon1,
                     color: AppColorConfig.white,
                   ),
                   W.paddingWidtht16(),
@@ -239,7 +235,7 @@ class JadwalSholatView extends StatelessWidget {
               Row(
                 children: [
                   const Icon(
-                    Iconsax.moon,
+                    Iconsax.sun,
                     color: AppColorConfig.white,
                   ),
                   W.paddingWidtht16(),
@@ -268,7 +264,7 @@ class JadwalSholatView extends StatelessWidget {
               Row(
                 children: [
                   const Icon(
-                    Iconsax.moon,
+                    Iconsax.sun_1,
                     color: AppColorConfig.white,
                   ),
                   W.paddingWidtht16(),
@@ -297,7 +293,7 @@ class JadwalSholatView extends StatelessWidget {
               Row(
                 children: [
                   const Icon(
-                    Iconsax.moon,
+                    Iconsax.sun_fog,
                     color: AppColorConfig.white,
                   ),
                   W.paddingWidtht16(),
@@ -326,7 +322,7 @@ class JadwalSholatView extends StatelessWidget {
               Row(
                 children: [
                   const Icon(
-                    Iconsax.moon,
+                    Iconsax.moon5,
                     color: AppColorConfig.white,
                   ),
                   W.paddingWidtht16(),
@@ -359,7 +355,7 @@ class JadwalSholatView extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColorConfig.primary),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Column(
                 children: [
@@ -407,7 +403,7 @@ class JadwalSholatView extends StatelessWidget {
                   W.textBody(
                     text: data.sunset,
                     color: AppColorConfig.white,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                 ],
               ),

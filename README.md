@@ -11,6 +11,11 @@ fitur yang karang
 - pada halaman bookmark ketika di klik harusnya langsung ke ayat yang disimpan
 - ketika sudah pernah menekan getstarted harusnya langsung ke halaman home
 
+## FLutter 
+3.29.0
+
+## Java
+17
 
 ## Statemanagement
 

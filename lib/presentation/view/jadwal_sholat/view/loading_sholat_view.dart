@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 
@@ -191,9 +192,9 @@ class LoadingSholatView extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  W.shimmer(width: 100, height: 15),
+                  W.shimmer(width: C.getWidth() * 0.25, height: 15),
                   W.paddingheight5(),
-                  W.shimmer(width: 100, height: 15),
+                  W.shimmer(width: C.getWidth() * 0.25, height: 15),
                 ],
               ),
               const SizedBox(
@@ -202,9 +203,9 @@ class LoadingSholatView extends StatelessWidget {
               ),
               Column(
                 children: [
-                  W.shimmer(width: 100, height: 15),
+                  W.shimmer(width: C.getWidth() * 0.25, height: 15),
                   W.paddingheight5(),
-                  W.shimmer(width: 100, height: 15),
+                  W.shimmer(width: C.getWidth() * 0.25, height: 15),
                 ],
               ),
               const SizedBox(
@@ -213,9 +214,9 @@ class LoadingSholatView extends StatelessWidget {
               ),
               Column(
                 children: [
-                  W.shimmer(width: 100, height: 15),
+                  W.shimmer(width: C.getWidth() * 0.25, height: 15),
                   W.paddingheight5(),
-                  W.shimmer(width: 100, height: 15),
+                  W.shimmer(width: C.getWidth() * 0.25, height: 15),
                 ],
               ),
             ],
