@@ -13,7 +13,6 @@ class JadwalSholatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.put(JadwalSholatGetx());
-    c.getLoacationName();
     // C.showLog(log: '--${c.timezone.value}');
 
     return Scaffold(
