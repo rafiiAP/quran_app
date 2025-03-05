@@ -234,7 +234,7 @@ class JadwalSholatGetx extends GetxController {
     // continue accessing the position of the device.
     try {
       C.showLog(log: '--Fetching current location...');
-      final position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: 10));
+      final position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: 1));
       C.showLog(log: '--Location fetched: ${position.latitude}, ${position.longitude}');
       return position;
     } catch (e) {
@@ -245,8 +245,13 @@ class JadwalSholatGetx extends GetxController {
 
   getLoacationName() async {
     C.showLog(log: 'log: --baaa');
-    Position position = await determinePosition();
+    Position? position = await determinePosition();
     C.showLog(log: '--baaa position: $position');
+
+    if (position == null) {
+      city.value = 'Tidak diketahui';
+      return;
+    }
 
     // Ambil nama kota/kabupaten
     var placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
