@@ -13,7 +13,7 @@ class JadwalSholatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.put(JadwalSholatGetx());
-    // c.determinePosition();
+    c.getLoacationName();
     // C.showLog(log: '--${c.timezone.value}');
 
     return Scaffold(
@@ -21,6 +21,12 @@ class JadwalSholatPage extends StatelessWidget {
         title: W.title(text: 'Jadwal Sholat'),
         automaticallyImplyLeading: false,
         centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          W.messageInfo(message: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        },
+        child: const Icon(Icons.refresh),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

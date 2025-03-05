@@ -12,6 +12,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 
 class JadwalSholatGetx extends GetxController {
+  Rxn<Position> position = Rxn<Position>();
+
   var city = ''.obs, cSholat = ''.obs, countdownText = ''.obs, timezone = ''.obs;
 
   @override
@@ -41,15 +43,20 @@ class JadwalSholatGetx extends GetxController {
     String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
     // Ambil lokasi
-    Position position = await determinePosition();
+    position.value = await determinePosition();
+
+    if (position.value == null) {
+      // jadwalSholat();
+      return;
+    }
 
     // Pastikan context masih valid setelah async selesai
     if (!context.mounted) return;
 
     context.read<JadwalSholatBloc>().add(
           JadwalSholatEvent.getJadwalSholat(
-            latitude: position.latitude,
-            longitude: position.longitude,
+            latitude: position.value!.latitude,
+            longitude: position.value!.longitude,
             date: date,
           ),
         );
@@ -234,7 +241,7 @@ class JadwalSholatGetx extends GetxController {
     // continue accessing the position of the device.
     try {
       C.showLog(log: '--Fetching current location...');
-      final position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: 1));
+      final position = await Geolocator.getCurrentPosition();
       C.showLog(log: '--Location fetched: ${position.latitude}, ${position.longitude}');
       return position;
     } catch (e) {
@@ -244,22 +251,24 @@ class JadwalSholatGetx extends GetxController {
   }
 
   getLoacationName() async {
-    C.showLog(log: 'log: --baaa');
-    Position? position = await determinePosition();
-    C.showLog(log: '--baaa position: $position');
+    // C.showLog(log: 'log: --baaa');
+    position.value = await determinePosition();
+    // C.showLog(log: '--baaa position: $position');
 
-    if (position == null) {
+    if (position.value == null) {
       city.value = 'Tidak diketahui';
       return;
     }
 
     // Ambil nama kota/kabupaten
-    var placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-    C.showLog(log: '--baaa placemarks: $placemarks');
+    var placemarks = await placemarkFromCoordinates(position.value!.latitude, position.value!.longitude);
+    // C.showLog(log: '--baaa placemarks: $placemarks');
 
     if (placemarks.isNotEmpty) {
       city.value = placemarks[0].locality ?? "Tidak diketahui";
-      // C.showLog(log: '--baaa City: $city');
+      // C.showLog(log: '--baaa City: $city');.va
+    } else {
+      city.value = 'Tidak diketahui';
     }
   }
 
