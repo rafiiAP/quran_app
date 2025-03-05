@@ -11,6 +11,11 @@ fitur yang karang
 - pada halaman bookmark ketika di klik harusnya langsung ke ayat yang disimpan
 - ketika sudah pernah menekan getstarted harusnya langsung ke halaman home
 
+## FLutter 
+3.29.0
+
+## Java
+17
 
 ## Statemanagement
 
@@ -28,6 +33,7 @@ fitur yang karang
 - freezed_annotation
 - flutter_bloc
 - geolocator
+- geocoding
 - dartz
 - equatable
 - get_it
@@ -38,6 +44,7 @@ fitur yang karang
 - shimmer
 - firebase_core
 - firebase_crashlytics
+- flutter_timezone
 
 
 ## Dev_Dependencies

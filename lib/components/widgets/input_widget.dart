@@ -84,21 +84,21 @@ mixin InputWidget {
         border: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
-            color: AppColorConfig.grey.withOpacity(0.4),
+            color: AppColorConfig.grey.withValues(alpha: 0.4),
           ),
           // borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
-            color: AppColorConfig.grey.withOpacity(0.4),
+            color: AppColorConfig.grey.withValues(alpha: 0.4),
           ),
           // borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
-            color: AppColorConfig.grey.withOpacity(0.4),
+            color: AppColorConfig.grey.withValues(alpha: 0.4),
           ),
 
           // borderSide: BorderSide.none,
@@ -111,7 +111,7 @@ mixin InputWidget {
         hintStyle: GoogleFonts.poppins(
           textStyle: Get.textTheme.bodyMedium!.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColorConfig.grey.withOpacity(0.4),
+            color: AppColorConfig.grey.withValues(alpha: 0.4),
           ),
         ),
         labelStyle: labelText == null
@@ -119,7 +119,7 @@ mixin InputWidget {
             : GoogleFonts.poppins(
                 textStyle: Get.textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColorConfig.grey.withOpacity(0.4),
+                  color: AppColorConfig.grey.withValues(alpha: 0.4),
                 ),
               ),
 
@@ -221,7 +221,7 @@ mixin InputWidget {
             : GoogleFonts.poppins(
                 textStyle: Get.textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColorConfig.grey.withOpacity(0.4),
+                  color: AppColorConfig.grey.withValues(alpha: 0.4),
                 ),
               ),
       ),

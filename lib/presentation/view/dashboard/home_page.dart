@@ -12,12 +12,11 @@ import 'package:quran_app/presentation/controller/dashboard/home_getx.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_bloc/detail_surah_bloc.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
-
-  final c = Get.put(HomeGetx());
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final c = Get.put(HomeGetx());
     // c.init();
     return Scaffold(
       appBar: AppBar(
@@ -33,12 +32,6 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.error),
-        onPressed: () {
-          throw Exception();
-        },
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -57,7 +50,7 @@ class HomePage extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
             W.paddingheight16(),
-            cardLastRead(),
+            cardLastRead(c),
             W.paddingheight16(),
             W.paddingheight16(),
             BlocConsumer<GetSurahBloc, GetSurahState>(
@@ -78,7 +71,7 @@ class HomePage extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return loadList();
+                        return loadList(c);
                       },
                     );
                   },
@@ -100,7 +93,7 @@ class HomePage extends StatelessWidget {
                         itemCount: surah.length,
                         itemBuilder: (context, index) {
                           SurahEntity surahEntity = surah[index];
-                          return listSurah(surahEntity);
+                          return listSurah(c, surahEntity);
                         },
                       ),
                     );
@@ -114,7 +107,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  loadList() {
+  loadList(HomeGetx c) {
     return Column(
       children: [
         W.paddingheight5(),
@@ -142,7 +135,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  cardLastRead() {
+  cardLastRead(HomeGetx c) {
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -203,7 +196,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  listSurah(SurahEntity surahEntity) {
+  listSurah(HomeGetx c, SurahEntity surahEntity) {
     return InkWell(
       onTap: () {
         c.getDetailSurah(surahEntity);
@@ -215,47 +208,55 @@ class HomePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 40,
-                    height: 40,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          MyImage.borderNum,
+              Flexible(
+                child: Row(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      width: 40,
+                      height: 40,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            MyImage.borderNum,
+                          ),
+                        ),
+                      ),
+                      child: Align(
+                        child: W.textBody(
+                          text: surahEntity.nomor.toString(),
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                    child: W.textBody(
-                      text: surahEntity.nomor.toString(),
-                      fontWeight: FontWeight.w500,
+                    W.paddingWidtht16(),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          W.textBody(
+                            text: surahEntity.namaLatin,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          W.textBody(
+                            text: '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
+                            fontWeight: FontWeight.w500,
+                            color: AppColorConfig.grey,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  W.paddingWidtht16(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      W.textBody(
-                        text: surahEntity.namaLatin,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                      ),
-                      W.textBody(
-                        text: '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
-                        fontWeight: FontWeight.w500,
-                        color: AppColorConfig.grey,
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-              W.textBody(
-                text: surahEntity.nama,
-                color: AppColorConfig.primary,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              Flexible(
+                child: W.textBody(
+                  text: surahEntity.nama,
+                  color: AppColorConfig.primary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
