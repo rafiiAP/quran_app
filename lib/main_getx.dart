@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:quran_app/components/function/main_function.dart';
+import 'package:quran_app/core/service/permission_service.dart';
 import 'package:quran_app/data/constant/config.dart';
 import 'package:quran_app/presentation/view/dashboard/dashboard_page.dart';
 import 'package:quran_app/presentation/view/started_page.dart';
@@ -12,7 +13,7 @@ class MainGetx extends GetxController {
   @override
   void onInit() {
     init();
-
+    initServices();
     super.onInit();
   }
 
@@ -22,10 +23,14 @@ class MainGetx extends GetxController {
     super.onReady();
   }
 
+  Future<void> initServices() async {
+    // await PermissionService.requestNotificationPermission()
+    await PermissionService.requestAllPermissions();
+  }
+
   getPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
-    C.showLog(log: '--baaa determinePosition');
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -35,8 +40,6 @@ class MainGetx extends GetxController {
       // App to enable the location services.
       C.showLog(log: '--Location services are disabled.');
     }
-
-    C.showLog(log: '--ba1');
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -51,7 +54,6 @@ class MainGetx extends GetxController {
         return null;
       }
     }
-    C.showLog(log: '--ba2');
 
     if (permission == LocationPermission.deniedForever) {
       await Geolocator.openAppSettings();

@@ -26,7 +26,6 @@ mixin GetStorageComponent {
   SurahEntity getModel({
     required String cKey,
   }) {
-    C.showLog(log: '--${gs.read(cKey)}');
     return gs.read(cKey);
   }
 
