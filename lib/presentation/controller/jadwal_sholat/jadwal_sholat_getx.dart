@@ -1,17 +1,20 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:quran_app/components/function/main_function.dart';
+import 'package:quran_app/core/service/local_notification_service.dart';
+import 'package:quran_app/data/model/set_notif_model.dart';
 import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
-// import 'package:quran_app/data/datasources/remote_api_datasource/remote_api_datasource.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
 
 class JadwalSholatGetx extends GetxController {
+  RxMap<String, String> jadwal = RxMap<String, String>();
+  RxList<SetNotifModel> vaJadwal = RxList<SetNotifModel>();
   Rxn<Position> position = Rxn<Position>();
 
   var city = ''.obs, cSholat = ''.obs, countdownText = ''.obs, timezone = ''.obs;
@@ -60,21 +63,71 @@ class JadwalSholatGetx extends GetxController {
         );
   }
 
-  void startTimer(JadwalSholatEntity data) {
+  onSuccess(JadwalSholatEntity data) {
+    vaJadwal.value = [
+      SetNotifModel(
+        iconsax: Iconsax.moon1,
+        hour: int.parse(data.fajr.split(":")[0]),
+        minute: int.parse(data.fajr.split(":")[1]),
+        title: 'Subuh',
+        body: 'Waktunya sholat Subuh',
+        isSet: false.obs,
+      ),
+      SetNotifModel(
+        iconsax: Iconsax.sun,
+        hour: int.parse(data.dhuhr.split(":")[0]),
+        minute: int.parse(data.dhuhr.split(":")[1]),
+        title: 'Dzuhur',
+        body: 'Waktunya sholat Dzuhur',
+        isSet: false.obs,
+      ),
+      SetNotifModel(
+        iconsax: Iconsax.sun_1,
+        hour: int.parse(data.asr.split(":")[0]),
+        minute: int.parse(data.asr.split(":")[1]),
+        title: 'Ashar',
+        body: 'Waktunya sholat Ashar',
+        isSet: false.obs,
+      ),
+      SetNotifModel(
+        iconsax: Iconsax.sun_fog,
+        hour: int.parse(data.maghrib.split(":")[0]),
+        minute: int.parse(data.maghrib.split(":")[1]),
+        title: 'Maghrib',
+        body: 'Waktunya sholat Maghrib',
+        isSet: false.obs,
+      ),
+      SetNotifModel(
+        iconsax: Iconsax.moon5,
+        hour: int.parse(data.isha.split(":")[0]),
+        minute: int.parse(data.isha.split(":")[1]),
+        title: 'Isya',
+        body: 'Waktunya sholat Isya',
+        isSet: false.obs,
+      ),
+    ];
+    loadAlarmStatus();
+    startTimer();
+    updateSholat();
+  }
+
+  Future<void> requestExactAlarmPermission() async {}
+
+  void startTimer() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      updateCountdown(data);
-      startTimer(data);
+      updateCountdown();
+      startTimer();
     });
   }
 
-  void updateSholat(JadwalSholatEntity data) {
+  void updateSholat() {
     Future.delayed(const Duration(hours: 3)).then(
       (value) {
-        getNextSholatText(data);
-        getNextSholatText(data);
-        getTimeText(data);
-        getNextTime(data);
-        updateSholat(data);
+        getNextSholatText();
+        getNextSholatText();
+        getTimeText();
+        getNextTime();
+        updateSholat();
       },
     );
   }
@@ -88,70 +141,62 @@ class JadwalSholatGetx extends GetxController {
     return "$hours:$minutes:$seconds";
   }
 
-  void updateCountdown(JadwalSholatEntity data) {
+  void updateCountdown() {
     DateTime now = DateTime.now();
-    Map<String, String> jadwal = {
-      "Subuh": data.fajr,
-      "Zuhur": data.dhuhr,
-      "Asar": data.asr,
-      "Maghrib": data.maghrib,
-      "Isya": data.isha,
-    };
 
-    for (var entry in jadwal.entries) {
-      List<String> splitTime = entry.value.split(":");
-      DateTime waktuSholat = DateTime(now.year, now.month, now.day, int.parse(splitTime[0]), int.parse(splitTime[1]));
+    for (var entry in vaJadwal) {
+      DateTime waktuSholat = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        entry.hour,
+        entry.minute,
+      );
 
       if (now.isBefore(waktuSholat)) {
         Duration remaining = waktuSholat.difference(now);
-        countdownText.value = "${entry.key} dalam\n${formatDuration(remaining)}";
+        countdownText.value = "${entry.title} dalam\n${formatDuration(remaining)}";
         return;
       }
     }
 
     // Jika sudah melewati semua jadwal, tampilkan countdown untuk Subuh besok
-    List<String> splitTime = data.fajr.split(":");
-    DateTime waktuSubuhBesok =
-        DateTime(now.year, now.month, now.day + 1, int.parse(splitTime[0]), int.parse(splitTime[1]));
+
+    DateTime waktuSubuhBesok = DateTime(
+      now.year,
+      now.month,
+      now.day + 1,
+      vaJadwal.first.hour,
+      vaJadwal.first.minute,
+    );
     Duration remaining = waktuSubuhBesok.difference(now);
     countdownText.value = "Subuh dalam\n${formatDuration(remaining)}";
   }
 
-  String getSholatText(JadwalSholatEntity data) {
+  String getSholatText() {
     DateTime now = DateTime.now();
-    Map<String, String> jadwal = {
-      "Subuh": data.fajr,
-      "Zuhur": data.dhuhr,
-      "Asar": data.asr,
-      "Maghrib": data.maghrib,
-      "Isya": data.isha,
-    };
 
-    for (var entry in jadwal.entries) {
-      List<String> splitTime = entry.value.split(":");
-      DateTime waktuSholat = DateTime(now.year, now.month, now.day, int.parse(splitTime[0]), int.parse(splitTime[1]));
+    for (var entry in vaJadwal) {
+      DateTime waktuSholat = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        entry.hour,
+        entry.minute,
+      );
 
       if (now.isBefore(waktuSholat)) {
-        return "Mendekati waktu ${entry.key}";
+        return "Mendekati waktu ${entry.title}";
       }
     }
     return "-";
   }
 
-  String getNextSholatText(JadwalSholatEntity data) {
+  String getNextSholatText() {
     DateTime now = DateTime.now();
-    Map<String, String> jadwal = {
-      "Subuh": data.fajr,
-      "Zuhur": data.dhuhr,
-      "Asar": data.asr,
-      "Maghrib": data.maghrib,
-      "Isya": data.isha,
-    };
 
-    List<String> keys = jadwal.keys.toList(); // Urutan sholat
-    List<DateTime> times = keys.map((key) {
-      List<String> splitTime = jadwal[key]!.split(":");
-      return DateTime(now.year, now.month, now.day, int.parse(splitTime[0]), int.parse(splitTime[1]));
+    List<DateTime> times = vaJadwal.map((key) {
+      return DateTime(now.year, now.month, now.day, key.hour, key.minute);
     }).toList();
 
     int nextIndex = -1;
@@ -168,24 +213,14 @@ class JadwalSholatGetx extends GetxController {
       nextIndex = 0;
     }
 
-    return keys[nextIndex];
+    return vaJadwal[nextIndex].title;
   }
 
-  String getNextTime(JadwalSholatEntity data) {
+  String getNextTime() {
     DateTime now = DateTime.now();
-    Map<String, String> jadwal = {
-      "Subuh": data.fajr,
-      "Zuhur": data.dhuhr,
-      "Asar": data.asr,
-      "Maghrib": data.maghrib,
-      "Isya": data.isha,
-    };
 
-    List<String> times = jadwal.values.toList(); // Ambil semua waktu sholat
-
-    List<DateTime> dateTimes = times.map((time) {
-      List<String> splitTime = time.split(":");
-      return DateTime(now.year, now.month, now.day, int.parse(splitTime[0]), int.parse(splitTime[1]));
+    List<DateTime> dateTimes = vaJadwal.map((time) {
+      return DateTime(now.year, now.month, now.day, time.hour, time.minute);
     }).toList();
 
     int nextIndex = -1;
@@ -205,31 +240,17 @@ class JadwalSholatGetx extends GetxController {
     return DateFormat('HH:mm').format(dateTimes[nextIndex]);
   }
 
-  String getTimeText(JadwalSholatEntity data) {
+  String getTimeText() {
     DateTime now = DateTime.now();
-    Map<String, String> jadwal = {
-      "Subuh": data.fajr,
-      "Zuhur": data.dhuhr,
-      "Asar": data.asr,
-      "Maghrib": data.maghrib,
-      "Isya": data.isha,
-    };
 
-    for (var entry in jadwal.entries) {
-      List<String> splitTime = entry.value.split(":");
-      DateTime waktuSholat = DateTime(now.year, now.month, now.day, int.parse(splitTime[0]), int.parse(splitTime[1]));
+    for (var entry in vaJadwal) {
+      DateTime waktuSholat = DateTime(now.year, now.month, now.day, entry.hour, entry.minute);
 
       if (now.isBefore(waktuSholat)) {
-        return entry.value;
+        return "${entry.hour}:${entry.minute}";
       }
     }
     return "";
-  }
-
-  waktuSholat(String cSholat) {
-    // switch (DateTime.now().hour){
-    //   case cSholat.toString()
-    // }
   }
 
   /// When the location services are not enabled or permissions
@@ -238,9 +259,7 @@ class JadwalSholatGetx extends GetxController {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     try {
-      C.showLog(log: '--Fetching current location...');
       final position = await Geolocator.getCurrentPosition();
-      C.showLog(log: '--Location fetched: ${position.latitude}, ${position.longitude}');
       return position;
     } catch (e) {
       C.showLog(log: '--Error getting location: $e');
@@ -272,5 +291,78 @@ class JadwalSholatGetx extends GetxController {
 
   getTimeZone() async {
     timezone.value = await FlutterTimezone.getLocalTimezone();
+  }
+
+  loadAlarmStatus() async {
+    for (var item in vaJadwal) {
+      bool? status = C.getBool(cKey: "alarm_${item.title}", lDefaultValue: false);
+      item.isSet.value = status;
+
+      if (item.isSet.value) {
+        await LocalNotificationService.scheduleNotification(
+          vaJadwal.indexOf(item),
+          item.hour,
+          item.minute,
+          title: item.title,
+          body: item.body,
+        );
+      }
+    }
+  }
+
+  setNotif(int index, SetNotifModel model) async {
+    // for (var i = 0; i < jadwal.length; i++) {
+    //   List<String> splitTime = jadwal.values.elementAt(i).split(":");
+    //   LocalNotificationService.scheduleNotification(
+    //     i,
+    //     int.parse(splitTime[0]),
+    //     int.parse(splitTime[1]),
+    //     title: jadwal.keys.elementAt(i),
+    //     body: 'Waktunya sholat ${jadwal.keys.elementAt(i)}',
+    //   );
+    // }
+    if (model.isSet.value) {
+      model.isSet.value = false;
+      await LocalNotificationService.cancelNotification(index);
+    } else {
+      model.isSet.value = true;
+      LocalNotificationService.scheduleNotification(
+        index,
+        model.hour,
+        model.minute,
+        title: model.title,
+        body: model.body,
+      ).then(
+        (value) {
+          LocalNotificationService.checkScheduledNotifications()!.then(
+            (value) {
+              if (value == null) {
+                Get.snackbar('Gagal', 'Pengingat waktu sholat gagal diaktifkan');
+                return;
+              } else {
+                DateTime now = DateTime.now();
+
+                DateTime waktuSholat = DateTime(
+                  now.year,
+                  now.month,
+                  now.day,
+                  model.hour,
+                  model.minute,
+                );
+
+                for (int i = 0; i < vaJadwal.length; i++) {
+                  C.setBool(cKey: "alarm_${vaJadwal[i].title}", lValue: vaJadwal[i].isSet.value);
+                }
+
+                Duration remaining = waktuSholat.difference(now);
+
+                Get.snackbar('Berhasil',
+                    "Pengingat waktu sholat ${model.title} dalam\n${remaining.inHours} jam ${remaining.inMinutes.remainder(60)} menit");
+              }
+            },
+          );
+        },
+      );
+    }
   }
 }

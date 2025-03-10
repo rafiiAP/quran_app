@@ -27,6 +27,5 @@ class DashboardGetx extends GetxController {
 
   setCache() {
     C.setBool(cKey: AppConfig.cacheStarted, lValue: true);
-    C.showLog(log: '--${C.getBool(cKey: AppConfig.cacheStarted, lDefaultValue: false)}');
   }
 }

@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:quran_app/components/style.dart';
+import 'package:quran_app/core/service/local_notification_service.dart';
+import 'package:quran_app/core/service/permission_service.dart';
 import 'package:quran_app/data/db/database_helper.dart';
 import 'package:quran_app/domain/use_case/quran_usecase.dart';
 import 'package:quran_app/firebase_options.dart';
@@ -34,6 +36,10 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+  await PermissionService.requestAllPermissions();
+
+  await LocalNotificationService.init();
 
   final DatabaseHelper databaseHelper = DatabaseHelper();
   databaseHelper.db;

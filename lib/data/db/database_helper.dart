@@ -2,7 +2,6 @@ import 'dart:async';
 // ignore: depend_on_referenced_packages
 import 'package:get/get.dart';
 import 'package:path/path.dart';
-import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
 import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:sqflite/sqflite.dart';
@@ -55,8 +54,6 @@ class DatabaseHelper {
       where: 'teks_indonesia = ?',
       whereArgs: [ayatDetailEntity.teksIndonesia],
     );
-
-    C.showLog(log: '---> $existingData');
 
     if (existingData.isEmpty) {
       // Jika tidak ada data, lakukan insert
