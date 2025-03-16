@@ -6,15 +6,19 @@ import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/constant/image.dart';
 import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:quran_app/presentation/controller/detail_surah/detail_surah_getx.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DetailSurahPage extends StatelessWidget {
   final DetailEntity detailEntity;
-  DetailSurahPage({super.key, required this.detailEntity});
+  final int? index;
 
-  final c = Get.put(DetailSurahGetx());
+  const DetailSurahPage({super.key, required this.detailEntity, this.index});
 
   @override
   Widget build(BuildContext context) {
+    final c = Get.put(DetailSurahGetx(index: index));
+    // c.toScrollIndex(index);
+
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -22,95 +26,99 @@ class DetailSurahPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: ListView(
+        child: Column(
           children: [
-            cardSurah(),
-            ListView.builder(
-              padding: const EdgeInsets.only(top: 32),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: detailEntity.ayat.length,
-              itemBuilder: (context, index) {
-                AyatDetailEntity ayatDetailEntity = detailEntity.ayat[index];
-                return InkWell(
-                  onTap: () {
-                    c.onTapList(context, ayatDetailEntity, detailEntity);
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: C.isDark(context)
-                              ? AppColorConfig.bgBottom
-                              : AppColorConfig.lightGrey.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(16),
+            // cardSurah(),
+            Expanded(
+              child: ScrollablePositionedList.builder(
+                itemScrollController: c.itemScrollController,
+                // itemPositionsListener: c.itemPositionsListener,
+                // initialAlignment: 0,
+                // initialScrollIndex: 0,
+                itemCount: detailEntity.ayat.length,
+                itemBuilder: (context, index) {
+                  AyatDetailEntity ayatDetailEntity = detailEntity.ayat[index];
+
+                  return InkWell(
+                    onTap: () {
+                      c.onTapList(context, ayatDetailEntity, detailEntity);
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: C.isDark(context)
+                                ? AppColorConfig.bgBottom
+                                : AppColorConfig.lightGrey.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 13,
+                                backgroundColor: AppColorConfig.primary,
+                                child: W.textBody(
+                                  text: ayatDetailEntity.nomorAyat.toString(),
+                                  color: AppColorConfig.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  c.onTapList(context, ayatDetailEntity, detailEntity);
+                                },
+                                child: const Icon(
+                                  Icons.menu_rounded,
+                                  color: AppColorConfig.primary,
+                                ),
+                              ),
+                              W.paddingWidtht8(),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 13,
-                              backgroundColor: AppColorConfig.primary,
-                              child: W.textBody(
-                                text: ayatDetailEntity.nomorAyat.toString(),
-                                color: AppColorConfig.white,
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  ayatDetailEntity.teksArab,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    height: 2,
+                                  ),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              W.paddingheight16(),
+                              Text(
+                                ayatDetailEntity.teksLatin,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                              W.paddingheight5(),
+                              W.textBody(
+                                text: ayatDetailEntity.teksIndonesia,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                c.onTapShare(ayatDetailEntity);
-                              },
-                              child: const Icon(
-                                Icons.share,
-                                color: AppColorConfig.primary,
-                              ),
-                            ),
-                            W.paddingWidtht8(),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                ayatDetailEntity.teksArab,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  height: 2,
-                                ),
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                            W.paddingheight16(),
-                            Text(
-                              ayatDetailEntity.teksLatin,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                            W.paddingheight5(),
-                            W.textBody(
-                              text: ayatDetailEntity.teksIndonesia,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            W.paddingheight16(),
-                            const Divider(color: AppColorConfig.grey),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              },
+                              W.paddingheight16(),
+                              const Divider(color: AppColorConfig.grey),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
             )
           ],
         ),

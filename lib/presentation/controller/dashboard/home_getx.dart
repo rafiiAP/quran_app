@@ -17,7 +17,12 @@ class HomeGetx extends GetxController {
   Rx<List<SurahEntity>> surahList = Rx<List<SurahEntity>>([]);
 
   var cNamaLatin = ''.obs;
+  var nNomorSurah = 0.obs;
   var nNomorAyat = 0.obs;
+
+  ///untuk kodisi ketika tap lastRead atau tidak
+  var isToLastRead = false.obs;
+  var isSnackbarActive = false.obs;
 
   @override
   void onReady() {
@@ -36,6 +41,7 @@ class HomeGetx extends GetxController {
 
   getLastRead() {
     cNamaLatin.value = C.getString(cKey: AppConfig.cacheNamaLatin);
+    nNomorSurah.value = C.getInt(cKey: AppConfig.cacheNomorSurah, nDefaultValue: 0);
     nNomorAyat.value = C.getInt(cKey: AppConfig.cacheNomorAyat, nDefaultValue: 0);
   }
 
@@ -49,16 +55,36 @@ class HomeGetx extends GetxController {
     surahList.value = data;
   }
 
+  toLastRead({int? index = 0}) {
+    if (index != 0) {
+      isToLastRead.value = true;
+
+      BuildContext context = Get.context!;
+      context.read<DetailSurahCubit>().getPosts(number: index!);
+    } else {
+      //tampilkan snackbar
+      if (!isSnackbarActive.value) {
+        isSnackbarActive.value = true; // Set jadi aktif
+
+        Get.snackbar(
+          'Perhatian',
+          'Belum ada bacaan terakhir',
+        );
+        Future.delayed(const Duration(seconds: 3), () => isSnackbarActive.value = false); // Setelah 3 detik))
+      }
+    }
+  }
+
   getDetailSurah(SurahEntity data) {
-    C.setString(cKey: AppConfig.cacheNamaLatin, cValue: data.namaLatin);
-    C.setInt(cKey: AppConfig.cacheNomorAyat, nValue: data.nomor);
+    isToLastRead.value = false;
+
     BuildContext context = Get.context!;
     context.read<DetailSurahCubit>().getPosts(number: data.nomor);
   }
 
   onSuccesDetailSurah(DetailEntity data) {
     W.endwait();
-    C.to(() => DetailSurahPage(detailEntity: data))!.then((_) {
+    C.to(() => DetailSurahPage(detailEntity: data, index: isToLastRead.value ? nNomorAyat.value : null))!.then((_) {
       getLastRead();
     });
   }

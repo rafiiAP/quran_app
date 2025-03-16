@@ -4,18 +4,11 @@ Qur'an App
 
 Dicoding final project flutter fundamental.
 
-fitur yang karang
-- penambahan text ayat yang terakhir di baca
-- tombol penanda terakhir di baca pada detail
-- ketika klik terakhir baca, maka akan langsung ke halaman terakhir dibaca dan langsung ke ayat terakhir dibaca
-- pada halaman bookmark ketika di klik harusnya langsung ke ayat yang disimpan
-- ketika sudah pernah menekan getstarted harusnya langsung ke halaman home
-
 ## FLutter 
 3.29.0
 
 ## Java
-17
+21
 
 ## Statemanagement
 
@@ -45,6 +38,10 @@ fitur yang karang
 - firebase_core
 - firebase_crashlytics
 - flutter_timezone
+- flutter_local_notification
+- permission_handler
+- timezone
+- scrollable_positioned_list
 
 
 ## Dev_Dependencies

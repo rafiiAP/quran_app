@@ -137,62 +137,68 @@ class HomePage extends StatelessWidget {
   }
 
   cardLastRead(HomeGetx c) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColorConfig.secondary, AppColorConfig.primary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return InkWell(
+      onTap: () {
+        c.toLastRead(index: c.nNomorSurah.value);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [AppColorConfig.secondary, AppColorConfig.primary],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(15),
         ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Image.asset(MyImage.bookCard),
-                    W.paddingWidtht5(),
-                    W.textBody(
-                      text: 'Terakhir dibaca',
-                      fontWeight: FontWeight.w500,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(MyImage.bookCard),
+                      W.paddingWidtht5(),
+                      W.textBody(
+                        text: 'Terakhir dibaca',
+                        fontWeight: FontWeight.w500,
+                        color: AppColorConfig.white,
+                      ),
+                    ],
+                  ),
+                  W.paddingheight16(),
+                  Obx(
+                    () => W.textBody(
+                      text: c.cNamaLatin.value,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                       color: AppColorConfig.white,
                     ),
-                  ],
-                ),
-                W.paddingheight16(),
-                Obx(
-                  () => W.textBody(
-                    text: c.cNamaLatin.value,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: AppColorConfig.white,
                   ),
-                ),
-                W.paddingheight5(),
-                Obx(
-                  () => W.textBody(
-                    text: 'Surah : ${c.nNomorAyat.value == 0 ? '-' : c.nNomorAyat.value}',
-                    color: AppColorConfig.white,
-                    fontWeight: FontWeight.w500,
+                  W.paddingheight5(),
+                  Obx(
+                    () => W.textBody(
+                      text:
+                          'Surah : ${c.nNomorSurah.value == 0 ? '-' : c.nNomorSurah.value} , Ayat : ${c.nNomorAyat.value == 0 ? '-' : c.nNomorAyat.value}',
+                      color: AppColorConfig.white,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            right: -30,
-            bottom: -30,
-            child: Image.asset(
-              MyImage.quran,
-              width: C.getWidth() * 0.5,
+            Positioned(
+              right: -30,
+              bottom: -30,
+              child: Image.asset(
+                MyImage.quran,
+                width: C.getWidth() * 0.5,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

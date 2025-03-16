@@ -18,6 +18,7 @@ class AppConfig {
   static const int nAppVersion = 1;
 
   //---------cache-------------//
+  static const String cacheNomorSurah = 'cacheNomorSurah';
   static const String cacheNomorAyat = 'cacheNomorAyat';
   static const String cacheNamaLatin = 'cacheNamaLatin';
   static const String cacheStarted = 'cacheStarted';

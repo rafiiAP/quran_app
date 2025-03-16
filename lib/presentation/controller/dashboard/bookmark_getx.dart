@@ -14,6 +14,7 @@ class BookmarkGetx extends GetxController {
   DatabaseHelper dbHelper = DatabaseHelper();
 
   Rx<List<BookmarkModel>> bookmarks = Rx<List<BookmarkModel>>([]);
+  var nNomorAyat = 0.obs;
 
   @override
   void onInit() {
@@ -44,6 +45,7 @@ class BookmarkGetx extends GetxController {
   }
 
   getDetailSurah(BookmarkModel data) {
+    nNomorAyat.value = data.nomorAyat;
     BuildContext context = Get.context!;
     context.read<DetailSurahCubit>().getPosts(number: data.nomorSurah);
   }
@@ -51,6 +53,6 @@ class BookmarkGetx extends GetxController {
   onSuccesDetailSurah(DetailEntity data) {
     W.endwait();
 
-    C.to(() => DetailSurahPage(detailEntity: data))!.then((_) => init());
+    C.to(() => DetailSurahPage(detailEntity: data, index: nNomorAyat.value))!.then((_) => init());
   }
 }

@@ -62,7 +62,7 @@ class StartedPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       backgroundColor: AppColorConfig.white,
                       onPressed: () {
-                        C.to(() => DashboardPage());
+                        C.offAll(() => DashboardPage());
                       },
                       child: W.textBody(
                         text: 'Get Started',
