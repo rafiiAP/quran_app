@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/style.dart';
 import 'package:quran_app/core/service/local_notification_service.dart';
 import 'package:quran_app/core/service/permission_service.dart';
