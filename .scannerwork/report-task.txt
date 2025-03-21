@@ -3,5 +3,5 @@ serverUrl=http://localhost:9000
 serverVersion=25.3.0.104237
 branch=
 dashboardUrl=http://localhost:9000/dashboard?id=Quran-App
-ceTaskId=64a7dfaf-7db5-439d-9e72-21e489922f74
-ceTaskUrl=http://localhost:9000/api/ce/task?id=64a7dfaf-7db5-439d-9e72-21e489922f74
+ceTaskId=273ae679-e77a-48a6-9a55-f3a880370675
+ceTaskUrl=http://localhost:9000/api/ce/task?id=273ae679-e77a-48a6-9a55-f3a880370675
