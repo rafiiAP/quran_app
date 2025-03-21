@@ -1,0 +1,7 @@
+- name: Run SonarQube Scanner
+  run: |
+    sonar-scanner \
+      -Dsonar.projectKey=Quran-App \
+      -Dsonar.sources=lib \
+      -Dsonar.host.url=http://localhost:9000 \
+      -Dsonar.token=${{ secrets.SONAR_TOKEN }}
