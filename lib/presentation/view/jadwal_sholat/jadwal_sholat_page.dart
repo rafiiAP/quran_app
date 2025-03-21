@@ -14,7 +14,9 @@ class JadwalSholatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.put(JadwalSholatGetx());
-    // C.showLog(log: '--${c.timezone.value}');
+
+    // LocalNotificationService.scheduleNotification(1, 13, 43, body: 'tes', title: 'tes');
+    // LocalNotificationService.checkScheduledNotifications();
 
     return Scaffold(
       appBar: AppBar(
@@ -56,29 +58,6 @@ class JadwalSholatPage extends StatelessWidget {
             );
           },
         ),
-
-        // child: BlocBuilder<JadwalSholatBloc, JadwalSholatState>(
-        //   builder: (context, state) {
-        //     return state.maybeWhen(
-        //       orElse: () {
-        //         return const LoadingSholatView();
-        //       },
-        //       loading: () {
-        //         return const LoadingSholatView();
-        //       },
-        //       error: (message) => W.messageInfo(message: message),
-        //       success: (data) {
-        //         c.startTimer(data);
-        //         // c.updateCountdown(data);
-        //         c.updateSholat(data);
-        //         return JadwalSholatView(
-        //           data: data,
-        //           c: c,
-        //         );
-        //       },
-        //     );
-        //   },
-        // ),
       ),
     );
   }

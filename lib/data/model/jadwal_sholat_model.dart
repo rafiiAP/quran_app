@@ -14,11 +14,13 @@ class JadwalSholatDioModel extends Equatable {
     required this.data,
   });
 
-  factory JadwalSholatDioModel.fromJson(String str) => JadwalSholatDioModel.fromMap(json.decode(str));
+  factory JadwalSholatDioModel.fromJson(String str) =>
+      JadwalSholatDioModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory JadwalSholatDioModel.fromMap(Map<String, dynamic> json) => JadwalSholatDioModel(
+  factory JadwalSholatDioModel.fromMap(Map<String, dynamic> json) =>
+      JadwalSholatDioModel(
         code: json["code"],
         status: json["status"],
         data: JadwalSholatDataModel.fromMap(json["data"]),
@@ -41,11 +43,13 @@ class JadwalSholatDataModel extends Equatable {
     required this.timings,
   });
 
-  factory JadwalSholatDataModel.fromJson(String str) => JadwalSholatDataModel.fromMap(json.decode(str));
+  factory JadwalSholatDataModel.fromJson(String str) =>
+      JadwalSholatDataModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory JadwalSholatDataModel.fromMap(Map<String, dynamic> json) => JadwalSholatDataModel(
+  factory JadwalSholatDataModel.fromMap(Map<String, dynamic> json) =>
+      JadwalSholatDataModel(
         timings: JadwalSholatModel.fromMap(json["timings"]),
       );
 
@@ -84,11 +88,13 @@ class JadwalSholatModel extends Equatable {
     required this.lastthird,
   });
 
-  factory JadwalSholatModel.fromJson(String str) => JadwalSholatModel.fromMap(json.decode(str));
+  factory JadwalSholatModel.fromJson(String str) =>
+      JadwalSholatModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory JadwalSholatModel.fromMap(Map<String, dynamic> json) => JadwalSholatModel(
+  factory JadwalSholatModel.fromMap(Map<String, dynamic> json) =>
+      JadwalSholatModel(
         fajr: json["Fajr"],
         sunrise: json["Sunrise"],
         dhuhr: json["Dhuhr"],

@@ -81,23 +81,24 @@ class LocalNotificationService {
     String? body,
     String? title,
   }) async {
-    // final detroit = tz.getLocation('Asia/Jakarta');
-    final now = tz.TZDateTime.now(tz.local);
+    final detroit = tz.getLocation('Asia/Jakarta');
+    final now = tz.TZDateTime.now(detroit);
     tz.TZDateTime scheduledTime;
     scheduledTime = tz.TZDateTime(
-      tz.local,
+      detroit,
       now.year,
       now.month,
       now.day,
       hour,
       minute,
     );
-    C.showLog(log: '--$scheduledTime - $now -${scheduledTime.isBefore(now)}');
+    C.showLog(log: '--🎯 TZDateTime (detroit): ${scheduledTime.toString()}');
+    C.showLog(log: '--🕒 Sekarang (detroit): ${now.toString()}');
 
     if (scheduledTime.isBefore(now)) {
       //kalau sudah lewat maka dijadwalkan untuk besoknya
       scheduledTime = tz.TZDateTime(
-        tz.local,
+        detroit,
         now.year,
         now.month,
         now.day + 1,
@@ -134,7 +135,7 @@ class LocalNotificationService {
       body,
       scheduledTime,
       details,
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
@@ -152,7 +153,7 @@ class LocalNotificationService {
         await FlutterLocalNotificationsPlugin().pendingNotificationRequests();
 
     for (var notif in pendingNotifications) {
-      C.showLog(log: '--📅 Notifikasi ID: ${notif.id}, Title: ${notif.title}, Body: ${notif.body}');
+      C.showLog(log: '--📅 Notifikasi ID: ${notif.id}, Title: ${notif.title}, Body: ${notif.body}, ${notif.payload}');
     }
 
     if (pendingNotifications.isEmpty) {

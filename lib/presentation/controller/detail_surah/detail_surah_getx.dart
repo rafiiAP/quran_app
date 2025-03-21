@@ -39,62 +39,44 @@ class DetailSurahGetx extends GetxController {
         mainAxisSize: MainAxisSize.min,
         children: [
           W.paddingheight16(),
-          Container(
-            width: context.width,
-            decoration: BoxDecoration(
-              color: C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.white,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
+          ListTile(
+            leading: const Icon(
+              Icons.local_attraction_outlined,
+              color: AppColorConfig.primary,
             ),
-            child: W.buttonAKP(
-              onPressed: () {
-                C.setString(cKey: AppConfig.cacheNamaLatin, cValue: detailModel.namaLatin);
-                C.setInt(cKey: AppConfig.cacheNomorAyat, nValue: ayatModel.nomorAyat);
-                C.setInt(cKey: AppConfig.cacheNomorSurah, nValue: detailModel.nomor);
+            title: W.textBody(text: 'Tandai sebagai bacaan terakhir'),
+            onTap: () {
+              C.setString(cKey: AppConfig.cacheNamaLatin, cValue: detailModel.namaLatin);
+              C.setInt(cKey: AppConfig.cacheNomorAyat, nValue: ayatModel.nomorAyat);
+              C.setInt(cKey: AppConfig.cacheNomorSurah, nValue: detailModel.nomor);
 
-                Get.back();
-                Get.snackbar('Sukses', 'Berhasil ditandai sebagai bacaan terakhir');
-              },
-              text: 'Tandai sebagai bacaan terakhir',
-            ),
+              Get.back();
+              Get.snackbar('Sukses', 'Berhasil ditandai sebagai bacaan terakhir');
+            },
           ),
-          W.paddingheight16(),
-          Container(
-            width: context.width,
-            decoration: BoxDecoration(
-              color: C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.white,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(
+              Icons.bookmark_add_outlined,
+              color: AppColorConfig.primary,
             ),
-            child: W.buttonAKP(
-              onPressed: () {
-                dbHelper.insertOrUpdateBookmark(ayatModel, detailModel);
-                Get.back();
-              },
-              text: 'Simpan ke bookmark',
-            ),
+            title: W.textBody(text: 'Simpan ke bookmark'),
+            onTap: () {
+              dbHelper.insertOrUpdateBookmark(ayatModel, detailModel);
+              Get.back();
+            },
           ),
-          W.paddingheight16(),
-          Container(
-            width: context.width,
-            decoration: BoxDecoration(
-              color: C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.white,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(
+              Icons.add_link,
+              color: AppColorConfig.primary,
             ),
-            child: W.buttonAKP(
-              onPressed: () {
-                onTapShare(ayatModel);
-                Get.back();
-              },
-              text: 'Salin',
-            ),
+            title: W.textBody(text: 'Salin'),
+            onTap: () {
+              onTapShare(ayatModel);
+              Get.back();
+            },
           ),
           W.paddingheight16(),
           W.paddingheight16(),

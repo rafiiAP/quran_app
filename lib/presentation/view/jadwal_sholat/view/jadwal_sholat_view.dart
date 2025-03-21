@@ -22,7 +22,6 @@ class JadwalSholatView extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                // height: C.getHeight() * 0.20,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   image: const DecorationImage(
@@ -156,7 +155,9 @@ class JadwalSholatView extends StatelessWidget {
         W.paddingheight16(),
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColorConfig.primary),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: AppColorConfig.primary),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -230,7 +231,9 @@ class JadwalSholatView extends StatelessWidget {
                           },
                           icon: Obx(
                             () => Icon(
-                              data.isSet.value ? Iconsax.alarm5 : Iconsax.alarm,
+                              data.isAlarmSet.value
+                                  ? Iconsax.alarm5
+                                  : Iconsax.alarm,
                               color: AppColorConfig.white,
                             ),
                           ),
@@ -248,7 +251,9 @@ class JadwalSholatView extends StatelessWidget {
         W.paddingheight16(),
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColorConfig.primary),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: AppColorConfig.primary),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

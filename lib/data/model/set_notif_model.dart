@@ -7,7 +7,7 @@ class SetNotifModel {
   final int minute;
   final String title;
   final String body;
-  RxBool isSet = false.obs;
+  RxBool isAlarmSet = false.obs;
 
   SetNotifModel({
     required this.iconsax,
@@ -15,6 +15,6 @@ class SetNotifModel {
     required this.minute,
     required this.title,
     required this.body,
-    required this.isSet,
+    required this.isAlarmSet,
   });
 }

@@ -3,25 +3,27 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
 
-class HTTPModel extends Equatable {
+class SurahaDioModel extends Equatable {
   final int code;
   final String message;
   final List<SurahModel> data;
 
-  const HTTPModel({
+  const SurahaDioModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory HTTPModel.fromJson(String str) => HTTPModel.fromMap(json.decode(str));
+  factory SurahaDioModel.fromJson(String str) =>
+      SurahaDioModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory HTTPModel.fromMap(Map<String, dynamic> json) => HTTPModel(
+  factory SurahaDioModel.fromMap(Map<String, dynamic> json) => SurahaDioModel(
         code: json["code"],
         message: json["message"],
-        data: List<SurahModel>.from(json["data"].map((x) => SurahModel.fromMap(x))),
+        data: List<SurahModel>.from(
+            json["data"].map((x) => SurahModel.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -55,7 +57,8 @@ class SurahModel extends Equatable {
     required this.audioFull,
   });
 
-  factory SurahModel.fromJson(String str) => SurahModel.fromMap(json.decode(str));
+  factory SurahModel.fromJson(String str) =>
+      SurahModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
@@ -67,7 +70,8 @@ class SurahModel extends Equatable {
         tempatTurun: json["tempatTurun"],
         arti: json["arti"],
         deskripsi: json["deskripsi"],
-        audioFull: Map.from(json["audioFull"]).map((k, v) => MapEntry<String, String>(k, v)),
+        audioFull: Map.from(json["audioFull"])
+            .map((k, v) => MapEntry<String, String>(k, v)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -78,7 +82,8 @@ class SurahModel extends Equatable {
         "tempatTurun": tempatTurun,
         "arti": arti,
         "deskripsi": deskripsi,
-        "audioFull": Map.from(audioFull).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "audioFull":
+            Map.from(audioFull).map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
 
   SurahEntity toEntity() {
@@ -95,5 +100,14 @@ class SurahModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [nomor, nama, namaLatin, jumlahAyat, tempatTurun, arti, deskripsi, audioFull];
+  List<Object?> get props => [
+        nomor,
+        nama,
+        namaLatin,
+        jumlahAyat,
+        tempatTurun,
+        arti,
+        deskripsi,
+        audioFull
+      ];
 }

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/core/service/local_notification_service.dart';
 import 'package:quran_app/data/model/set_notif_model.dart';
@@ -13,11 +16,13 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
 
 class JadwalSholatGetx extends GetxController {
-  RxMap<String, String> jadwal = RxMap<String, String>();
   RxList<SetNotifModel> vaJadwal = RxList<SetNotifModel>();
   Rxn<Position> position = Rxn<Position>();
 
-  var city = ''.obs, cSholat = ''.obs, countdownText = ''.obs, timezone = ''.obs;
+  var city = ''.obs,
+      cSholat = ''.obs,
+      countdownText = ''.obs,
+      timezone = ''.obs;
 
   @override
   void onInit() {
@@ -71,7 +76,7 @@ class JadwalSholatGetx extends GetxController {
         minute: int.parse(data.fajr.split(":")[1]),
         title: 'Subuh',
         body: 'Waktunya sholat Subuh',
-        isSet: false.obs,
+        isAlarmSet: false.obs,
       ),
       SetNotifModel(
         iconsax: Iconsax.sun,
@@ -79,7 +84,7 @@ class JadwalSholatGetx extends GetxController {
         minute: int.parse(data.dhuhr.split(":")[1]),
         title: 'Dzuhur',
         body: 'Waktunya sholat Dzuhur',
-        isSet: false.obs,
+        isAlarmSet: false.obs,
       ),
       SetNotifModel(
         iconsax: Iconsax.sun_1,
@@ -87,7 +92,7 @@ class JadwalSholatGetx extends GetxController {
         minute: int.parse(data.asr.split(":")[1]),
         title: 'Ashar',
         body: 'Waktunya sholat Ashar',
-        isSet: false.obs,
+        isAlarmSet: false.obs,
       ),
       SetNotifModel(
         iconsax: Iconsax.sun_fog,
@@ -95,7 +100,7 @@ class JadwalSholatGetx extends GetxController {
         minute: int.parse(data.maghrib.split(":")[1]),
         title: 'Maghrib',
         body: 'Waktunya sholat Maghrib',
-        isSet: false.obs,
+        isAlarmSet: false.obs,
       ),
       SetNotifModel(
         iconsax: Iconsax.moon5,
@@ -103,7 +108,7 @@ class JadwalSholatGetx extends GetxController {
         minute: int.parse(data.isha.split(":")[1]),
         title: 'Isya',
         body: 'Waktunya sholat Isya',
-        isSet: false.obs,
+        isAlarmSet: false.obs,
       ),
     ];
     loadAlarmStatus();
@@ -155,7 +160,8 @@ class JadwalSholatGetx extends GetxController {
 
       if (now.isBefore(waktuSholat)) {
         Duration remaining = waktuSholat.difference(now);
-        countdownText.value = "${entry.title} dalam\n${formatDuration(remaining)}";
+        countdownText.value =
+            "${entry.title} dalam\n${formatDuration(remaining)}";
         return;
       }
     }
@@ -174,7 +180,10 @@ class JadwalSholatGetx extends GetxController {
   }
 
   String getSholatText() {
+    // Gunakan waktu statis 18:30 (6:30 PM) saat debugging
     DateTime now = DateTime.now();
+    // now = DateTime(now.year, now.month, now.day, 20, 35);
+    // C.showLog(log: '--baaa now: $now');
 
     for (var entry in vaJadwal) {
       DateTime waktuSholat = DateTime(
@@ -189,7 +198,8 @@ class JadwalSholatGetx extends GetxController {
         return "Mendekati waktu ${entry.title}";
       }
     }
-    return "-";
+
+    return "Subuh Besok";
   }
 
   String getNextSholatText() {
@@ -242,15 +252,17 @@ class JadwalSholatGetx extends GetxController {
 
   String getTimeText() {
     DateTime now = DateTime.now();
+    // now = DateTime(now.year, now.month, now.day, 20, 35);
 
     for (var entry in vaJadwal) {
-      DateTime waktuSholat = DateTime(now.year, now.month, now.day, entry.hour, entry.minute);
+      DateTime waktuSholat =
+          DateTime(now.year, now.month, now.day, entry.hour, entry.minute);
 
       if (now.isBefore(waktuSholat)) {
         return "${entry.hour}:${entry.minute}";
       }
     }
-    return "";
+    return "${vaJadwal.first.hour}:${vaJadwal.first.minute}";
   }
 
   /// When the location services are not enabled or permissions
@@ -278,7 +290,8 @@ class JadwalSholatGetx extends GetxController {
     }
 
     // Ambil nama kota/kabupaten
-    var placemarks = await placemarkFromCoordinates(position.value!.latitude, position.value!.longitude);
+    var placemarks = await placemarkFromCoordinates(
+        position.value!.latitude, position.value!.longitude);
     // C.showLog(log: '--baaa placemarks: $placemarks');
 
     if (placemarks.isNotEmpty) {
@@ -295,10 +308,11 @@ class JadwalSholatGetx extends GetxController {
 
   loadAlarmStatus() async {
     for (var item in vaJadwal) {
-      bool? status = C.getBool(cKey: "alarm_${item.title}", lDefaultValue: false);
-      item.isSet.value = status;
+      bool? status =
+          C.getBool(cKey: "alarm_${item.title}", lDefaultValue: false);
+      item.isAlarmSet.value = status;
 
-      if (item.isSet.value) {
+      if (item.isAlarmSet.value) {
         await LocalNotificationService.scheduleNotification(
           vaJadwal.indexOf(item),
           item.hour,
@@ -311,21 +325,18 @@ class JadwalSholatGetx extends GetxController {
   }
 
   setNotif(int index, SetNotifModel model) async {
-    // for (var i = 0; i < jadwal.length; i++) {
-    //   List<String> splitTime = jadwal.values.elementAt(i).split(":");
-    //   LocalNotificationService.scheduleNotification(
-    //     i,
-    //     int.parse(splitTime[0]),
-    //     int.parse(splitTime[1]),
-    //     title: jadwal.keys.elementAt(i),
-    //     body: 'Waktunya sholat ${jadwal.keys.elementAt(i)}',
-    //   );
-    // }
-    if (model.isSet.value) {
-      model.isSet.value = false;
+    if (Platform.isAndroid) {
+      if (await Permission.scheduleExactAlarm.isDenied) {
+        Permission.scheduleExactAlarm.request();
+        return;
+      }
+    }
+
+    if (model.isAlarmSet.value) {
+      model.isAlarmSet.value = false;
       await LocalNotificationService.cancelNotification(index);
     } else {
-      model.isSet.value = true;
+      model.isAlarmSet.value = true;
       LocalNotificationService.scheduleNotification(
         index,
         model.hour,
@@ -337,7 +348,8 @@ class JadwalSholatGetx extends GetxController {
           LocalNotificationService.checkScheduledNotifications()!.then(
             (value) {
               if (value == null) {
-                Get.snackbar('Gagal', 'Pengingat waktu sholat gagal diaktifkan');
+                Get.snackbar(
+                    'Gagal', 'Pengingat waktu sholat gagal diaktifkan');
                 return;
               } else {
                 DateTime now = DateTime.now();
@@ -351,7 +363,9 @@ class JadwalSholatGetx extends GetxController {
                 );
 
                 for (int i = 0; i < vaJadwal.length; i++) {
-                  C.setBool(cKey: "alarm_${vaJadwal[i].title}", lValue: vaJadwal[i].isSet.value);
+                  C.setBool(
+                      cKey: "alarm_${vaJadwal[i].title}",
+                      lValue: vaJadwal[i].isAlarmSet.value);
                 }
 
                 Duration remaining = waktuSholat.difference(now);

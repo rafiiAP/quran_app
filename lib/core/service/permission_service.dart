@@ -12,7 +12,6 @@ class PermissionService {
   static Future<bool> requestAllPermissions() async {
     final statuses = await [
       Permission.notification,
-      Permission.scheduleExactAlarm,
       Permission.location,
     ].request();
 

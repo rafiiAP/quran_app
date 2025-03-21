@@ -41,7 +41,7 @@ mixin BottomsheetWidget {
             ),
           ),
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
           ),
           backgroundColor: backgroundColor,
           isDismissible: isDismissible,
@@ -92,7 +92,7 @@ mixin BottomsheetWidget {
             ),
           ),
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
           ),
           backgroundColor: backgroundColor,
           isDismissible: isDismissible,
@@ -102,7 +102,7 @@ mixin BottomsheetWidget {
         return Get.bottomSheet(
           bottomSheet ?? Container(),
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
           ),
           backgroundColor: backgroundColor,
           isDismissible: isDismissible,

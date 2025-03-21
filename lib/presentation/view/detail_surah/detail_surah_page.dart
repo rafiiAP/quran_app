@@ -22,6 +22,7 @@ class DetailSurahPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
+        centerTitle: true,
         title: W.title(text: detailEntity.namaLatin),
       ),
       body: Padding(

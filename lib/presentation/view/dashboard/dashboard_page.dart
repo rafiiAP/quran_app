@@ -14,6 +14,16 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() => c.vaPage[c.nIndex.value]),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     try {
+      //       throw Exception('--tes kok gak walawe');
+      //     } catch (e, stackTrace) {
+      //       FirebaseCrashlytics.instance
+      //           .recordError(e, stackTrace, fatal: true);
+      //     }
+      //   },
+      // ),
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
           onTap: (value) => c.nIndex.value = value,
@@ -21,20 +31,26 @@ class DashboardPage extends StatelessWidget {
           currentIndex: c.nIndex.value,
           selectedItemColor: AppColorConfig.primary,
           unselectedItemColor: AppColorConfig.grey,
-          backgroundColor: C.isDark(context) ? AppColorConfig.bgBottom : AppColorConfig.white,
+          backgroundColor: C.isDark(context)
+              ? AppColorConfig.bgBottom
+              : AppColorConfig.white,
           items: [
             BottomNavigationBarItem(
               label: '',
               icon: Image.asset(
                 MyImage.bookNav,
-                color: c.nIndex.value == 0 ? AppColorConfig.primary : AppColorConfig.grey,
+                color: c.nIndex.value == 0
+                    ? AppColorConfig.primary
+                    : AppColorConfig.grey,
               ),
             ),
             BottomNavigationBarItem(
               label: '',
               icon: Image.asset(
                 MyImage.bookmark,
-                color: c.nIndex.value == 1 ? AppColorConfig.primary : AppColorConfig.grey,
+                color: c.nIndex.value == 1
+                    ? AppColorConfig.primary
+                    : AppColorConfig.grey,
               ),
             ),
             BottomNavigationBarItem(
@@ -42,7 +58,9 @@ class DashboardPage extends StatelessWidget {
               icon: Image.asset(
                 MyImage.shalat,
                 width: 30,
-                color: c.nIndex.value == 2 ? AppColorConfig.primary : AppColorConfig.grey,
+                color: c.nIndex.value == 2
+                    ? AppColorConfig.primary
+                    : AppColorConfig.grey,
               ),
             ),
           ],

@@ -14,11 +14,13 @@ class ResponseDetailModel extends Equatable {
     required this.data,
   });
 
-  factory ResponseDetailModel.fromJson(String str) => ResponseDetailModel.fromMap(json.decode(str));
+  factory ResponseDetailModel.fromJson(String str) =>
+      ResponseDetailModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory ResponseDetailModel.fromMap(Map<String, dynamic> json) => ResponseDetailModel(
+  factory ResponseDetailModel.fromMap(Map<String, dynamic> json) =>
+      ResponseDetailModel(
         code: json["code"],
         message: json["message"],
         data: DetailModel.fromMap(json["data"]),
@@ -57,7 +59,8 @@ class DetailModel extends Equatable {
     required this.ayat,
   });
 
-  factory DetailModel.fromJson(String str) => DetailModel.fromMap(json.decode(str));
+  factory DetailModel.fromJson(String str) =>
+      DetailModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
@@ -69,8 +72,10 @@ class DetailModel extends Equatable {
         tempatTurun: json["tempatTurun"],
         arti: json["arti"],
         deskripsi: json["deskripsi"],
-        audioFull: Map.from(json["audioFull"]).map((k, v) => MapEntry<String, String>(k, v)),
-        ayat: List<AyatDetailModel>.from(json["ayat"].map((x) => AyatDetailModel.fromMap(x))),
+        audioFull: Map.from(json["audioFull"])
+            .map((k, v) => MapEntry<String, String>(k, v)),
+        ayat: List<AyatDetailModel>.from(
+            json["ayat"].map((x) => AyatDetailModel.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -81,7 +86,8 @@ class DetailModel extends Equatable {
         "tempatTurun": tempatTurun,
         "arti": arti,
         "deskripsi": deskripsi,
-        "audioFull": Map.from(audioFull).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "audioFull":
+            Map.from(audioFull).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "ayat": List<dynamic>.from(ayat.map((x) => x.toMap())),
       };
 
@@ -99,7 +105,17 @@ class DetailModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [nomor, nama, namaLatin, jumlahAyat, tempatTurun, arti, deskripsi, audioFull, ayat];
+  List<Object?> get props => [
+        nomor,
+        nama,
+        namaLatin,
+        jumlahAyat,
+        tempatTurun,
+        arti,
+        deskripsi,
+        audioFull,
+        ayat
+      ];
 }
 
 class AyatDetailModel extends Equatable {
@@ -117,7 +133,8 @@ class AyatDetailModel extends Equatable {
     required this.audio,
   });
 
-  factory AyatDetailModel.fromJson(String str) => AyatDetailModel.fromMap(json.decode(str));
+  factory AyatDetailModel.fromJson(String str) =>
+      AyatDetailModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
@@ -126,7 +143,8 @@ class AyatDetailModel extends Equatable {
         teksArab: json["teksArab"],
         teksLatin: json["teksLatin"],
         teksIndonesia: json["teksIndonesia"],
-        audio: Map.from(json["audio"]).map((k, v) => MapEntry<String, String>(k, v)),
+        audio: Map.from(json["audio"])
+            .map((k, v) => MapEntry<String, String>(k, v)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -148,5 +166,6 @@ class AyatDetailModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [nomorAyat, teksArab, teksLatin, teksIndonesia, audio];
+  List<Object?> get props =>
+      [nomorAyat, teksArab, teksLatin, teksIndonesia, audio];
 }
