@@ -2,32 +2,30 @@ part of 'main_widget.dart';
 
 mixin TextWidget {
   Widget textBody({
-    required String text,
-    Color? color,
-    double? fontSize,
-    FontWeight? fontWeight,
-    List<Shadow>? shadows,
-    double? textHeight,
-    TextAlign? textAlign,
-    int? maxLines,
-    TextOverflow? overflow,
-    double? letterSpacing,
-    TextDecoration textDecoration = TextDecoration.none,
-    Color? underlineColor,
-    FontStyle? fontStyle,
+    required final String text,
+    final Color? color,
+    final double? fontSize,
+    final FontWeight? fontWeight,
+    final List<Shadow>? shadows,
+    final double? textHeight,
+    final TextAlign? textAlign,
+    final int? maxLines,
+    final TextOverflow? overflow,
+    final double? letterSpacing,
+    final TextDecoration textDecoration = TextDecoration.none,
+    final Color? underlineColor,
+    final FontStyle? fontStyle,
   }) {
-    if (Theme.of(Get.context!).brightness == Brightness.dark) {
-      color ??= AppColorConfig.white;
-    } else {
-      color ??= AppColorConfig.black;
-    }
     return Text(
       text,
       style: GoogleFonts.poppins(
         textStyle: Get.textTheme.bodyMedium!.copyWith(
           decoration: textDecoration,
           decorationColor: underlineColor,
-          color: color,
+          color: color ??
+              (Theme.of(Get.context!).brightness == Brightness.dark
+                  ? colorConfig.white
+                  : colorConfig.black),
           fontSize: fontSize,
           fontWeight: fontWeight,
           shadows: shadows,
@@ -44,30 +42,28 @@ mixin TextWidget {
   }
 
   Widget title({
-    required String text,
-    Color? color,
-    List<Shadow>? shadows,
-    double? textHeight,
-    TextAlign? textAlign,
-    int? maxLines,
-    TextOverflow? overflow,
-    double? letterSpacing,
-    TextDecoration textDecoration = TextDecoration.none,
-    Color? underlineColor,
-    FontStyle? fontStyle,
+    required final String text,
+    final Color? color,
+    final List<Shadow>? shadows,
+    final double? textHeight,
+    final TextAlign? textAlign,
+    final int? maxLines,
+    final TextOverflow? overflow,
+    final double? letterSpacing,
+    final TextDecoration textDecoration = TextDecoration.none,
+    final Color? underlineColor,
+    final FontStyle? fontStyle,
   }) {
-    if (Theme.of(Get.context!).brightness == Brightness.dark) {
-      color ??= AppColorConfig.white;
-    } else {
-      color ??= AppColorConfig.black;
-    }
     return Text(
       text,
       style: GoogleFonts.poppins(
         textStyle: Get.textTheme.bodyMedium!.copyWith(
           decoration: textDecoration,
           decorationColor: underlineColor,
-          color: color,
+          color: color ??
+              (Theme.of(Get.context!).brightness == Brightness.dark
+                  ? colorConfig.white
+                  : colorConfig.black),
           fontSize: 20,
           fontWeight: FontWeight.bold,
           shadows: shadows,

@@ -50,29 +50,30 @@ class DetailSurahPage extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: C.isDark(context)
-                                ? AppColorConfig.bgBottom
-                                : AppColorConfig.lightGrey.withValues(alpha: 0.3),
+                                ? colorConfig.bgBottom
+                                : colorConfig.lightGrey.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(
                             children: [
                               CircleAvatar(
                                 radius: 13,
-                                backgroundColor: AppColorConfig.primary,
+                                backgroundColor: colorConfig.primary,
                                 child: W.textBody(
                                   text: ayatDetailEntity.nomorAyat.toString(),
-                                  color: AppColorConfig.white,
+                                  color: colorConfig.white,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               const Spacer(),
                               GestureDetector(
                                 onTap: () {
-                                  c.onTapList(context, ayatDetailEntity, detailEntity);
+                                  c.onTapList(
+                                      context, ayatDetailEntity, detailEntity);
                                 },
-                                child: const Icon(
+                                child: Icon(
                                   Icons.menu_rounded,
-                                  color: AppColorConfig.primary,
+                                  color: colorConfig.primary,
                                 ),
                               ),
                               W.paddingWidtht8(),
@@ -111,7 +112,7 @@ class DetailSurahPage extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                               W.paddingheight16(),
-                              const Divider(color: AppColorConfig.grey),
+                              Divider(color: colorConfig.grey),
                             ],
                           ),
                         )
@@ -131,40 +132,41 @@ class DetailSurahPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-            colors: [AppColorConfig.secondary, AppColorConfig.primary],
+        gradient: LinearGradient(
+            colors: [colorConfig.secondary, colorConfig.primary],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight),
         borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
+        image: DecorationImage(
           scale: 1.2,
           alignment: Alignment.bottomRight,
           opacity: 0.1,
-          image: AssetImage(MyImage.quran),
+          image: AssetImage(imageConfig.quran),
         ),
       ),
       child: Column(
         children: [
           W.textBody(
             text: detailEntity.namaLatin,
-            color: AppColorConfig.white,
+            color: colorConfig.white,
             fontSize: 26,
             fontWeight: FontWeight.w500,
           ),
           W.textBody(
             text: detailEntity.arti,
-            color: AppColorConfig.white,
+            color: colorConfig.white,
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
           SizedBox(
               width: C.getWidth() * 0.4,
-              child: const Divider(
-                color: AppColorConfig.white,
+              child: Divider(
+                color: colorConfig.white,
               )),
           W.textBody(
-            text: '${detailEntity.tempatTurun} - ${detailEntity.jumlahAyat} Ayat',
-            color: AppColorConfig.white,
+            text:
+                '${detailEntity.tempatTurun} - ${detailEntity.jumlahAyat} Ayat',
+            color: colorConfig.white,
             fontWeight: FontWeight.w500,
             fontSize: 16,
           ),

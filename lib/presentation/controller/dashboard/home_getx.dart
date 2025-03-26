@@ -14,19 +14,19 @@ import 'package:quran_app/presentation/view/serach_page/search_page.dart';
 import '../../view/detail_surah/detail_surah_page.dart';
 
 class HomeGetx extends GetxController {
-  Rx<List<SurahEntity>> surahList = Rx<List<SurahEntity>>([]);
+  Rx<List<SurahEntity>> surahList = Rx<List<SurahEntity>>(<SurahEntity>[]);
 
-  var cNamaLatin = ''.obs;
-  var nNomorSurah = 0.obs;
-  var nNomorAyat = 0.obs;
+  RxString cNamaLatin = ''.obs;
+  RxInt nNomorSurah = 0.obs;
+  RxInt nNomorAyat = 0.obs;
 
   ///untuk kodisi ketika tap lastRead atau tidak
-  var isToLastRead = false.obs;
-  var isSnackbarActive = false.obs;
+  RxBool isToLastRead = false.obs;
+  RxBool isSnackbarActive = false.obs;
 
   @override
   void onReady() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((final _) {
       getSurah();
     });
     super.onReady();
@@ -39,28 +39,29 @@ class HomeGetx extends GetxController {
     super.onInit();
   }
 
-  getLastRead() {
-    cNamaLatin.value = C.getString(cKey: AppConfig.cacheNamaLatin);
-    nNomorSurah.value = C.getInt(cKey: AppConfig.cacheNomorSurah, nDefaultValue: 0);
-    nNomorAyat.value = C.getInt(cKey: AppConfig.cacheNomorAyat, nDefaultValue: 0);
+  void getLastRead() {
+    cNamaLatin.value = C.getString(cKey: config.cacheNamaLatin);
+    nNomorSurah.value =
+        C.getInt(cKey: config.cacheNomorSurah, nDefaultValue: 0);
+    nNomorAyat.value = C.getInt(cKey: config.cacheNomorAyat, nDefaultValue: 0);
   }
 
-  getSurah() {
+  void getSurah() async {
     BuildContext context = Get.context!;
     //memanggil data al-qur'an
     context.read<GetSurahCubit>().getPosts();
   }
 
-  onSuccesGetSurah(List<SurahEntity> data) {
+  void onSuccesGetSurah(final List<SurahEntity> data) {
     surahList.value = data;
   }
 
-  toLastRead({int? index = 0}) {
+  void toLastRead({final int? index = 0}) async {
     if (index != 0) {
       isToLastRead.value = true;
 
-      BuildContext context = Get.context!;
-      context.read<DetailSurahCubit>().getPosts(number: index!);
+      final BuildContext context = Get.context!;
+      await context.read<DetailSurahCubit>().getPosts(number: index!);
     } else {
       //tampilkan snackbar
       if (!isSnackbarActive.value) {
@@ -70,27 +71,33 @@ class HomeGetx extends GetxController {
           'Perhatian',
           'Belum ada bacaan terakhir',
         );
-        Future.delayed(const Duration(seconds: 3), () => isSnackbarActive.value = false); // Setelah 3 detik))
+        Future.delayed(const Duration(seconds: 3), () {
+          isSnackbarActive.value = false;
+        }); // Setelah 3 detik))
       }
     }
   }
 
-  getDetailSurah(SurahEntity data) {
+  void getDetailSurah(final SurahEntity data) async {
     isToLastRead.value = false;
 
-    BuildContext context = Get.context!;
-    context.read<DetailSurahCubit>().getPosts(number: data.nomor);
+    final BuildContext context = Get.context!;
+    await context.read<DetailSurahCubit>().getPosts(number: data.nomor);
   }
 
-  onSuccesDetailSurah(DetailEntity data) {
+  void onSuccesDetailSurah(final DetailEntity data) async {
     W.endwait();
-    C.to(() => DetailSurahPage(detailEntity: data, index: isToLastRead.value ? nNomorAyat.value : null))!.then((_) {
+    await C
+        .to(() => DetailSurahPage(
+            detailEntity: data,
+            index: isToLastRead.value ? nNomorAyat.value : null))
+        .then((final _) {
       getLastRead();
     });
   }
 
-  toSearchPage() {
-    C.to(() => SearchPage(
+  void toSearchPage() async {
+    await C.to(() => SearchPage(
           vaSurah: surahList.value,
         ));
   }

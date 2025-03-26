@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quran_app/components/function/main_function.dart';
-import 'package:quran_app/core/service/local_notification_service.dart';
+import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/model/set_notif_model.dart';
 import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
 import 'package:geocoding/geocoding.dart';
@@ -19,7 +20,7 @@ class JadwalSholatGetx extends GetxController {
   RxList<SetNotifModel> vaJadwal = RxList<SetNotifModel>();
   Rxn<Position> position = Rxn<Position>();
 
-  var city = ''.obs,
+  RxString city = ''.obs,
       cSholat = ''.obs,
       countdownText = ''.obs,
       timezone = ''.obs;
@@ -35,10 +36,17 @@ class JadwalSholatGetx extends GetxController {
   }
 
   @override
-  void onReady() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+  Future<void> onReady() async {
+    WidgetsBinding.instance.addPostFrameCallback((final _) {
       jadwalSholat();
     });
+    if (Platform.isAndroid) {
+      if (await Permission.scheduleExactAlarm.isDenied) {
+        await W.messageInfo(
+            message: 'Permission alarm dibutuhkan untuk melanjutkan aplikasi');
+        await Permission.scheduleExactAlarm.request();
+      }
+    }
     super.onReady();
   }
 
@@ -48,7 +56,7 @@ class JadwalSholatGetx extends GetxController {
     if (context == null) return;
 
     // Dapatkan tanggal sekarang
-    String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    final String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
     // Ambil lokasi
     position.value = await determinePosition();
@@ -68,8 +76,8 @@ class JadwalSholatGetx extends GetxController {
         );
   }
 
-  onSuccess(JadwalSholatEntity data) {
-    vaJadwal.value = [
+  void onSuccess(final JadwalSholatEntity data) async {
+    vaJadwal.value = <SetNotifModel>[
       SetNotifModel(
         iconsax: Iconsax.moon1,
         hour: int.parse(data.fajr.split(":")[0]),
@@ -111,6 +119,7 @@ class JadwalSholatGetx extends GetxController {
         isAlarmSet: false.obs,
       ),
     ];
+
     loadAlarmStatus();
     startTimer();
     updateSholat();
@@ -127,7 +136,7 @@ class JadwalSholatGetx extends GetxController {
 
   void updateSholat() {
     Future.delayed(const Duration(hours: 3)).then(
-      (value) {
+      (final _) {
         getNextSholatText();
         getNextSholatText();
         getTimeText();
@@ -138,8 +147,8 @@ class JadwalSholatGetx extends GetxController {
   }
 
   // 🔥 Konversi Durasi ke Format HH:mm:ss 🔥
-  String formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String formatDuration(final Duration duration) {
+    String twoDigits(final int n) => n.toString().padLeft(2, "0");
     String hours = twoDigits(duration.inHours);
     String minutes = twoDigits(duration.inMinutes.remainder(60));
     String seconds = twoDigits(duration.inSeconds.remainder(60));
@@ -147,10 +156,10 @@ class JadwalSholatGetx extends GetxController {
   }
 
   void updateCountdown() {
-    DateTime now = DateTime.now();
+    final DateTime now = DateTime.now();
 
     for (var entry in vaJadwal) {
-      DateTime waktuSholat = DateTime(
+      final DateTime waktuSholat = DateTime(
         now.year,
         now.month,
         now.day,
@@ -159,34 +168,34 @@ class JadwalSholatGetx extends GetxController {
       );
 
       if (now.isBefore(waktuSholat)) {
-        Duration remaining = waktuSholat.difference(now);
+        final Duration remaining = waktuSholat.difference(now);
         countdownText.value =
             "${entry.title} dalam\n${formatDuration(remaining)}";
-        return;
+        break;
       }
     }
 
     // Jika sudah melewati semua jadwal, tampilkan countdown untuk Subuh besok
 
-    DateTime waktuSubuhBesok = DateTime(
+    final DateTime waktuSubuhBesok = DateTime(
       now.year,
       now.month,
       now.day + 1,
       vaJadwal.first.hour,
       vaJadwal.first.minute,
     );
-    Duration remaining = waktuSubuhBesok.difference(now);
+    final Duration remaining = waktuSubuhBesok.difference(now);
     countdownText.value = "Subuh dalam\n${formatDuration(remaining)}";
   }
 
   String getSholatText() {
     // Gunakan waktu statis 18:30 (6:30 PM) saat debugging
-    DateTime now = DateTime.now();
+    final DateTime now = DateTime.now();
     // now = DateTime(now.year, now.month, now.day, 20, 35);
     // C.showLog(log: '--baaa now: $now');
 
-    for (var entry in vaJadwal) {
-      DateTime waktuSholat = DateTime(
+    for (final SetNotifModel entry in vaJadwal) {
+      final DateTime waktuSholat = DateTime(
         now.year,
         now.month,
         now.day,
@@ -203,9 +212,9 @@ class JadwalSholatGetx extends GetxController {
   }
 
   String getNextSholatText() {
-    DateTime now = DateTime.now();
+    final DateTime now = DateTime.now();
 
-    List<DateTime> times = vaJadwal.map((key) {
+    final List<DateTime> times = vaJadwal.map((final SetNotifModel key) {
       return DateTime(now.year, now.month, now.day, key.hour, key.minute);
     }).toList();
 
@@ -227,9 +236,9 @@ class JadwalSholatGetx extends GetxController {
   }
 
   String getNextTime() {
-    DateTime now = DateTime.now();
+    final DateTime now = DateTime.now();
 
-    List<DateTime> dateTimes = vaJadwal.map((time) {
+    final List<DateTime> dateTimes = vaJadwal.map((final SetNotifModel time) {
       return DateTime(now.year, now.month, now.day, time.hour, time.minute);
     }).toList();
 
@@ -251,11 +260,11 @@ class JadwalSholatGetx extends GetxController {
   }
 
   String getTimeText() {
-    DateTime now = DateTime.now();
+    final DateTime now = DateTime.now();
     // now = DateTime(now.year, now.month, now.day, 20, 35);
 
-    for (var entry in vaJadwal) {
-      DateTime waktuSholat =
+    for (final SetNotifModel entry in vaJadwal) {
+      final DateTime waktuSholat =
           DateTime(now.year, now.month, now.day, entry.hour, entry.minute);
 
       if (now.isBefore(waktuSholat)) {
@@ -271,7 +280,7 @@ class JadwalSholatGetx extends GetxController {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     try {
-      final position = await Geolocator.getCurrentPosition();
+      final Position position = await Geolocator.getCurrentPosition();
       return position;
     } catch (e) {
       C.showLog(log: '--Error getting location: $e');
@@ -279,7 +288,7 @@ class JadwalSholatGetx extends GetxController {
     }
   }
 
-  getLoacationName() async {
+  void getLoacationName() async {
     // C.showLog(log: 'log: --baaa');
     position.value = await determinePosition();
     // C.showLog(log: '--baaa position: $position');
@@ -302,18 +311,18 @@ class JadwalSholatGetx extends GetxController {
     }
   }
 
-  getTimeZone() async {
+  void getTimeZone() async {
     timezone.value = await FlutterTimezone.getLocalTimezone();
   }
 
-  loadAlarmStatus() async {
-    for (var item in vaJadwal) {
-      bool? status =
+  void loadAlarmStatus() async {
+    for (final SetNotifModel item in vaJadwal) {
+      final bool status =
           C.getBool(cKey: "alarm_${item.title}", lDefaultValue: false);
       item.isAlarmSet.value = status;
 
       if (item.isAlarmSet.value) {
-        await LocalNotificationService.scheduleNotification(
+        await C.scheduleNotification(
           vaJadwal.indexOf(item),
           item.hour,
           item.minute,
@@ -324,37 +333,32 @@ class JadwalSholatGetx extends GetxController {
     }
   }
 
-  setNotif(int index, SetNotifModel model) async {
-    if (Platform.isAndroid) {
-      if (await Permission.scheduleExactAlarm.isDenied) {
-        Permission.scheduleExactAlarm.request();
-        return;
-      }
-    }
-
+  void setNotif(final int index, final SetNotifModel model) async {
     if (model.isAlarmSet.value) {
       model.isAlarmSet.value = false;
-      await LocalNotificationService.cancelNotification(index);
+      await C.cancelNotification(index);
     } else {
       model.isAlarmSet.value = true;
-      LocalNotificationService.scheduleNotification(
+      await C
+          .scheduleNotification(
         index,
         model.hour,
         model.minute,
         title: model.title,
         body: model.body,
-      ).then(
-        (value) {
-          LocalNotificationService.checkScheduledNotifications()!.then(
-            (value) {
-              if (value == null) {
+      )
+          .then(
+        (final _) {
+          C.checkScheduledNotifications().then(
+            (final List<PendingNotificationRequest> value) {
+              if (value.isEmpty) {
                 Get.snackbar(
                     'Gagal', 'Pengingat waktu sholat gagal diaktifkan');
                 return;
               } else {
-                DateTime now = DateTime.now();
+                final DateTime now = DateTime.now();
 
-                DateTime waktuSholat = DateTime(
+                final DateTime waktuSholat = DateTime(
                   now.year,
                   now.month,
                   now.day,
@@ -368,7 +372,7 @@ class JadwalSholatGetx extends GetxController {
                       lValue: vaJadwal[i].isAlarmSet.value);
                 }
 
-                Duration remaining = waktuSholat.difference(now);
+                final Duration remaining = waktuSholat.difference(now);
 
                 Get.snackbar('Berhasil',
                     "Pengingat waktu sholat ${model.title} dalam\n${remaining.inHours} jam ${remaining.inMinutes.remainder(60)} menit");

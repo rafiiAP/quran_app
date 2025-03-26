@@ -26,7 +26,7 @@ class StartedPage extends StatelessWidget {
             W.textBody(
               text: 'Learn Quran and Recite once everyday',
               fontSize: 18,
-              color: AppColorConfig.grey,
+              color: colorConfig.grey,
               textAlign: TextAlign.center,
             ),
             SizedBox(
@@ -37,11 +37,11 @@ class StartedPage extends StatelessWidget {
               height: C.getHeight() * 0.5,
               width: C.getWidth(),
               decoration: BoxDecoration(
-                color: AppColorConfig.primary,
+                color: colorConfig.primary,
                 borderRadius: BorderRadius.circular(30),
-                image: const DecorationImage(
+                image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage(MyImage.bgSplash),
+                  image: AssetImage(imageConfig.bgSplash),
                 ),
               ),
               child: Stack(
@@ -52,22 +52,23 @@ class StartedPage extends StatelessWidget {
                     bottom: 0,
                     top: C.getHeight() * 0.13,
                     child: Image.asset(
-                      MyImage.quran,
+                      imageConfig.quran,
                       width: C.getWidth() * 0.7,
                     ),
                   ),
                   Positioned(
                     bottom: -20,
                     child: W.outlinedButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                      backgroundColor: AppColorConfig.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 16),
+                      backgroundColor: colorConfig.white,
                       onPressed: () {
                         C.offAll(() => DashboardPage());
                       },
                       child: W.textBody(
                         text: 'Get Started',
                         fontSize: 18,
-                        color: AppColorConfig.primary,
+                        color: colorConfig.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

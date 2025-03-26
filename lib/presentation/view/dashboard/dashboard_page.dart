@@ -29,38 +29,37 @@ class DashboardPage extends StatelessWidget {
           onTap: (value) => c.nIndex.value = value,
           elevation: 0,
           currentIndex: c.nIndex.value,
-          selectedItemColor: AppColorConfig.primary,
-          unselectedItemColor: AppColorConfig.grey,
-          backgroundColor: C.isDark(context)
-              ? AppColorConfig.bgBottom
-              : AppColorConfig.white,
+          selectedItemColor: colorConfig.primary,
+          unselectedItemColor: colorConfig.grey,
+          backgroundColor:
+              C.isDark(context) ? colorConfig.bgBottom : colorConfig.white,
           items: [
             BottomNavigationBarItem(
               label: '',
               icon: Image.asset(
-                MyImage.bookNav,
+                imageConfig.bookNav,
                 color: c.nIndex.value == 0
-                    ? AppColorConfig.primary
-                    : AppColorConfig.grey,
+                    ? colorConfig.primary
+                    : colorConfig.grey,
               ),
             ),
             BottomNavigationBarItem(
               label: '',
               icon: Image.asset(
-                MyImage.bookmark,
+                imageConfig.bookmark,
                 color: c.nIndex.value == 1
-                    ? AppColorConfig.primary
-                    : AppColorConfig.grey,
+                    ? colorConfig.primary
+                    : colorConfig.grey,
               ),
             ),
             BottomNavigationBarItem(
               label: '',
               icon: Image.asset(
-                MyImage.shalat,
+                imageConfig.shalat,
                 width: 30,
                 color: c.nIndex.value == 2
-                    ? AppColorConfig.primary
-                    : AppColorConfig.grey,
+                    ? colorConfig.primary
+                    : colorConfig.grey,
               ),
             ),
           ],

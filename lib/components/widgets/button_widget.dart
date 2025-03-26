@@ -2,25 +2,22 @@ part of 'main_widget.dart';
 
 mixin ButtonWidget {
   Widget button({
-    required Function()? onPressed,
-    required Widget child,
-    Color? textColor,
-    Color? backgroundColor,
-    double? elevation,
-    EdgeInsetsGeometry? padding,
+    required final Function()? onPressed,
+    required final Widget child,
+    final Color? textColor,
+    final Color? backgroundColor,
+    final double? elevation,
+    final EdgeInsetsGeometry? padding,
   }) {
-    textColor ??= AppColorConfig.primary;
-    backgroundColor ??= AppColorConfig.primary;
-    padding ??= const EdgeInsets.symmetric(
-      vertical: 15,
-    );
-    elevation ??= 5;
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        elevation: elevation,
-        foregroundColor: textColor,
-        backgroundColor: backgroundColor,
-        padding: padding,
+        elevation: elevation ?? 5,
+        foregroundColor: textColor ?? colorConfig.white,
+        backgroundColor: backgroundColor ?? colorConfig.primary,
+        padding: padding ??
+            const EdgeInsets.symmetric(
+              vertical: 15,
+            ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
         ),
@@ -31,28 +28,27 @@ mixin ButtonWidget {
   }
 
   Widget outlinedButton({
-    required Function()? onPressed,
-    required Widget child,
-    Color? borderColor,
-    EdgeInsetsGeometry? padding,
-    Color? backgroundColor,
+    required final Function()? onPressed,
+    required final Widget child,
+    final Color? borderColor,
+    final EdgeInsetsGeometry? padding,
+    final Color? backgroundColor,
   }) {
-    borderColor ??= AppColorConfig.primary;
-    padding ??= const EdgeInsets.symmetric(
-      vertical: 18.0,
-    );
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         foregroundColor: borderColor,
         side: BorderSide(
-          color: borderColor,
+          color: borderColor ?? colorConfig.primary,
           style: BorderStyle.solid,
           width: 3,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(100),
         ),
-        padding: padding,
+        padding: padding ??
+            const EdgeInsets.symmetric(
+              vertical: 15,
+            ),
         backgroundColor: backgroundColor,
       ),
       onPressed: onPressed,
@@ -61,24 +57,23 @@ mixin ButtonWidget {
   }
 
   Widget textButton({
-    required Function()? onPressed,
-    required Widget child,
-    Color? textColor,
-    OutlinedBorder? shape,
-    EdgeInsetsGeometry? padding,
+    required final Function()? onPressed,
+    required final Widget child,
+    final Color? textColor,
+    final OutlinedBorder? shape,
+    final EdgeInsetsGeometry? padding,
   }) {
-    textColor ??= Get.theme.colorScheme.primary;
-    padding ??= const EdgeInsets.symmetric(
-      vertical: 18.0,
-    );
-    shape ??= RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    );
     return TextButton(
       style: TextButton.styleFrom(
-        foregroundColor: textColor,
-        padding: padding,
-        shape: shape,
+        foregroundColor: textColor ?? colorConfig.primary,
+        padding: padding ??
+            const EdgeInsets.symmetric(
+              vertical: 15,
+            ),
+        shape: shape ??
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
       ),
       onPressed: onPressed,
       child: child,
@@ -86,19 +81,22 @@ mixin ButtonWidget {
   }
 
   Widget buttonAKP({
-    required String text,
-    Color? textColor,
-    required dynamic Function()? onPressed,
-    double? paddingHorizontal,
+    required final String text,
+    final Color? textColor,
+    required final dynamic Function()? onPressed,
+    final double? paddingHorizontal,
   }) {
-    textColor ??= AppColorConfig.white;
-    paddingHorizontal ??= C.getWidth() * 0.03;
     return Container(
       width: C.getWidth(),
-      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 16),
+      padding: EdgeInsets.symmetric(
+          horizontal: paddingHorizontal ?? C.getWidth() * 0.03),
       child: W.button(
         onPressed: onPressed,
-        child: W.textBody(text: text, color: textColor, fontWeight: FontWeight.bold),
+        child: W.textBody(
+          text: text,
+          color: textColor ?? colorConfig.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

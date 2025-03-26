@@ -9,68 +9,67 @@ mixin GetStorageComponent {
     return _gs!;
   }
 
-  Future setString({
-    required String cKey,
-    required String cValue,
+  Future<void> setString({
+    required final String cKey,
+    required final String cValue,
   }) async {
-    return gs.write(cKey, cValue);
-  }
-
-  Future setModel({
-    required String cKey,
-    required SurahEntity cValue,
-  }) async {
-    return gs.write(cKey, cValue);
-  }
-
-  SurahEntity getModel({
-    required String cKey,
-  }) {
-    return gs.read(cKey);
+    await gs.write(cKey, cValue);
   }
 
   String getString({
-    required String cKey,
-    String cDefaultValue = "",
+    required final String cKey,
+    final String cDefaultValue = '',
   }) {
-    return gs.read(cKey) ?? cDefaultValue;
+    return gs.read(cKey) as String? ?? cDefaultValue;
   }
 
-  Future setInt({
-    required String cKey,
-    required int nValue,
+  Future<void> setModel({
+    required final String cKey,
+    required final SurahEntity cValue,
+  }) async {
+    await gs.write(cKey, cValue);
+  }
+
+  SurahEntity? getModel({required final String cKey}) {
+    final dynamic data = gs.read(cKey);
+    return (data is SurahEntity) ? data : null; // ✅ Cek tipe sebelum casting
+  }
+
+  Future<void> setInt({
+    required final String cKey,
+    required final int nValue,
   }) async {
     return gs.write(cKey, nValue);
   }
 
   int getInt({
-    required String cKey,
-    required int nDefaultValue,
+    required final String cKey,
+    required final int nDefaultValue,
   }) {
-    return gs.read(cKey) ?? nDefaultValue;
+    return gs.read(cKey) as int? ?? nDefaultValue;
   }
 
-  Future setBool({
-    required String cKey,
-    required bool lValue,
+  Future<void> setBool({
+    required final String cKey,
+    required final bool lValue,
   }) async {
-    return gs.write(cKey, lValue);
+    await gs.write(cKey, lValue);
   }
 
   bool getBool({
-    required String cKey,
-    required bool lDefaultValue,
+    required final String cKey,
+    required final bool lDefaultValue,
   }) {
-    return gs.read(cKey) ?? lDefaultValue;
+    return gs.read(cKey) as bool? ?? lDefaultValue;
   }
 
-  Future clearCache({
-    required String cKey,
-  }) {
-    return gs.remove(cKey);
+  Future<void> clearCache({
+    required final String cKey,
+  }) async {
+    await gs.remove(cKey);
   }
 
-  Future clearAllCache() {
-    return gs.erase();
+  Future<void> clearAllCache() async {
+    await gs.erase();
   }
 }

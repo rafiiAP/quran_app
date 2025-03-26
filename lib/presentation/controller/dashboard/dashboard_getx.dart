@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/data/constant/config.dart';
@@ -7,13 +8,13 @@ import 'package:quran_app/presentation/view/dashboard/home_page.dart';
 import 'package:quran_app/presentation/view/jadwal_sholat/jadwal_sholat_page.dart';
 
 class DashboardGetx extends GetxController {
-  List vaPage = [
+  List<Widget> vaPage = <Widget>[
     const HomePage(),
     BookmarkPage(),
     const JadwalSholatPage(),
   ];
 
-  var nIndex = 0.obs;
+  RxInt nIndex = 0.obs;
 
   @override
   void onInit() {
@@ -21,11 +22,11 @@ class DashboardGetx extends GetxController {
     super.onInit();
   }
 
-  init() {
+  void init() {
     setCache();
   }
 
-  setCache() {
-    C.setBool(cKey: AppConfig.cacheStarted, lValue: true);
+  void setCache() async {
+    await C.setBool(cKey: config.cacheStarted, lValue: true);
   }
 }

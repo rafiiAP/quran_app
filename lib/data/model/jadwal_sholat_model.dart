@@ -4,76 +4,62 @@ import 'package:equatable/equatable.dart';
 import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
 
 class JadwalSholatDioModel extends Equatable {
-  final int code;
-  final String status;
-  final JadwalSholatDataModel data;
-
   const JadwalSholatDioModel({
     required this.code,
     required this.status,
     required this.data,
   });
 
-  factory JadwalSholatDioModel.fromJson(String str) =>
+  factory JadwalSholatDioModel.fromJson(final String str) =>
       JadwalSholatDioModel.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
-
-  factory JadwalSholatDioModel.fromMap(Map<String, dynamic> json) =>
+  factory JadwalSholatDioModel.fromMap(final Map<String, dynamic> json) =>
       JadwalSholatDioModel(
         code: json["code"],
         status: json["status"],
         data: JadwalSholatDataModel.fromMap(json["data"]),
       );
 
-  Map<String, dynamic> toMap() => {
+  String toJson() => json.encode(toMap());
+
+  final int code;
+  final String status;
+  final JadwalSholatDataModel data;
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
         "code": code,
         "status": status,
         "data": data.toMap(),
       };
 
   @override
-  List<Object?> get props => [code, status, data];
+  List<Object?> get props => <Object?>[code, status, data];
 }
 
 class JadwalSholatDataModel extends Equatable {
-  final JadwalSholatModel timings;
-
   const JadwalSholatDataModel({
     required this.timings,
   });
 
-  factory JadwalSholatDataModel.fromJson(String str) =>
+  factory JadwalSholatDataModel.fromJson(final String str) =>
       JadwalSholatDataModel.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
-
-  factory JadwalSholatDataModel.fromMap(Map<String, dynamic> json) =>
+  factory JadwalSholatDataModel.fromMap(final Map<String, dynamic> json) =>
       JadwalSholatDataModel(
         timings: JadwalSholatModel.fromMap(json["timings"]),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => <String, dynamic>{
         "timings": timings.toMap(),
       };
+  String toJson() => json.encode(toMap());
 
+  final JadwalSholatModel timings;
   @override
-  List<Object?> get props => [timings];
+  List<Object?> get props => <Object?>[timings];
 }
 
 class JadwalSholatModel extends Equatable {
-  final String fajr;
-  final String sunrise;
-  final String dhuhr;
-  final String asr;
-  final String sunset;
-  final String maghrib;
-  final String isha;
-  final String imsak;
-  final String midnight;
-  final String firstthird;
-  final String lastthird;
-
   const JadwalSholatModel({
     required this.fajr,
     required this.sunrise,
@@ -88,12 +74,10 @@ class JadwalSholatModel extends Equatable {
     required this.lastthird,
   });
 
-  factory JadwalSholatModel.fromJson(String str) =>
+  factory JadwalSholatModel.fromJson(final String str) =>
       JadwalSholatModel.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
-
-  factory JadwalSholatModel.fromMap(Map<String, dynamic> json) =>
+  factory JadwalSholatModel.fromMap(final Map<String, dynamic> json) =>
       JadwalSholatModel(
         fajr: json["Fajr"],
         sunrise: json["Sunrise"],
@@ -108,7 +92,20 @@ class JadwalSholatModel extends Equatable {
         lastthird: json["Lastthird"],
       );
 
-  Map<String, dynamic> toMap() => {
+  final String fajr;
+  final String sunrise;
+  final String dhuhr;
+  final String asr;
+  final String sunset;
+  final String maghrib;
+  final String isha;
+  final String imsak;
+  final String midnight;
+  final String firstthird;
+  final String lastthird;
+
+  String toJson() => json.encode(toMap());
+  Map<String, dynamic> toMap() => <String, dynamic>{
         "Fajr": fajr,
         "Sunrise": sunrise,
         "Dhuhr": dhuhr,
@@ -139,7 +136,7 @@ class JadwalSholatModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
         fajr,
         sunrise,
         dhuhr,

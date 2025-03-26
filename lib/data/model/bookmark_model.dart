@@ -1,13 +1,6 @@
 class BookmarkModel {
-  int? id; // Optional karena ID biasanya otomatis di-generate oleh database
-  int nomorSurah;
-  String namaLatin;
-  int nomorAyat;
-  String teksArab;
-  String teksIndonesia;
-  String teksLatin;
-
-  BookmarkModel({
+  /// Constructor utama dengan required parameters
+  const BookmarkModel({
     this.id,
     required this.nomorSurah,
     required this.namaLatin,
@@ -17,8 +10,8 @@ class BookmarkModel {
     required this.teksLatin,
   });
 
-  // Untuk mengonversi dari Map (database) ke objek BookmarkModel
-  factory BookmarkModel.fromMap(Map<String, dynamic> map) {
+  /// Factory method untuk konversi dari Map ke BookmarkModel
+  factory BookmarkModel.fromMap(final Map<String, dynamic> map) {
     return BookmarkModel(
       id: map['id'], // Misalnya ada kolom ID di tabel
       nomorSurah: map['nomor_surah'],
@@ -30,9 +23,18 @@ class BookmarkModel {
     );
   }
 
-  // Untuk mengonversi dari objek BookmarkModel ke Map (untuk disimpan ke database)
+  final int?
+      id; // Optional karena ID biasanya otomatis di-generate oleh database
+  final int nomorSurah;
+  final String namaLatin;
+  final int nomorAyat;
+  final String teksArab;
+  final String teksIndonesia;
+  final String teksLatin;
+
+  /// Konversi dari objek ke Map (untuk database)
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'id': id,
       'nomor_surah': nomorSurah,
       'nama_latin': namaLatin,

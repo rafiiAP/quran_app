@@ -6,11 +6,11 @@ import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
 
 abstract class Failure extends Equatable {
-  final String message;
   const Failure(this.message);
+  final String message;
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => <Object>[message];
 }
 
 class ConnectionFailure extends Failure {
@@ -28,11 +28,12 @@ class ResponseFailure extends Failure {
 abstract class RemoteRepository {
   Future<Either<Failure, List<SurahEntity>>> getSurah();
 
-  Future<Either<Failure, DetailEntity>> getDetailSurah({required int nomor});
+  Future<Either<Failure, DetailEntity>> getDetailSurah(
+      {required final int nomor});
 
   Future<Either<Failure, JadwalSholatEntity>> getJadwalSholat({
-    required double latitude,
-    required double longitude,
-    required String date,
+    required final double latitude,
+    required final double longitude,
+    required final String date,
   });
 }

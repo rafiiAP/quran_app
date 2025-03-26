@@ -17,7 +17,7 @@ class LoadingSholatView extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: AppColorConfig.primary.withValues(
+                  color: colorConfig.primary.withValues(
                     alpha: 0.5,
                   ),
                 ),
@@ -42,7 +42,7 @@ class LoadingSholatView extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: AppColorConfig.primary.withValues(
+                  color: colorConfig.primary.withValues(
                     alpha: 0.5,
                   ),
                 ),
@@ -68,7 +68,7 @@ class LoadingSholatView extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: AppColorConfig.primary.withValues(
+            color: colorConfig.primary.withValues(
               alpha: 0.5,
             ),
           ),
@@ -104,7 +104,7 @@ class LoadingSholatView extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: AppColorConfig.primary.withValues(
+            color: colorConfig.primary.withValues(
               alpha: 0.5,
             ),
           ),
@@ -183,7 +183,7 @@ class LoadingSholatView extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: AppColorConfig.primary.withValues(
+            color: colorConfig.primary.withValues(
               alpha: 0.5,
             ),
           ),

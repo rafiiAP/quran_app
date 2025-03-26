@@ -1,16 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class DetailEntity extends Equatable {
-  final int nomor;
-  final String nama;
-  final String namaLatin;
-  final int jumlahAyat;
-  final String tempatTurun;
-  final String arti;
-  final String deskripsi;
-  final Map<String, String> audioFull;
-  final List<AyatDetailEntity> ayat;
-
   const DetailEntity({
     required this.nomor,
     required this.nama,
@@ -23,8 +13,18 @@ class DetailEntity extends Equatable {
     required this.ayat,
   });
 
+  final int nomor;
+  final String nama;
+  final String namaLatin;
+  final int jumlahAyat;
+  final String tempatTurun;
+  final String arti;
+  final String deskripsi;
+  final Map<String, String> audioFull;
+  final List<AyatDetailEntity> ayat;
+
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
         nomor,
         nama,
         namaLatin,
@@ -38,12 +38,6 @@ class DetailEntity extends Equatable {
 }
 
 class AyatDetailEntity extends Equatable {
-  final int nomorAyat;
-  final String teksArab;
-  final String teksLatin;
-  final String teksIndonesia;
-  final Map<String, String> audio;
-
   const AyatDetailEntity({
     required this.nomorAyat,
     required this.teksArab,
@@ -52,6 +46,13 @@ class AyatDetailEntity extends Equatable {
     required this.audio,
   });
 
+  final int nomorAyat;
+  final String teksArab;
+  final String teksLatin;
+  final String teksIndonesia;
+  final Map<String, String> audio;
+
   @override
-  List<Object?> get props => [nomorAyat, teksArab, teksLatin, teksIndonesia, audio];
+  List<Object?> get props =>
+      <Object?>[nomorAyat, teksArab, teksLatin, teksIndonesia, audio];
 }

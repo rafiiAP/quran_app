@@ -3,73 +3,61 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quran_app/data/constant/color.dart';
+import 'package:quran_app/injection.dart';
+
+MainStyle get style => locator<MainStyle>();
 
 class MainStyle {
-  static final MainStyle _instance = MainStyle._internal();
-
-  MainStyle._internal();
-
-  factory MainStyle() {
-    return _instance;
-  }
-
   /// Untuk set statusBarColor, statusBarIconBrightness, statusBarBrightness, systemNavigationBarColor, systemNavigationBarIconBrightness, systemNavigationBarDividerColor
-  static setSystemUIOverlay() {
-    final brightness =
-        PlatformDispatcher.instance.implicitView?.platformDispatcher.platformBrightness ?? Brightness.light;
-    final isDarkMode = brightness == Brightness.dark;
-    if (isDarkMode) {
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.dark,
-          systemNavigationBarColor: AppColorConfig.bgBottom,
-          systemNavigationBarIconBrightness: Brightness.light,
-          systemNavigationBarDividerColor: AppColorConfig.bgBottom,
-        ),
-      );
-    } else {
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
-          systemNavigationBarColor: AppColorConfig.white,
-          systemNavigationBarIconBrightness: Brightness.dark,
-          systemNavigationBarDividerColor: AppColorConfig.white,
-        ),
-      );
-    }
+  void setSystemUIOverlay() {
+    final Brightness brightness = PlatformDispatcher
+            .instance.implicitView?.platformDispatcher.platformBrightness ??
+        Brightness.light;
+    final bool isDarkMode = brightness == Brightness.dark;
+
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness:
+            isDarkMode ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDarkMode ? Brightness.dark : Brightness.light,
+        systemNavigationBarColor:
+            isDarkMode ? colorConfig.bgBottom : colorConfig.white,
+        systemNavigationBarIconBrightness:
+            isDarkMode ? Brightness.light : Brightness.dark,
+        systemNavigationBarDividerColor:
+            isDarkMode ? colorConfig.bgBottom : colorConfig.white,
+      ),
+    );
   }
 
-  static ThemeData light = ThemeData(
+  ThemeData light = ThemeData(
     brightness: Brightness.light,
-    scaffoldBackgroundColor: AppColorConfig.white,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColorConfig.white,
+    scaffoldBackgroundColor: colorConfig.white,
+    appBarTheme: AppBarTheme(
+      backgroundColor: colorConfig.white,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
-        systemNavigationBarColor: AppColorConfig.white,
+        systemNavigationBarColor: colorConfig.white,
         systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarDividerColor: AppColorConfig.white,
+        systemNavigationBarDividerColor: colorConfig.white,
       ),
     ),
   );
-  static ThemeData dark = ThemeData(
+  ThemeData dark = ThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: AppColorConfig.background,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColorConfig.bgBottom,
+    scaffoldBackgroundColor: colorConfig.background,
+    appBarTheme: AppBarTheme(
+      backgroundColor: colorConfig.bgBottom,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
-        systemNavigationBarColor: AppColorConfig.bgBottom,
+        systemNavigationBarColor: colorConfig.bgBottom,
         systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarDividerColor: AppColorConfig.bgBottom,
+        systemNavigationBarDividerColor: colorConfig.bgBottom,
       ),
     ),
   );

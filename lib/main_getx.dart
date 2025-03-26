@@ -21,19 +21,19 @@ class MainGetx extends GetxController {
     super.onReady();
   }
 
-  init() {
+  void init() {
     getCache();
   }
 
-  getCache() {
-    if (C.getBool(cKey: AppConfig.cacheStarted, lDefaultValue: false)) {
+  void getCache() {
+    if (C.getBool(cKey: config.cacheStarted, lDefaultValue: false)) {
       page = DashboardPage();
     } else {
       page = const StartedPage();
     }
   }
 
-  getPermission() async {
+  void getPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -56,15 +56,15 @@ class MainGetx extends GetxController {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         C.showLog(log: '--Location permissions are denied');
-        return null;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       await Geolocator.openAppSettings();
       // Permissions are denied forever, handle appropriately.
-      C.showLog(log: '--Location permissions are permanently denied, we cannot request permissions.');
-      return null;
+      C.showLog(
+          log:
+              '--Location permissions are permanently denied, we cannot request permissions.');
     }
     C.showLog(log: '--Location permissions are granted');
   }

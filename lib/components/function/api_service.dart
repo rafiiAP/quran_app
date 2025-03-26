@@ -1,25 +1,40 @@
 part of 'main_function.dart';
 
 mixin ApiService {
-  Future<String> dioGet({required String url, required String requestName}) async {
-    http.Dio dio = http.Dio();
+  Future<String> dioGet({
+    required final String url,
+    required final String requestName,
+  }) async {
+    final dio.Dio myDio = dio.Dio();
     dynamic cResponse;
     try {
       C.showLog(log: '$requestName : $url');
-      http.Response response = await dio.get(url);
+      final dio.Response<dynamic> response = await myDio.get(url);
       cResponse = response.data;
       C.showLog(log: '$requestName response : $cResponse');
-    } on http.DioException catch (e) {
+    } on dio.DioException catch (e) {
       C.showLog(log: '--${e.response}\n-${e.message}');
       switch (e.type) {
-        case DioExceptionType.connectionTimeout:
-          W.messageInfo(message: 'Koneksi timeout, periksa jaringan Anda').then((_) {
-            return dioGet(url: url, requestName: requestName);
-          });
-        case DioExceptionType.badResponse:
-          throw 'Terjadi kesalahan dari server: ${e.response?.statusCode}';
-        default:
-          throw 'Terjadi kesalahan, coba lagi nanti';
+        case dio.DioExceptionType.connectionTimeout:
+          throw Exception('Koneksi timeout, periksa jaringan Anda');
+        case dio.DioExceptionType.sendTimeout:
+          throw Exception('Koneksi timeout, periksa jaringan Anda');
+        case dio.DioExceptionType.receiveTimeout:
+          await W.messageInfo(
+              message: 'Koneksi timeout, periksa jaringan Anda');
+          break;
+        case dio.DioExceptionType.badCertificate:
+          throw Exception('Koneksi timeout, periksa jaringan Anda');
+        case dio.DioExceptionType.badResponse:
+          throw Exception(
+              'Terjadi kesalahan dari server: ${e.response?.statusCode}');
+        case dio.DioExceptionType.cancel:
+          await W.messageInfo(message: 'Permintaan dibatalkan');
+          break;
+        case dio.DioExceptionType.connectionError:
+          throw Exception('Tidak dapat terhubung ke server');
+        case dio.DioExceptionType.unknown:
+          throw Exception('Terjadi kesalahan, coba lagi nanti');
       }
     }
     C.showLog(log: '$requestName response : $cResponse');
@@ -43,133 +58,133 @@ mixin ApiService {
   //   } catch (e) {}
   // }
 
-  Future<String> sendHTTPost({
-    required String url,
-    required String request,
-    String requestName = "",
-    String deviceID = "",
-    String authorization = "",
-    // bool useOAuth = true,
-    // String versiSertifikatOAuth = "",
-    // bool refreshTokenOAuth = true,
-    int? timeoutDuration = 30,
-  }) async {
-    // String enp = await C.getDeviceInfo();
-    String cResponse = "";
-    if (requestName.isEmpty) requestName = url;
-    try {
-      // C.showLog(log: '--$enp');
-      http.Dio client = http.Dio();
-      http.FormData data = http.FormData.fromMap({
-        // "cCode": request,
-        // "DEVICEID": deviceID,
-        // "ENP": enp,
-        // "PLATFORM": C.operatingSystem,
-        // "VERSIAPLIKASI": versiSertifikatOAuth,
-      });
-      Map<String, dynamic> headers = <String, dynamic>{
-        "Authorization": authorization,
-      };
-      C.showLog(log: "$requestName Request: $request");
-      C.showLog(log: "$requestName URL: $url");
-      http.Response response = await client
-          .post(
-            url,
-            data: data,
-            options: http.Options(
-              headers: headers,
-            ),
-          )
-          .timeout(Duration(
-            seconds: timeoutDuration!,
-          ));
+  // Future<String> sendHTTPost({
+  //   required String url,
+  //   required String request,
+  //   String requestName = "",
+  //   String deviceID = "",
+  //   String authorization = "",
+  //   // bool useOAuth = true,
+  //   // String versiSertifikatOAuth = "",
+  //   // bool refreshTokenOAuth = true,
+  //   int? timeoutDuration = 30,
+  // }) async {
+  //   // String enp = await C.getDeviceInfo();
+  //   String cResponse = "";
+  //   if (requestName.isEmpty) requestName = url;
+  //   try {
+  //     // C.showLog(log: '--$enp');
+  //     http.Dio client = http.Dio();
+  //     http.FormData data = http.FormData.fromMap({
+  //       // "cCode": request,
+  //       // "DEVICEID": deviceID,
+  //       // "ENP": enp,
+  //       // "PLATFORM": C.operatingSystem,
+  //       // "VERSIAPLIKASI": versiSertifikatOAuth,
+  //     });
+  //     Map<String, dynamic> headers = <String, dynamic>{
+  //       "Authorization": authorization,
+  //     };
+  //     C.showLog(log: "$requestName Request: $request");
+  //     C.showLog(log: "$requestName URL: $url");
+  //     http.Response response = await client
+  //         .post(
+  //           url,
+  //           data: data,
+  //           options: http.Options(
+  //             headers: headers,
+  //           ),
+  //         )
+  //         .timeout(Duration(
+  //           seconds: timeoutDuration!,
+  //         ));
 
-      // cResponse = C.jsonencode(object: response.data);
-      C.showLog(log: "$requestName Response: $response");
-    } on TimeoutException {
-      C.showLog(log: '--Timeout');
-      W.messageInfo(message: 'Timeout, coba lagi').then((value) async {
-        return sendHTTPost(
-          url: url,
-          request: request,
-          deviceID: deviceID,
-          // versiSertifikatOAuth: versiSertifikatOAuth,
-          authorization: authorization,
-          // useOAuth: useOAuth,
-          timeoutDuration: timeoutDuration,
-          requestName: requestName,
-          // refreshTokenOAuth: refreshTokenOAuth,
-        );
-      });
-    } on http.DioException catch (e) {
-      C.showLog(log: '--DioException ${e.message}');
-      // jika tidak mendapat respon
-      // cErrorMSG = "";
-      // lShowErrorMSG = true;
-      // if (e.response != null) {
-      //   cErrorMSG = "${e.response?.statusCode} ${e.response?.statusMessage}";
-      //   C.showLog(
-      //     log: "$requestName responseError: ${e.response?.statusCode} ${e.response?.statusMessage}",
-      //   );
-      //   C.showLog(
-      //     log: "$requestName responseError: ${e.response?.data}",
-      //   );
-      //   if (useOAuth) {
-      //     if (e.response?.statusCode == 401) {
+  //     // cResponse = C.jsonencode(object: response.data);
+  //     C.showLog(log: "$requestName Response: $response");
+  //   } on TimeoutException {
+  //     C.showLog(log: '--Timeout');
+  //     W.messageInfo(message: 'Timeout, coba lagi').then((value) async {
+  //       return sendHTTPost(
+  //         url: url,
+  //         request: request,
+  //         deviceID: deviceID,
+  //         // versiSertifikatOAuth: versiSertifikatOAuth,
+  //         authorization: authorization,
+  //         // useOAuth: useOAuth,
+  //         timeoutDuration: timeoutDuration,
+  //         requestName: requestName,
+  //         // refreshTokenOAuth: refreshTokenOAuth,
+  //       );
+  //     });
+  //   } on http.DioException catch (e) {
+  //     C.showLog(log: '--DioException ${e.message}');
+  //     // jika tidak mendapat respon
+  //     // cErrorMSG = "";
+  //     // lShowErrorMSG = true;
+  //     // if (e.response != null) {
+  //     //   cErrorMSG = "${e.response?.statusCode} ${e.response?.statusMessage}";
+  //     //   C.showLog(
+  //     //     log: "$requestName responseError: ${e.response?.statusCode} ${e.response?.statusMessage}",
+  //     //   );
+  //     //   C.showLog(
+  //     //     log: "$requestName responseError: ${e.response?.data}",
+  //     //   );
+  //     //   if (useOAuth) {
+  //     //     if (e.response?.statusCode == 401) {
 
-      //       String cRefreshToken = C.getString(cKey: AppConfig.cacheRefreshToken);
-      //       String cRespRefreshToken = await getRefreshToken(
-      //         url: AppConfig.cURLRefreshTokenOAuth,
-      //         deviceID: deviceID,
-      //         authorization: "Bearer $cRefreshToken",
-      //         versiSertifikatOAuth: versiSertifikatOAuth,
-      //       );
-      //       Map<String, dynamic> vaRespRefreshToken = jsonDecode(cRespRefreshToken);
-      //       if (vaRespRefreshToken["Status"] == 1) {
+  //     //       String cRefreshToken = C.getString(cKey: config.cacheRefreshToken);
+  //     //       String cRespRefreshToken = await getRefreshToken(
+  //     //         url: config.cURLRefreshTokenOAuth,
+  //     //         deviceID: deviceID,
+  //     //         authorization: "Bearer $cRefreshToken",
+  //     //         versiSertifikatOAuth: versiSertifikatOAuth,
+  //     //       );
+  //     //       Map<String, dynamic> vaRespRefreshToken = jsonDecode(cRespRefreshToken);
+  //     //       if (vaRespRefreshToken["Status"] == 1) {
 
-      //         cErrorMSG = "";
-      //         lShowErrorMSG = false;
+  //     //         cErrorMSG = "";
+  //     //         lShowErrorMSG = false;
 
-      //         OAuthModel result = OAuthModel.fromJson(vaRespRefreshToken["Data"]);
-      //         String cAccessToken = result.accessToken ?? "";
-      //         String cRefreshToken = result.refreshToken ?? "";
-      //         C.setString(cKey: AppConfig.cacheAksesToken, cValue: cAccessToken);
-      //         C.setString(cKey: AppConfig.cacheRefreshToken, cValue: cRefreshToken);
-      //         authorization = "Bearer $cAccessToken";
+  //     //         OAuthModel result = OAuthModel.fromJson(vaRespRefreshToken["Data"]);
+  //     //         String cAccessToken = result.accessToken ?? "";
+  //     //         String cRefreshToken = result.refreshToken ?? "";
+  //     //         C.setString(cKey: config.cacheAksesToken, cValue: cAccessToken);
+  //     //         C.setString(cKey: config.cacheRefreshToken, cValue: cRefreshToken);
+  //     //         authorization = "Bearer $cAccessToken";
 
-      //         return sendHTTPost(
-      //           url: url,
-      //           request: request,
-      //           requestName: requestName,
-      //           deviceID: deviceID,
-      //           authorization: authorization,
-      //           useOAuth: useOAuth,
-      //           versiSertifikatOAuth: versiSertifikatOAuth,
-      //           refreshTokenOAuth: false,
-      //           timeoutDuration: timeoutDuration,
-      //         );
-      //       }
-      //       // }
-      //     }
-      //   }
-      // } else {
-      //   cErrorMSG = e.message;
-      //   C.showLog(
-      //     log: "$requestName requestError: $cErrorMSG ${e.response}",
-      //   );
-      // }
-    }
-    // if (lShowErrorMSG) {
-    //   W.showSnackBar(
-    //     title: "Terjadi Kesalahan",
-    //     message: cErrorMSG,
-    //     backgroundColor: Colors.red[100],
-    //     icon: const Icon(Icons.wifi),
-    //     margin: const EdgeInsets.all(20.0),
-    //   );
-    // }
-    return cResponse;
-  }
+  //     //         return sendHTTPost(
+  //     //           url: url,
+  //     //           request: request,
+  //     //           requestName: requestName,
+  //     //           deviceID: deviceID,
+  //     //           authorization: authorization,
+  //     //           useOAuth: useOAuth,
+  //     //           versiSertifikatOAuth: versiSertifikatOAuth,
+  //     //           refreshTokenOAuth: false,
+  //     //           timeoutDuration: timeoutDuration,
+  //     //         );
+  //     //       }
+  //     //       // }
+  //     //     }
+  //     //   }
+  //     // } else {
+  //     //   cErrorMSG = e.message;
+  //     //   C.showLog(
+  //     //     log: "$requestName requestError: $cErrorMSG ${e.response}",
+  //     //   );
+  //     // }
+  //   }
+  //   // if (lShowErrorMSG) {
+  //   //   W.showSnackBar(
+  //   //     title: "Terjadi Kesalahan",
+  //   //     message: cErrorMSG,
+  //   //     backgroundColor: Colors.red[100],
+  //   //     icon: const Icon(Icons.wifi),
+  //   //     margin: const EdgeInsets.all(20.0),
+  //   //   );
+  //   // }
+  //   return cResponse;
+  // }
 
   /// fungsi untuk mengirimkan request access token ke switching
   // Future<String> getAccessToken({

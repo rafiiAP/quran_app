@@ -4,16 +4,13 @@ import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
 import 'package:quran_app/domain/entity/detail_entity.dart';
+import 'package:quran_app/injection.dart';
 import 'package:sqflite/sqflite.dart';
 
+DatabaseHelper get databaseHelper => locator<DatabaseHelper>();
+
 class DatabaseHelper {
-  static final DatabaseHelper _instance = DatabaseHelper._internal();
-
-  factory DatabaseHelper() => _instance;
-
   static Database? _db;
-
-  DatabaseHelper._internal();
 
   Future<Database> get db async {
     if (_db != null) {
@@ -24,13 +21,13 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDb() async {
-    String path = await getDatabasesPath();
-    String dbPath = join(path, 'surah.db');
+    final String path = await getDatabasesPath();
+    final String dbPath = join(path, 'surah.db');
 
     return await openDatabase(dbPath, version: 1, onCreate: _createDb);
   }
 
-  Future<void> _createDb(Database db, int version) async {
+  void _createDb(final Database db, final int version) async {
     // Create bookmark table
     await db.execute('''
       CREATE TABLE bookmark(
@@ -45,21 +42,22 @@ class DatabaseHelper {
   }
 
   // Insert data into tables
-  insertOrUpdateBookmark(AyatDetailEntity ayatDetailEntity, DetailEntity detailEntity) async {
-    final dbClient = await db;
+  void insertOrUpdateBookmark(final AyatDetailEntity ayatDetailEntity,
+      final DetailEntity detailEntity) async {
+    final Database dbClient = await db;
 
     // Cek apakah data dengan nama_latin tertentu sudah ada
-    List<Map> existingData = await dbClient.query(
+    final List<Map<dynamic, dynamic>> existingData = await dbClient.query(
       'bookmark',
       where: 'teks_indonesia = ?',
-      whereArgs: [ayatDetailEntity.teksIndonesia],
+      whereArgs: <Object>[ayatDetailEntity.teksIndonesia],
     );
 
     if (existingData.isEmpty) {
       // Jika tidak ada data, lakukan insert
       await dbClient.insert(
         'bookmark',
-        {
+        <String, Object?>{
           "nomor_surah": detailEntity.nomor,
           "nama_latin": detailEntity.namaLatin,
           "nomor_ayat": ayatDetailEntity.nomorAyat,
@@ -76,31 +74,30 @@ class DatabaseHelper {
 
   // Get all data from tables
   Future<List<BookmarkModel>> getAllBookmarks() async {
-    final dbClient = await db;
+    final Database dbClient = await db;
 
     // Ambil semua data dari tabel 'bookmark'
     final List<Map<String, dynamic>> maps = await dbClient.query('bookmark');
 
     // Konversi List<Map<String, dynamic>> menjadi List<BookmarkModel>
-    return List.generate(maps.length, (index) {
-      return BookmarkModel.fromMap(maps[index]);
-    });
+    return List<BookmarkModel>.generate(
+        maps.length, (final int index) => BookmarkModel.fromMap(maps[index]));
   }
 
-  deleteBookmark(String teksIndonesia) async {
-    final dbClient = await db;
+  void deleteBookmark(final String teksIndonesia) async {
+    final Database dbClient = await db;
 
     // Hapus data berdasarkan nama_latin
-    return await dbClient.delete(
+    await dbClient.delete(
       'bookmark',
       where: 'teks_indonesia = ?',
-      whereArgs: [teksIndonesia],
+      whereArgs: <Object>[teksIndonesia],
     );
   }
 
   // Close database
-  Future close() async {
-    final dbClient = await db;
-    dbClient.close();
+  void close() async {
+    final Database dbClient = await db;
+    await dbClient.close();
   }
 }

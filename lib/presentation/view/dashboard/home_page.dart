@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
           children: [
             W.textBody(
               text: "Assalamu'alaikum",
-              color: AppColorConfig.grey,
+              color: colorConfig.grey,
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
@@ -85,7 +85,8 @@ class HomePage extends StatelessWidget {
                             W.messageInfo(message: message);
                           },
                           loading: () => W.wait(),
-                          success: (detailModel) => c.onSuccesDetailSurah(detailModel),
+                          success: (detailModel) =>
+                              c.onSuccesDetailSurah(detailModel),
                         );
                       },
                       child: ListView.builder(
@@ -121,7 +122,11 @@ class HomePage extends StatelessWidget {
                 W.paddingWidtht16(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [W.shimmer(width: 200, height: 15), W.paddingheight5(), W.shimmer(width: 200, height: 15)],
+                  children: [
+                    W.shimmer(width: 200, height: 15),
+                    W.paddingheight5(),
+                    W.shimmer(width: 200, height: 15)
+                  ],
                 ),
               ],
             ),
@@ -129,8 +134,8 @@ class HomePage extends StatelessWidget {
           ],
         ),
         W.paddingheight5(),
-        const Divider(
-          color: AppColorConfig.grey,
+        Divider(
+          color: colorConfig.grey,
         ),
       ],
     );
@@ -143,8 +148,8 @@ class HomePage extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppColorConfig.secondary, AppColorConfig.primary],
+          gradient: LinearGradient(
+            colors: [colorConfig.secondary, colorConfig.primary],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -159,12 +164,12 @@ class HomePage extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Image.asset(MyImage.bookCard),
+                      Image.asset(imageConfig.bookCard),
                       W.paddingWidtht5(),
                       W.textBody(
                         text: 'Terakhir dibaca',
                         fontWeight: FontWeight.w500,
-                        color: AppColorConfig.white,
+                        color: colorConfig.white,
                       ),
                     ],
                   ),
@@ -174,7 +179,7 @@ class HomePage extends StatelessWidget {
                       text: c.cNamaLatin.value,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: AppColorConfig.white,
+                      color: colorConfig.white,
                     ),
                   ),
                   W.paddingheight5(),
@@ -182,7 +187,7 @@ class HomePage extends StatelessWidget {
                     () => W.textBody(
                       text:
                           'Surah : ${c.nNomorSurah.value == 0 ? '-' : c.nNomorSurah.value} , Ayat : ${c.nNomorAyat.value == 0 ? '-' : c.nNomorAyat.value}',
-                      color: AppColorConfig.white,
+                      color: colorConfig.white,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -193,7 +198,7 @@ class HomePage extends StatelessWidget {
               right: -30,
               bottom: -30,
               child: Image.asset(
-                MyImage.quran,
+                imageConfig.quran,
                 width: C.getWidth() * 0.5,
               ),
             ),
@@ -222,10 +227,10 @@ class HomePage extends StatelessWidget {
                       alignment: Alignment.center,
                       width: 40,
                       height: 40,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                            MyImage.borderNum,
+                            imageConfig.borderNum,
                           ),
                         ),
                       ),
@@ -247,9 +252,10 @@ class HomePage extends StatelessWidget {
                             fontSize: 16,
                           ),
                           W.textBody(
-                            text: '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
+                            text:
+                                '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
                             fontWeight: FontWeight.w500,
-                            color: AppColorConfig.grey,
+                            color: colorConfig.grey,
                           ),
                         ],
                       ),
@@ -260,7 +266,7 @@ class HomePage extends StatelessWidget {
               Flexible(
                 child: W.textBody(
                   text: surahEntity.nama,
-                  color: AppColorConfig.primary,
+                  color: colorConfig.primary,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -268,8 +274,8 @@ class HomePage extends StatelessWidget {
             ],
           ),
           W.paddingheight5(),
-          const Divider(
-            color: AppColorConfig.grey,
+          Divider(
+            color: colorConfig.grey,
           ),
         ],
       ),

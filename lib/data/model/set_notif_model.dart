@@ -2,13 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class SetNotifModel {
-  final IconData iconsax;
-  final int hour;
-  final int minute;
-  final String title;
-  final String body;
-  RxBool isAlarmSet = false.obs;
-
   SetNotifModel({
     required this.iconsax,
     required this.hour,
@@ -17,4 +10,11 @@ class SetNotifModel {
     required this.body,
     required this.isAlarmSet,
   });
+
+  final IconData iconsax;
+  final int hour;
+  final int minute;
+  final String title;
+  final String body;
+  RxBool isAlarmSet = false.obs;
 }

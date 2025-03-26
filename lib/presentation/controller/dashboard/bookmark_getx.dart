@@ -11,10 +11,9 @@ import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_sura
 import 'package:quran_app/presentation/view/detail_surah/detail_surah_page.dart';
 
 class BookmarkGetx extends GetxController {
-  DatabaseHelper dbHelper = DatabaseHelper();
-
-  Rx<List<BookmarkModel>> bookmarks = Rx<List<BookmarkModel>>([]);
-  var nNomorAyat = 0.obs;
+  Rx<List<BookmarkModel>> bookmarks =
+      Rx<List<BookmarkModel>>(<BookmarkModel>[]);
+  RxInt nNomorAyat = 0.obs;
 
   @override
   void onInit() {
@@ -22,37 +21,41 @@ class BookmarkGetx extends GetxController {
     super.onInit();
   }
 
-  init() {
-    dbHelper.getAllBookmarks().then((value) {
+  void init() async {
+    await databaseHelper
+        .getAllBookmarks()
+        .then((final List<BookmarkModel> value) {
       bookmarks.value = value;
     });
   }
 
-  onTapDelete(BookmarkModel bookmarkModel) {
-    dbHelper.deleteBookmark(bookmarkModel.teksIndonesia);
+  void onTapDelete(final BookmarkModel bookmarkModel) {
+    databaseHelper.deleteBookmark(bookmarkModel.teksIndonesia);
     init();
   }
 
-  onTapShare(BookmarkModel bookmarkModel) {
-    Clipboard.setData(
+  void onTapShare(final BookmarkModel bookmarkModel) async {
+    await Clipboard.setData(
       ClipboardData(
         text:
             '${bookmarkModel.namaLatin} : ${bookmarkModel.nomorSurah}\n${bookmarkModel.teksArab}\n${bookmarkModel.teksIndonesia}',
       ),
-    ).then((_) {
+    ).then((final _) {
       Get.snackbar('Sukses', 'Teks berhasil disalin');
     });
   }
 
-  getDetailSurah(BookmarkModel data) {
+  void getDetailSurah(final BookmarkModel data) async {
     nNomorAyat.value = data.nomorAyat;
-    BuildContext context = Get.context!;
-    context.read<DetailSurahCubit>().getPosts(number: data.nomorSurah);
+    final BuildContext context = Get.context!;
+    await context.read<DetailSurahCubit>().getPosts(number: data.nomorSurah);
   }
 
-  onSuccesDetailSurah(DetailEntity data) {
+  void onSuccesDetailSurah(final DetailEntity data) async {
     W.endwait();
 
-    C.to(() => DetailSurahPage(detailEntity: data, index: nNomorAyat.value))!.then((_) => init());
+    await C
+        .to(() => DetailSurahPage(detailEntity: data, index: nNomorAyat.value))
+        .then((final _) => init());
   }
 }

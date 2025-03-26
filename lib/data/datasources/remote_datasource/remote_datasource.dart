@@ -8,11 +8,11 @@ import 'package:quran_app/data/model/surah_model.dart';
 
 abstract class RemoteDatasource {
   Future<List<SurahModel>> getSurah();
-  Future<DetailModel> getDetailSurah({required int nomor});
+  Future<DetailModel> getDetailSurah({required final int nomor});
   Future<JadwalSholatModel> getJadwalSholat({
-    required double latitude,
-    required double longitude,
-    required String date,
+    required final double latitude,
+    required final double longitude,
+    required final String date,
   });
 }
 
@@ -20,40 +20,40 @@ class RemoteDatasourceImpl implements RemoteDatasource {
   @override
   Future<List<SurahModel>> getSurah() async {
     try {
-      String response = await C.dioGet(
+      final String response = await C.dioGet(
         url: 'https://equran.id/api/v2/surat',
         requestName: 'getSurah',
       );
       return SurahaDioModel.fromJson(response).data;
     } on DioException catch (e, stackTrace) {
       // Kirim error ke Firebase Crashlytics
-      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+      await FirebaseCrashlytics.instance.recordError(e, stackTrace);
 
       throw Exception("Gagal mengambil data dari server.");
     } catch (e, stackTrace) {
       // Kirim error ke Firebase Crashlytics sebelum rethrow
-      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+      await FirebaseCrashlytics.instance.recordError(e, stackTrace);
 
       rethrow; // Lempar ulang agar tetap muncul di terminal
     }
   }
 
   @override
-  Future<DetailModel> getDetailSurah({required int nomor}) async {
+  Future<DetailModel> getDetailSurah({required final int nomor}) async {
     try {
-      String response = await C.dioGet(
+      final String response = await C.dioGet(
         url: 'https://equran.id/api/v2/surat/$nomor',
         requestName: 'getDetailSurah',
       );
       return ResponseDetailModel.fromJson(response).data;
     } on DioException catch (e, stackTrace) {
       // Kirim error ke Firebase Crashlytics
-      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+      await FirebaseCrashlytics.instance.recordError(e, stackTrace);
 
       throw Exception("Gagal mengambil data dari server.");
     } catch (e, stackTrace) {
       // Kirim error ke Firebase Crashlytics sebelum rethrow
-      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+      await FirebaseCrashlytics.instance.recordError(e, stackTrace);
 
       rethrow; // Lempar ulang agar tetap muncul di terminal
     }
@@ -61,25 +61,25 @@ class RemoteDatasourceImpl implements RemoteDatasource {
 
   @override
   Future<JadwalSholatModel> getJadwalSholat({
-    required double latitude,
-    required double longitude,
-    required String date,
+    required final double latitude,
+    required final double longitude,
+    required final String date,
   }) async {
     try {
-      String response = await C.dioGet(
+      final String response = await C.dioGet(
           url:
-              '${AppConfig.cUrlJadwalSholat}/$date?latitude=$latitude&longitude=$longitude',
+              '${config.cUrlJadwalSholat}/$date?latitude=$latitude&longitude=$longitude',
           requestName: 'getJadwalSholat');
 
       return JadwalSholatDioModel.fromJson(response).data.timings;
     } on DioException catch (e, stackTrace) {
       // Kirim error ke Firebase Crashlytics
-      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+      await FirebaseCrashlytics.instance.recordError(e, stackTrace);
 
       throw Exception("Gagal mengambil data dari server.");
     } catch (e, stackTrace) {
       // Kirim error ke Firebase Crashlytics sebelum rethrow
-      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+      await FirebaseCrashlytics.instance.recordError(e, stackTrace);
 
       rethrow; // Lempar ulang agar tetap muncul di terminal
     }

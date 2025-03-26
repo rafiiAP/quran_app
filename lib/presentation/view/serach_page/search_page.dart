@@ -23,14 +23,17 @@ class SearchPage extends StatelessWidget {
             children: [
               W.input(
                 controller: c.searchController,
-                color: C.isDark(context) ? AppColorConfig.white : AppColorConfig.black,
-                prefixIcon: Icon(Icons.search, color: AppColorConfig.grey.withValues(alpha: 0.4)),
+                color:
+                    C.isDark(context) ? colorConfig.white : colorConfig.black,
+                prefixIcon: Icon(Icons.search,
+                    color: colorConfig.grey.withValues(alpha: 0.4)),
                 onChanged: (val) => c.onSearch(surahList: vaSurah, value: val),
               ),
               W.paddingheight16(),
               Expanded(
                 child: Obx(
-                  () => c.vaSearch.value.isEmpty && c.searchController.text.isNotEmpty
+                  () => c.vaSearch.value.isEmpty &&
+                          c.searchController.text.isNotEmpty
                       ? Container(
                           child: W.textBody(
                             text: 'Surah tidak ditemukan',
@@ -41,7 +44,8 @@ class SearchPage extends StatelessWidget {
                           : ListView.builder(
                               itemCount: c.vaSearch.value.length,
                               itemBuilder: (context, index) {
-                                SurahEntity surahEntity = c.vaSearch.value[index];
+                                SurahEntity surahEntity =
+                                    c.vaSearch.value[index];
                                 return listSurah(surahEntity);
                               },
                             ),
@@ -73,10 +77,10 @@ class SearchPage extends StatelessWidget {
                       // alignment: Alignment.center,
                       width: 40,
                       height: 40,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                            MyImage.borderNum,
+                            imageConfig.borderNum,
                           ),
                         ),
                       ),
@@ -100,9 +104,10 @@ class SearchPage extends StatelessWidget {
                             fontSize: 16,
                           ),
                           W.textBody(
-                            text: '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
+                            text:
+                                '${surahEntity.tempatTurun} - ${surahEntity.jumlahAyat} ayat',
                             fontWeight: FontWeight.w500,
-                            color: AppColorConfig.grey,
+                            color: colorConfig.grey,
                           ),
                         ],
                       ),
@@ -113,7 +118,7 @@ class SearchPage extends StatelessWidget {
               Flexible(
                 child: W.textBody(
                   text: surahEntity.nama,
-                  color: AppColorConfig.primary,
+                  color: colorConfig.primary,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -121,8 +126,8 @@ class SearchPage extends StatelessWidget {
             ],
           ),
           W.paddingheight5(),
-          const Divider(
-            color: AppColorConfig.grey,
+          Divider(
+            color: colorConfig.grey,
           ),
         ],
       ),
