@@ -1,14 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as dev;
+import 'dart:io';
 
-import 'package:dio/dio.dart' as http;
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
+import 'package:quran_app/injection.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 // import 'package:translator/translator.dart';
 
 import '../../data/constant/config.dart';
@@ -18,41 +23,39 @@ part 'api_service.dart';
 part 'navigation_com.dart';
 part 'datetime_com.dart';
 part 'get_storage_com.dart';
+part 'local_notification_service.dart';
+part 'permission_service.dart';
 
-MainFunction get C => MainFunction();
+/// Getter global untuk mempermudah akses singleton
+MainFunction get C => locator<MainFunction>();
 
-class MainFunction with ApiService, NavigationCom, DatetimeComponent, GetStorageComponent {
-  static final MainFunction _instance = MainFunction._internal();
+class MainFunction
+    with
+        ApiService,
+        NavigationCom,
+        DatetimeComponent,
+        GetStorageComponent,
+        LocalNotificationService,
+        PermissionService {
+  /*Future<String> translateToIndonesian(String text) async {
+    final translator = GoogleTranslator();
 
-  MainFunction._internal();
+    try {
+      // Terjemahkan teks
+      final translation = await translator.translate(
+        text,
+        to: 'id', // Bahasa Indonesia
+        from: 'en', // Bahasa Inggris
+      );
+      return translation.text;
+    } catch (e) {
+      // Tangani error
+      C.showLog(log: "Error translating text: $e");
+      return text;
+    }
+  }*/
 
-  factory MainFunction() {
-    return _instance;
-  }
-
-  // Future<String> translateToIndonesian(String text) async {
-  //   final translator = GoogleTranslator();
-
-  //   try {
-  //     // Terjemahkan teks
-  //     final translation = await translator.translate(
-  //       text,
-  //       to: 'id', // Bahasa Indonesia
-  //       from: 'en', // Bahasa Inggris
-  //     );
-  //     return translation.text;
-  //   } catch (e) {
-  //     // Tangani error
-  //     C.showLog(log: "Error translating text: $e");
-  //     return text;
-  //   }
-  // }
-
-  String cleanString(String input) {
-    return input.replaceAll(RegExp(r'[\u0000-\u001F\u007F-\u009F\u202E\u2060\u200B-\u200F\u202A-\u202E]'), '');
-  }
-
-  bool isDark(BuildContext context) {
+  bool isDark(final BuildContext context) {
     if (Theme.of(context).brightness == Brightness.dark) {
       return true;
     } else {
@@ -60,17 +63,12 @@ class MainFunction with ApiService, NavigationCom, DatetimeComponent, GetStorage
     }
   }
 
-  getHeight() {
-    return Get.height;
-  }
-
-  getWidth() {
-    return Get.width;
-  }
+  double getHeight() => Get.height;
+  double getWidth() => Get.width;
 
   void showLog({
-    required dynamic log,
+    required final dynamic log,
   }) {
-    if (AppConfig.lShowLog) dev.log("$log");
+    if (config.lShowLog) dev.log("$log");
   }
 }

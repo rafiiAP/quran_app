@@ -1,14 +1,14 @@
 part of 'main_function.dart';
 
 mixin NavigationCom {
-  Future? to(
-    dynamic page, {
-    Transition? transition,
-    String? routeName,
-    bool fullscreenDialog = false,
-    dynamic arguments,
-  }) {
-    return Get.to(
+  Future<T?> to<T>(
+    final dynamic page, {
+    final Transition? transition,
+    final String? routeName,
+    final bool fullscreenDialog = false,
+    final Object? arguments,
+  }) async {
+    return Get.to<T>(
       page,
       transition: transition,
       routeName: routeName,
@@ -17,20 +17,20 @@ mixin NavigationCom {
     );
   }
 
-  Future? toNamed(
-    String page, {
-    dynamic arguments,
-    Map<String, String>? parameters,
+  Future<T?>? toNamed<T>(
+    final String page, {
+    final dynamic arguments,
+    final Map<String, String>? parameters,
   }) {
-    return Get.toNamed(
+    return Get.toNamed<T>(
       page,
       arguments: arguments,
       parameters: parameters,
     );
   }
 
-  void back({
-    Object? result,
+  void back<T>({
+    final Object? result,
   }) {
     return Get.back(
       result: result,
@@ -38,19 +38,19 @@ mixin NavigationCom {
   }
 
   void close({
-    int times = 1,
+    final int times = 1,
   }) {
     return Get.close(times);
   }
 
-  Future? off(
-    dynamic page, {
-    Transition? transition,
-    String? routeName,
-    bool fullscreenDialog = false,
-    dynamic arguments,
+  Future<T?>? off<T>(
+    final dynamic page, {
+    final Transition? transition,
+    final String? routeName,
+    final bool fullscreenDialog = false,
+    final dynamic arguments,
   }) {
-    return Get.off(
+    return Get.off<T>(
       page,
       transition: transition,
       routeName: routeName,
@@ -59,12 +59,12 @@ mixin NavigationCom {
     );
   }
 
-  Future? offAll(
-    dynamic page, {
-    Transition? transition,
-    String? routeName,
-    bool fullscreenDialog = false,
-    dynamic arguments,
+  Future<dynamic>? offAll(
+    final dynamic page, {
+    final Transition? transition,
+    final String? routeName,
+    final bool fullscreenDialog = false,
+    final dynamic arguments,
   }) {
     return Get.offAll(
       page,

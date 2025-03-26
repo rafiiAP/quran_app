@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/injection.dart';
+
+AppColorConfig get colorConfig => locator<AppColorConfig>();
 
 class AppColorConfig {
-  static final AppColorConfig _instance = AppColorConfig._internal();
-
-  AppColorConfig._internal();
-
-  factory AppColorConfig() {
-    return _instance;
-  }
-
-  static const MaterialColor primary = MaterialColor(
-    _primary,
+  MaterialColor primary = const MaterialColor(
+    0xFF672CBC,
     <int, Color>{
       50: Color(0xFFE0F6F5),
       100: Color(0xFFC0ECEA),
@@ -24,8 +19,8 @@ class AppColorConfig {
       900: Color(0xFF23BDB5),
     },
   );
-  static const MaterialColor secondary = MaterialColor(
-    _secondary,
+  MaterialColor secondary = const MaterialColor(
+    0xFFDF98FA,
     <int, Color>{
       50: Color(0xFFfff7e0),
       100: Color(0xFFffe9b1),
@@ -40,25 +35,21 @@ class AppColorConfig {
     },
   );
 
-  static const int _primary = 0xFF672CBC;
-  // static const int _primaryColorValue = 0xFF00A2E9;
-  static const int _secondary = 0xFFDF98FA;
-
-  static const Color maroon = Color(0xFF7f0001);
-  static const Color darkCandyAppleRed = Color(0xFFA10000);
-  static const Color white = Color(0xFFffffff);
-  static const Color btnTextColor = Color(0xFF000000);
-  static const Color background = Color(0xFF040C23);
-  static const Color lightGrey = Color(0xFFD8D8D8);
-  static const Color bgBottom = Color(0xFF121931);
-  static const Color aureolin = Color(0xFFFCEE10);
-  static const Color deepCarminePink = Color(0xFFE63235);
-  static const Color princetonOrange = Color(0xFFFB842A);
-  static const Color fuzzyWuzzy = Color(0xFFce6e6f);
-  static const Color subtitle = Color.fromARGB(255, 86, 86, 86);
-  static const Color black = Color(0xFF000000);
-  static const Color bondiBlue = Color(0xFF0093ba);
-  static const Color grey = Color(0xFFA19CC5);
-  static const Color colorCard = Color(0xFF004B48);
-  static const Color tes = Color.fromARGB(167, 148, 216, 255);
+  Color maroon = const Color(0xFF7f0001);
+  Color darkCandyAppleRed = const Color(0xFFA10000);
+  Color white = const Color(0xFFffffff);
+  Color btnTextColor = const Color(0xFF000000);
+  Color background = const Color(0xFF040C23);
+  Color lightGrey = const Color(0xFFD8D8D8);
+  Color bgBottom = const Color(0xFF121931);
+  Color aureolin = const Color(0xFFFCEE10);
+  Color deepCarminePink = const Color(0xFFE63235);
+  Color princetonOrange = const Color(0xFFFB842A);
+  Color fuzzyWuzzy = const Color(0xFFce6e6f);
+  Color subtitle = const Color.fromARGB(255, 86, 86, 86);
+  Color black = const Color(0xFF000000);
+  Color bondiBlue = const Color(0xFF0093ba);
+  Color grey = const Color(0xFFA19CC5);
+  Color colorCard = const Color(0xFF004B48);
+  Color tes = const Color.fromARGB(167, 148, 216, 255);
 }

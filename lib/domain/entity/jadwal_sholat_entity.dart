@@ -1,44 +1,32 @@
 import 'package:equatable/equatable.dart';
 
 class JadwalSholatDioEntity extends Equatable {
-  final int code;
-  final String status;
-  final JadwalSholatDataEntity data;
-
   const JadwalSholatDioEntity({
     required this.code,
     required this.status,
     required this.data,
   });
 
+  final int code;
+  final String status;
+  final JadwalSholatDataEntity data;
+
   @override
-  List<Object?> get props => [code, status, data];
+  List<Object?> get props => <Object?>[code, status, data];
 }
 
 class JadwalSholatDataEntity extends Equatable {
-  final JadwalSholatEntity timings;
-
   const JadwalSholatDataEntity({
     required this.timings,
   });
 
+  final JadwalSholatEntity timings;
+
   @override
-  List<Object?> get props => [timings];
+  List<Object?> get props => <Object?>[timings];
 }
 
 class JadwalSholatEntity extends Equatable {
-  final String fajr;
-  final String sunrise;
-  final String dhuhr;
-  final String asr;
-  final String sunset;
-  final String maghrib;
-  final String isha;
-  final String imsak;
-  final String midnight;
-  final String firstthird;
-  final String lastthird;
-
   const JadwalSholatEntity({
     required this.fajr,
     required this.sunrise,
@@ -53,8 +41,20 @@ class JadwalSholatEntity extends Equatable {
     required this.lastthird,
   });
 
+  final String fajr;
+  final String sunrise;
+  final String dhuhr;
+  final String asr;
+  final String sunset;
+  final String maghrib;
+  final String isha;
+  final String imsak;
+  final String midnight;
+  final String firstthird;
+  final String lastthird;
+
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
         fajr,
         sunrise,
         dhuhr,

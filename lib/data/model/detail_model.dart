@@ -4,49 +4,39 @@ import 'package:equatable/equatable.dart';
 import 'package:quran_app/domain/entity/detail_entity.dart';
 
 class ResponseDetailModel extends Equatable {
-  final int code;
-  final String message;
-  final DetailModel data;
-
   const ResponseDetailModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory ResponseDetailModel.fromJson(String str) =>
+  factory ResponseDetailModel.fromJson(final String str) =>
       ResponseDetailModel.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
-
-  factory ResponseDetailModel.fromMap(Map<String, dynamic> json) =>
+  factory ResponseDetailModel.fromMap(final Map<String, dynamic> json) =>
       ResponseDetailModel(
         code: json["code"],
         message: json["message"],
         data: DetailModel.fromMap(json["data"]),
       );
 
-  Map<String, dynamic> toMap() => {
+  final int code;
+  final String message;
+  final DetailModel data;
+
+  String toJson() => json.encode(toMap());
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
         "code": code,
         "message": message,
         "data": data.toMap(),
       };
 
   @override
-  List<Object?> get props => [code, message, data];
+  List<Object?> get props => <Object>[code, message, data];
 }
 
 class DetailModel extends Equatable {
-  final int nomor;
-  final String nama;
-  final String namaLatin;
-  final int jumlahAyat;
-  final String tempatTurun;
-  final String arti;
-  final String deskripsi;
-  final Map<String, String> audioFull;
-  final List<AyatDetailModel> ayat;
-
   const DetailModel({
     required this.nomor,
     required this.nama,
@@ -59,12 +49,10 @@ class DetailModel extends Equatable {
     required this.ayat,
   });
 
-  factory DetailModel.fromJson(String str) =>
+  factory DetailModel.fromJson(final String str) =>
       DetailModel.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
-
-  factory DetailModel.fromMap(Map<String, dynamic> json) => DetailModel(
+  factory DetailModel.fromMap(final Map<String, dynamic> json) => DetailModel(
         nomor: json["nomor"],
         nama: json["nama"],
         namaLatin: json["namaLatin"],
@@ -72,13 +60,25 @@ class DetailModel extends Equatable {
         tempatTurun: json["tempatTurun"],
         arti: json["arti"],
         deskripsi: json["deskripsi"],
-        audioFull: Map.from(json["audioFull"])
-            .map((k, v) => MapEntry<String, String>(k, v)),
-        ayat: List<AyatDetailModel>.from(
-            json["ayat"].map((x) => AyatDetailModel.fromMap(x))),
+        audioFull:
+            Map<String, String>.from(json["audioFull"]).map(MapEntry.new),
+        ayat: List<AyatDetailModel>.from((json["ayat"] as List<AyatDetailModel>)
+            .map((final dynamic x) => AyatDetailModel.fromMap(x))),
       );
 
-  Map<String, dynamic> toMap() => {
+  final int nomor;
+  final String nama;
+  final String namaLatin;
+  final int jumlahAyat;
+  final String tempatTurun;
+  final String arti;
+  final String deskripsi;
+  final Map<String, String> audioFull;
+  final List<AyatDetailModel> ayat;
+
+  String toJson() => json.encode(toMap());
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
         "nomor": nomor,
         "nama": nama,
         "namaLatin": namaLatin,
@@ -86,9 +86,9 @@ class DetailModel extends Equatable {
         "tempatTurun": tempatTurun,
         "arti": arti,
         "deskripsi": deskripsi,
-        "audioFull":
-            Map.from(audioFull).map((k, v) => MapEntry<String, dynamic>(k, v)),
-        "ayat": List<dynamic>.from(ayat.map((x) => x.toMap())),
+        "audioFull": Map<String, String>.from(audioFull).map(MapEntry.new),
+        "ayat": List<AyatDetailModel>.from(
+            ayat.map((final AyatDetailModel x) => x.toMap())),
       };
 
   DetailEntity toEntity() {
@@ -101,11 +101,11 @@ class DetailModel extends Equatable {
         arti: arti,
         deskripsi: deskripsi,
         audioFull: audioFull,
-        ayat: ayat.map((x) => x.toEntity()).toList());
+        ayat: ayat.map((final AyatDetailModel x) => x.toEntity()).toList());
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object>[
         nomor,
         nama,
         namaLatin,
@@ -119,12 +119,6 @@ class DetailModel extends Equatable {
 }
 
 class AyatDetailModel extends Equatable {
-  final int nomorAyat;
-  final String teksArab;
-  final String teksLatin;
-  final String teksIndonesia;
-  final Map<String, String> audio;
-
   const AyatDetailModel({
     required this.nomorAyat,
     required this.teksArab,
@@ -133,26 +127,32 @@ class AyatDetailModel extends Equatable {
     required this.audio,
   });
 
-  factory AyatDetailModel.fromJson(String str) =>
+  factory AyatDetailModel.fromJson(final String str) =>
       AyatDetailModel.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
-
-  factory AyatDetailModel.fromMap(Map<String, dynamic> json) => AyatDetailModel(
+  factory AyatDetailModel.fromMap(final Map<String, dynamic> json) =>
+      AyatDetailModel(
         nomorAyat: json["nomorAyat"],
         teksArab: json["teksArab"],
         teksLatin: json["teksLatin"],
         teksIndonesia: json["teksIndonesia"],
-        audio: Map.from(json["audio"])
-            .map((k, v) => MapEntry<String, String>(k, v)),
+        audio: Map<String, String>.from(json["audio"]).map(MapEntry.new),
       );
 
-  Map<String, dynamic> toMap() => {
+  final int nomorAyat;
+  final String teksArab;
+  final String teksLatin;
+  final String teksIndonesia;
+  final Map<String, String> audio;
+
+  String toJson() => json.encode(toMap());
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
         "nomorAyat": nomorAyat,
         "teksArab": teksArab,
         "teksLatin": teksLatin,
         "teksIndonesia": teksIndonesia,
-        "audio": Map.from(audio).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "audio": Map<String, String>.from(audio).map(MapEntry.new),
       };
 
   AyatDetailEntity toEntity() {
@@ -167,5 +167,5 @@ class AyatDetailModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [nomorAyat, teksArab, teksLatin, teksIndonesia, audio];
+      <Object>[nomorAyat, teksArab, teksLatin, teksIndonesia, audio];
 }

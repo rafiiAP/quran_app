@@ -4,48 +4,40 @@ import 'package:equatable/equatable.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
 
 class SurahaDioModel extends Equatable {
-  final int code;
-  final String message;
-  final List<SurahModel> data;
-
   const SurahaDioModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory SurahaDioModel.fromJson(String str) =>
+  factory SurahaDioModel.fromJson(final String str) =>
       SurahaDioModel.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
-
-  factory SurahaDioModel.fromMap(Map<String, dynamic> json) => SurahaDioModel(
+  factory SurahaDioModel.fromMap(final Map<String, dynamic> json) =>
+      SurahaDioModel(
         code: json["code"],
         message: json["message"],
-        data: List<SurahModel>.from(
-            json["data"].map((x) => SurahModel.fromMap(x))),
+        data: List<SurahModel>.from((json["data"] as List<SurahModel>)
+            .map((final dynamic x) => SurahModel.fromMap(x))),
       );
 
-  Map<String, dynamic> toMap() => {
+  final int code;
+  final String message;
+  final List<SurahModel> data;
+
+  String toJson() => json.encode(toMap());
+  Map<String, dynamic> toMap() => <String, dynamic>{
         "code": code,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toMap())),
+        "data":
+            List<SurahModel>.from(data.map((final SurahModel x) => x.toMap())),
       };
 
   @override
-  List<Object?> get props => [code, message, data];
+  List<Object?> get props => <Object?>[code, message, data];
 }
 
 class SurahModel extends Equatable {
-  final int nomor;
-  final String nama;
-  final String namaLatin;
-  final int jumlahAyat;
-  final String tempatTurun;
-  final String arti;
-  final String deskripsi;
-  final Map<String, String> audioFull;
-
   const SurahModel({
     required this.nomor,
     required this.nama,
@@ -57,12 +49,10 @@ class SurahModel extends Equatable {
     required this.audioFull,
   });
 
-  factory SurahModel.fromJson(String str) =>
+  factory SurahModel.fromJson(final String str) =>
       SurahModel.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
-
-  factory SurahModel.fromMap(Map<String, dynamic> json) => SurahModel(
+  factory SurahModel.fromMap(final Map<String, dynamic> json) => SurahModel(
         nomor: json["nomor"],
         nama: json["nama"],
         namaLatin: json["namaLatin"],
@@ -70,11 +60,21 @@ class SurahModel extends Equatable {
         tempatTurun: json["tempatTurun"],
         arti: json["arti"],
         deskripsi: json["deskripsi"],
-        audioFull: Map.from(json["audioFull"])
-            .map((k, v) => MapEntry<String, String>(k, v)),
+        audioFull:
+            Map<String, String>.from(json["audioFull"]).map(MapEntry.new),
       );
 
-  Map<String, dynamic> toMap() => {
+  final int nomor;
+  final String nama;
+  final String namaLatin;
+  final int jumlahAyat;
+  final String tempatTurun;
+  final String arti;
+  final String deskripsi;
+  final Map<String, String> audioFull;
+
+  String toJson() => json.encode(toMap());
+  Map<String, dynamic> toMap() => <String, dynamic>{
         "nomor": nomor,
         "nama": nama,
         "namaLatin": namaLatin,
@@ -82,8 +82,7 @@ class SurahModel extends Equatable {
         "tempatTurun": tempatTurun,
         "arti": arti,
         "deskripsi": deskripsi,
-        "audioFull":
-            Map.from(audioFull).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "audioFull": Map<String, String>.from(audioFull).map(MapEntry.new),
       };
 
   SurahEntity toEntity() {
@@ -100,7 +99,7 @@ class SurahModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
         nomor,
         nama,
         namaLatin,

@@ -24,21 +24,21 @@ class JadwalSholatView extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     alignment: Alignment.bottomLeft,
                     colorFilter: ColorFilter.mode(
-                      AppColorConfig.white,
+                      colorConfig.white,
                       BlendMode.srcIn,
                     ),
                     scale: 3.5,
                     image: AssetImage(
-                      MyImage.masjid,
+                      imageConfig.masjid,
                     ),
                   ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColorConfig.primary.withValues(
+                      color: colorConfig.primary.withValues(
                         alpha: 0.2,
                       ),
                       offset: const Offset(
@@ -49,10 +49,10 @@ class JadwalSholatView extends StatelessWidget {
                       spreadRadius: 2.0,
                     ),
                   ],
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
-                      AppColorConfig.white,
-                      AppColorConfig.primary,
+                      colorConfig.white,
+                      colorConfig.primary,
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomRight,
@@ -64,20 +64,20 @@ class JadwalSholatView extends StatelessWidget {
                     W.textBody(
                       text: c.getSholatText(),
                       fontWeight: FontWeight.bold,
-                      color: AppColorConfig.black,
+                      color: colorConfig.black,
                     ),
                     W.textBody(
                       text: c.getTimeText(),
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: AppColorConfig.primary,
+                      color: colorConfig.primary,
                     ),
                     W.paddingheight5(),
                     Obx(
                       () => W.textBody(
                         text: c.countdownText.value,
                         fontWeight: FontWeight.bold,
-                        color: AppColorConfig.primary,
+                        color: colorConfig.primary,
                       ),
                     ),
                     W.paddingheight16(),
@@ -91,21 +91,21 @@ class JadwalSholatView extends StatelessWidget {
                 // height: C.getHeight() * 0.20,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     alignment: Alignment.bottomLeft,
                     colorFilter: ColorFilter.mode(
-                      AppColorConfig.white,
+                      colorConfig.white,
                       BlendMode.srcIn,
                     ),
                     scale: 3.5,
                     image: AssetImage(
-                      MyImage.masjid,
+                      imageConfig.masjid,
                     ),
                   ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColorConfig.primary.withValues(
+                      color: colorConfig.primary.withValues(
                         alpha: 0.2,
                       ),
                       offset: const Offset(
@@ -116,10 +116,10 @@ class JadwalSholatView extends StatelessWidget {
                       spreadRadius: 2.0,
                     ),
                   ],
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
-                      AppColorConfig.white,
-                      AppColorConfig.primary,
+                      colorConfig.white,
+                      colorConfig.primary,
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomRight,
@@ -131,18 +131,18 @@ class JadwalSholatView extends StatelessWidget {
                     W.textBody(
                       text: 'Waktu Sholat Selanjutnya',
                       fontWeight: FontWeight.bold,
-                      color: AppColorConfig.black,
+                      color: colorConfig.black,
                     ),
                     W.textBody(
                       text: c.getNextSholatText(),
                       fontWeight: FontWeight.bold,
-                      color: AppColorConfig.primary,
+                      color: colorConfig.primary,
                       fontSize: 16,
                     ),
                     W.textBody(
                       text: c.getNextTime(),
                       fontSize: 16,
-                      color: AppColorConfig.primary,
+                      color: colorConfig.primary,
                       fontWeight: FontWeight.bold,
                     ),
                     W.paddingheight5(),
@@ -157,15 +157,15 @@ class JadwalSholatView extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: AppColorConfig.primary),
+              color: colorConfig.primary),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Iconsax.location,
-                    color: AppColorConfig.white,
+                    color: colorConfig.white,
                     size: 50,
                   ),
                   W.paddingWidtht16(),
@@ -176,7 +176,7 @@ class JadwalSholatView extends StatelessWidget {
                         Obx(
                           () => W.textBody(
                             text: c.city.value,
-                            color: AppColorConfig.white,
+                            color: colorConfig.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             maxLines: 2,
@@ -186,7 +186,7 @@ class JadwalSholatView extends StatelessWidget {
                         Obx(
                           () => W.textBody(
                             text: c.timezone.value,
-                            color: AppColorConfig.white,
+                            color: colorConfig.white,
                             fontSize: 18,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -210,18 +210,18 @@ class JadwalSholatView extends StatelessWidget {
                       children: [
                         Icon(
                           data.iconsax,
-                          color: AppColorConfig.white,
+                          color: colorConfig.white,
                         ),
                         W.paddingWidtht16(),
                         W.textBody(
                           text: data.title,
-                          color: AppColorConfig.white,
+                          color: colorConfig.white,
                           fontWeight: FontWeight.w600,
                         ),
                         const Spacer(),
                         W.textBody(
                           text: "${data.hour}:${data.minute}",
-                          color: AppColorConfig.white,
+                          color: colorConfig.white,
                           fontWeight: FontWeight.w600,
                         ),
                         W.paddingWidtht5(),
@@ -234,7 +234,7 @@ class JadwalSholatView extends StatelessWidget {
                               data.isAlarmSet.value
                                   ? Iconsax.alarm5
                                   : Iconsax.alarm,
-                              color: AppColorConfig.white,
+                              color: colorConfig.white,
                             ),
                           ),
                         ),
@@ -253,7 +253,7 @@ class JadwalSholatView extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: AppColorConfig.primary),
+              color: colorConfig.primary),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -262,12 +262,12 @@ class JadwalSholatView extends StatelessWidget {
                   children: [
                     W.textBody(
                       text: 'Sunrise',
-                      color: AppColorConfig.white,
+                      color: colorConfig.white,
                     ),
                     W.paddingheight5(),
                     W.textBody(
                       text: data.sunrise,
-                      color: AppColorConfig.white,
+                      color: colorConfig.white,
                       fontWeight: FontWeight.w600,
                     ),
                   ],
@@ -282,12 +282,12 @@ class JadwalSholatView extends StatelessWidget {
                   children: [
                     W.textBody(
                       text: 'Mid Night',
-                      color: AppColorConfig.white,
+                      color: colorConfig.white,
                     ),
                     W.paddingheight5(),
                     W.textBody(
                       text: data.midnight,
-                      color: AppColorConfig.white,
+                      color: colorConfig.white,
                       fontWeight: FontWeight.w600,
                     ),
                   ],
@@ -302,12 +302,12 @@ class JadwalSholatView extends StatelessWidget {
                   children: [
                     W.textBody(
                       text: 'Sunset',
-                      color: AppColorConfig.white,
+                      color: colorConfig.white,
                     ),
                     W.paddingheight5(),
                     W.textBody(
                       text: data.sunset,
-                      color: AppColorConfig.white,
+                      color: colorConfig.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ],

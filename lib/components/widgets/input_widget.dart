@@ -2,54 +2,46 @@ part of 'main_widget.dart';
 
 mixin InputWidget {
   Widget input({
-    TextInputType keyboardType = TextInputType.text,
-    AutovalidateMode? autoValidateMode,
-    FormFieldValidator<String>? validator,
-    bool? enabled,
-    Widget? icon,
-    String? hintText,
-    TextEditingController? controller,
-    String? initialValue,
-    List<TextInputFormatter>? inputFormatters,
-    Function(String)? onChanged,
-    Function(String?)? onSaved,
-    Function(String)? onFieldSubmitted,
-    FocusNode? focusNode,
-    TextInputAction? textInputAction,
-    TextAlign? textAlign,
-    double? fontSize,
-    FontWeight? fontWeight,
-    double? letterSpacing,
-    int? maxLength,
-    BorderRadius? borderRadius,
-    Widget? suffixIcon,
-    bool readOnly = false,
-    bool filled = true,
-    Color? color,
-    Color? colorHint,
-    Widget? prefixIcon,
-    void Function()? onTap,
-    int? maxLines = 1,
-    String? labelText,
-    Widget? prefix,
-    String? prefixText,
-    bool autofocus = false,
-    EdgeInsetsGeometry? contentPadding,
-    bool? isDense,
-    bool hideMaxLength = false,
-    FontWeight? fontWeightHint,
+    final TextInputType keyboardType = TextInputType.text,
+    final AutovalidateMode? autoValidateMode,
+    final FormFieldValidator<String>? validator,
+    final bool? enabled,
+    final Widget? icon,
+    final String? hintText,
+    final TextEditingController? controller,
+    final String? initialValue,
+    final List<TextInputFormatter>? inputFormatters,
+    final Function(String)? onChanged,
+    final Function(String?)? onSaved,
+    final Function(String)? onFieldSubmitted,
+    final FocusNode? focusNode,
+    final TextInputAction? textInputAction,
+    final TextAlign textAlign = TextAlign.start,
+    final double? fontSize,
+    final FontWeight? fontWeight,
+    final double? letterSpacing,
+    final int? maxLength,
+    final BorderRadius? borderRadius,
+    final Widget? suffixIcon,
+    final bool readOnly = false,
+    final bool filled = true,
+    final Color? color,
+    final Color? colorHint,
+    final Widget? prefixIcon,
+    final void Function()? onTap,
+    final int? maxLines = 1,
+    final String? labelText,
+    final Widget? prefix,
+    final String? prefixText,
+    final bool autofocus = false,
+    final EdgeInsetsGeometry? contentPadding,
+    final bool? isDense,
+    final bool hideMaxLength = false,
+    final FontWeight? fontWeightHint,
   }) {
-    textAlign ??= TextAlign.start;
-
-    borderRadius ??= const BorderRadius.all(Radius.circular(20));
-    contentPadding ??= const EdgeInsets.symmetric(
-      horizontal: 16,
-      vertical: 16,
-    );
-
     return TextFormField(
-      onTapOutside: (event) {
-        FocusManager.instance.primaryFocus!.unfocus();
+      onTapOutside: (final PointerDownEvent event) {
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       readOnly: readOnly,
       enabled: enabled,
@@ -60,7 +52,10 @@ mixin InputWidget {
       validator: validator,
       keyboardType: keyboardType,
       buildCounter: hideMaxLength
-          ? (context, {required currentLength, required isFocused, maxLength}) {
+          ? (final BuildContext context,
+              {required final int currentLength,
+              required final bool isFocused,
+              final int? maxLength}) {
               return null;
             }
           : null,
@@ -78,27 +73,35 @@ mixin InputWidget {
         ),
 
         // fillColor: Color(0xFFeeeef8),
-        fillColor: C.isDark(Get.context!) ? AppColorConfig.bgBottom : AppColorConfig.white,
+        fillColor:
+            C.isDark(Get.context!) ? colorConfig.bgBottom : colorConfig.white,
         labelText: labelText,
-        contentPadding: contentPadding,
+        contentPadding: contentPadding ??
+            const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
         border: OutlineInputBorder(
-          borderRadius: borderRadius,
+          borderRadius:
+              borderRadius ?? const BorderRadius.all(Radius.circular(20)),
           borderSide: BorderSide(
-            color: AppColorConfig.grey.withValues(alpha: 0.4),
+            color: colorConfig.grey.withValues(alpha: 0.4),
           ),
           // borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: borderRadius,
+          borderRadius:
+              borderRadius ?? const BorderRadius.all(Radius.circular(20)),
           borderSide: BorderSide(
-            color: AppColorConfig.grey.withValues(alpha: 0.4),
+            color: colorConfig.grey.withValues(alpha: 0.4),
           ),
           // borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: borderRadius,
+          borderRadius:
+              borderRadius ?? const BorderRadius.all(Radius.circular(20)),
           borderSide: BorderSide(
-            color: AppColorConfig.grey.withValues(alpha: 0.4),
+            color: colorConfig.grey.withValues(alpha: 0.4),
           ),
 
           // borderSide: BorderSide.none,
@@ -111,7 +114,7 @@ mixin InputWidget {
         hintStyle: GoogleFonts.poppins(
           textStyle: Get.textTheme.bodyMedium!.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColorConfig.grey.withValues(alpha: 0.4),
+            color: colorConfig.grey.withValues(alpha: 0.4),
           ),
         ),
         labelStyle: labelText == null
@@ -119,7 +122,7 @@ mixin InputWidget {
             : GoogleFonts.poppins(
                 textStyle: Get.textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColorConfig.grey.withValues(alpha: 0.4),
+                  color: colorConfig.grey.withValues(alpha: 0.4),
                 ),
               ),
 
@@ -148,42 +151,38 @@ mixin InputWidget {
   }
 
   Widget inputPassword({
-    TextInputType keyboardType = TextInputType.text,
-    AutovalidateMode? autoValidateMode,
-    FormFieldValidator<String>? validator,
-    bool? enabled,
-    Widget? icon,
-    String? hintText,
-    TextEditingController? controller,
-    String? initialValue,
-    List<TextInputFormatter>? inputFormatters,
-    Function(String)? onChanged,
-    Function(String?)? onSaved,
-    Function(String)? onFieldSubmitted,
-    FocusNode? focusNode,
-    TextInputAction? textInputAction,
-    TextAlign? textAlign,
-    double? fontSize,
-    FontWeight? fontWeight,
-    double? letterSpacing,
-    int? maxLength,
-    bool obscureText = false,
-    Function()? obscureTextPressed,
-    Color? fillColor,
-    String? labelText,
-    BorderRadius? borderRadius,
+    final TextInputType keyboardType = TextInputType.text,
+    final AutovalidateMode? autoValidateMode,
+    final FormFieldValidator<String>? validator,
+    final bool? enabled,
+    final Widget? icon,
+    final String? hintText,
+    final TextEditingController? controller,
+    final String? initialValue,
+    final List<TextInputFormatter>? inputFormatters,
+    final Function(String)? onChanged,
+    final Function(String?)? onSaved,
+    final Function(String)? onFieldSubmitted,
+    final FocusNode? focusNode,
+    final TextInputAction? textInputAction,
+    final TextAlign textAlign = TextAlign.start,
+    final double? fontSize,
+    final FontWeight? fontWeight,
+    final double? letterSpacing,
+    final int? maxLength,
+    final bool obscureText = false,
+    final Function()? obscureTextPressed,
+    final Color? fillColor,
+    final String? labelText,
+    final BorderRadius? borderRadius,
   }) {
-    textAlign ??= TextAlign.start;
-    fillColor ??= AppColorConfig.white;
-    borderRadius ??= const BorderRadius.all(Radius.circular(20));
-
     return TextFormField(
       enabled: enabled,
       autovalidateMode: autoValidateMode,
       validator: validator,
       keyboardType: keyboardType,
       obscureText: obscureText,
-      onTapOutside: (event) {
+      onTapOutside: (final PointerDownEvent event) {
         FocusManager.instance.primaryFocus!.unfocus();
       },
       decoration: InputDecoration(
@@ -193,18 +192,20 @@ mixin InputWidget {
           vertical: 16,
         ),
         labelText: labelText,
-        fillColor: fillColor,
+        fillColor: fillColor ?? colorConfig.white,
         border: OutlineInputBorder(
-          borderRadius: borderRadius,
-          borderSide: const BorderSide(
-            color: AppColorConfig.grey,
+          borderRadius:
+              borderRadius ?? const BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(
+            color: colorConfig.grey,
           ),
           // borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: borderRadius,
-          borderSide: const BorderSide(
-            color: AppColorConfig.grey,
+          borderRadius:
+              borderRadius ?? const BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(
+            color: colorConfig.grey,
           ),
           // borderSide: BorderSide.none,
         ),
@@ -212,7 +213,7 @@ mixin InputWidget {
           onPressed: obscureTextPressed,
           icon: Icon(
             obscureText ? Iconsax.eye_slash : Iconsax.eye,
-            color: AppColorConfig.grey,
+            color: colorConfig.grey,
           ),
         ),
         errorMaxLines: 3,
@@ -221,7 +222,7 @@ mixin InputWidget {
             : GoogleFonts.poppins(
                 textStyle: Get.textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColorConfig.grey.withValues(alpha: 0.4),
+                  color: colorConfig.grey.withValues(alpha: 0.4),
                 ),
               ),
       ),

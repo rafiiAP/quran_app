@@ -7,12 +7,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/style.dart';
-import 'package:quran_app/core/service/local_notification_service.dart';
-import 'package:quran_app/core/service/permission_service.dart';
 import 'package:quran_app/data/db/database_helper.dart';
-import 'package:quran_app/domain/use_case/quran_usecase.dart';
+import 'package:quran_app/domain/use_case/remote_usecase.dart';
 import 'package:quran_app/firebase_options.dart';
+import 'package:quran_app/injection.dart';
 import 'package:quran_app/main_getx.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_cubit/get_surah_cubit.dart';
 import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
@@ -22,6 +22,7 @@ import 'injection.dart' as di;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  di.setup();
   await dotenv.load(fileName: ".env");
 
   await Firebase.initializeApp(
@@ -34,53 +35,53 @@ Future<void> main() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   // Menangkap error dari kode async yang tidak tertangkap di try-catch
-  PlatformDispatcher.instance.onError = (error, stack) {
+  PlatformDispatcher.instance.onError =
+      (final Object error, final StackTrace stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
 
-  await PermissionService.requestAllPermissions();
+  await C.requestAllPermissions();
 
-  await LocalNotificationService.init();
+  await C.initLocalNotif();
 
-  final DatabaseHelper databaseHelper = DatabaseHelper();
-  databaseHelper.db;
+  await databaseHelper.db;
   await GetStorage.init();
 
-  MainStyle.setSystemUIOverlay();
-  di.setup();
+  style.setSystemUIOverlay();
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final c = Get.put(MainGetx());
+  final MainGetx _c = Get.put(MainGetx());
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              GetSurahCubit(quranUsecase: di.locator<RemoteUsecase>()),
+      providers: <BlocProvider>[
+        BlocProvider<GetSurahCubit>(
+          create: (final BuildContext context) =>
+              GetSurahCubit(quranUsecase: locator<RemoteUsecase>()),
         ),
-        BlocProvider(
-          create: (context) =>
+        BlocProvider<DetailSurahCubit>(
+          create: (final BuildContext context) =>
               DetailSurahCubit(quranUsecase: di.locator<RemoteUsecase>()),
         ),
-        BlocProvider(
-          create: (context) =>
+        BlocProvider<JadwalSholatCubit>(
+          create: (final BuildContext context) =>
               JadwalSholatCubit(usecase: di.locator<RemoteUsecase>()),
         )
       ],
       child: GetMaterialApp(
         title: 'Quran App',
-        theme: MainStyle.light,
-        darkTheme: MainStyle.dark,
+        theme: style.light,
+        darkTheme: style.dark,
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
-        home: c.page,
+        home: _c.page,
       ),
     );
   }

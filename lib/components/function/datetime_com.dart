@@ -2,11 +2,11 @@ part of 'main_function.dart';
 
 mixin DatetimeComponent {
   String date({
-    required String format,
-    DateTime? dateTime,
+    required final String format,
+    final DateTime? dateTime,
   }) {
-    dateTime ??= DateTime.now();
-    return DateFormat(format).format(dateTime);
+    assert(format.isNotEmpty, 'Format tidak boleh kosong'); // Validasi format
+    return DateFormat(format).format(dateTime ?? DateTime.now());
   }
 
   String datetime() {

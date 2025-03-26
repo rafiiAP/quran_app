@@ -50,14 +50,15 @@ class BookmarkPage extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: C.isDark(context)
-                            ? AppColorConfig.bgBottom
-                            : AppColorConfig.lightGrey.withValues(alpha: 0.4),
+                            ? colorConfig.bgBottom
+                            : colorConfig.lightGrey.withValues(alpha: 0.4),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(
                         children: [
                           W.textBody(
-                            text: '${bookmarkModel.namaLatin} : ${bookmarkModel.nomorSurah}',
+                            text:
+                                '${bookmarkModel.namaLatin} : ${bookmarkModel.nomorSurah}',
                             fontWeight: FontWeight.w500,
                           ),
                           const Spacer(),
@@ -65,9 +66,9 @@ class BookmarkPage extends StatelessWidget {
                             onTap: () {
                               c.onTapShare(bookmarkModel);
                             },
-                            child: const Icon(
+                            child: Icon(
                               Icons.share,
-                              color: AppColorConfig.primary,
+                              color: colorConfig.primary,
                             ),
                           ),
                           W.paddingWidtht8(),
@@ -75,9 +76,9 @@ class BookmarkPage extends StatelessWidget {
                             onTap: () {
                               c.onTapDelete(bookmarkModel);
                             },
-                            child: const Icon(
+                            child: Icon(
                               Icons.delete_outline,
-                              color: AppColorConfig.primary,
+                              color: colorConfig.primary,
                             ),
                           ),
                           W.paddingWidtht8(),
@@ -116,7 +117,7 @@ class BookmarkPage extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                           W.paddingheight16(),
-                          const Divider(color: AppColorConfig.grey),
+                          Divider(color: colorConfig.grey),
                         ],
                       ),
                     )

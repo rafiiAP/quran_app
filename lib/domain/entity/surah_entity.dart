@@ -1,15 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class SurahEntity extends Equatable {
-  final int nomor;
-  final String nama;
-  final String namaLatin;
-  final int jumlahAyat;
-  final String tempatTurun;
-  final String arti;
-  final String deskripsi;
-  final Map<String, String> audioFull;
-
   const SurahEntity({
     required this.nomor,
     required this.nama,
@@ -20,7 +11,24 @@ class SurahEntity extends Equatable {
     required this.deskripsi,
     required this.audioFull,
   });
+  final int nomor;
+  final String nama;
+  final String namaLatin;
+  final int jumlahAyat;
+  final String tempatTurun;
+  final String arti;
+  final String deskripsi;
+  final Map<String, String> audioFull;
 
   @override
-  List<Object?> get props => [nomor, nama, namaLatin, jumlahAyat, tempatTurun, arti, deskripsi, audioFull];
+  List<Object?> get props => <Object?>[
+        nomor,
+        nama,
+        namaLatin,
+        jumlahAyat,
+        tempatTurun,
+        arti,
+        deskripsi,
+        audioFull
+      ];
 }
