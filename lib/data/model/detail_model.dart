@@ -62,7 +62,7 @@ class DetailModel extends Equatable {
         deskripsi: json["deskripsi"],
         audioFull:
             Map<String, String>.from(json["audioFull"]).map(MapEntry.new),
-        ayat: List<AyatDetailModel>.from((json["ayat"] as List<AyatDetailModel>)
+        ayat: List<AyatDetailModel>.from((json["ayat"])
             .map((final dynamic x) => AyatDetailModel.fromMap(x))),
       );
 

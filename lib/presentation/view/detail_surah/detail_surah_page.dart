@@ -90,7 +90,7 @@ class DetailSurahPage extends StatelessWidget {
                                 child: Text(
                                   ayatDetailEntity.teksArab,
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 32,
                                     fontWeight: FontWeight.bold,
                                     height: 2,
                                   ),
@@ -99,7 +99,7 @@ class DetailSurahPage extends StatelessWidget {
                               ),
                               W.paddingheight16(),
                               Text(
-                                ayatDetailEntity.teksLatin,
+                                '${ayatDetailEntity.teksLatin} (${index + 1})',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontStyle: FontStyle.italic,
@@ -107,7 +107,8 @@ class DetailSurahPage extends StatelessWidget {
                               ),
                               W.paddingheight5(),
                               W.textBody(
-                                text: ayatDetailEntity.teksIndonesia,
+                                text:
+                                    '${ayatDetailEntity.teksIndonesia} (${index + 1})',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),

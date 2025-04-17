@@ -17,7 +17,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.put(HomeGetx());
-    // LocalNotificationService.checkScheduledNotifications();
+    // C.scheduleNotification(1, 15, 04,
+    //     body: 'halo hai', title: 'haloo apakah bisa');
+    // C.checkScheduledNotifications();
     // c.init();
     return Scaffold(
       appBar: AppBar(

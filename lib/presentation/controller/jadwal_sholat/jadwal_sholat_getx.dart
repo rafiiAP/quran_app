@@ -128,7 +128,7 @@ class JadwalSholatGetx extends GetxController {
   Future<void> requestExactAlarmPermission() async {}
 
   void startTimer() {
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       updateCountdown();
       startTimer();
     });
@@ -171,7 +171,7 @@ class JadwalSholatGetx extends GetxController {
         final Duration remaining = waktuSholat.difference(now);
         countdownText.value =
             "${entry.title} dalam\n${formatDuration(remaining)}";
-        break;
+        return;
       }
     }
 
@@ -214,7 +214,11 @@ class JadwalSholatGetx extends GetxController {
   String getNextSholatText() {
     final DateTime now = DateTime.now();
 
-    final List<DateTime> times = vaJadwal.map((final SetNotifModel key) {
+    if (vaJadwal.isEmpty) {
+      return "-";
+    }
+
+    final List<DateTime> times = vaJadwal.map((SetNotifModel key) {
       return DateTime(now.year, now.month, now.day, key.hour, key.minute);
     }).toList();
 
@@ -222,13 +226,13 @@ class JadwalSholatGetx extends GetxController {
 
     for (int i = 0; i < times.length; i++) {
       if (now.isBefore(times[i])) {
-        nextIndex = i + 1; // Loncat satu kali ke waktu berikutnya
+        nextIndex = i + 1; // waktu setelah yang paling dekat
         break;
       }
     }
 
-    // Jika nextIndex melewati Isya, kembali ke Subuh besok
-    if (nextIndex >= times.length) {
+    // Kalau semua waktu sudah lewat, balik ke subuh besok (index 0)
+    if (nextIndex == -1 || nextIndex >= vaJadwal.length) {
       nextIndex = 0;
     }
 
@@ -261,17 +265,23 @@ class JadwalSholatGetx extends GetxController {
 
   String getTimeText() {
     final DateTime now = DateTime.now();
-    // now = DateTime(now.year, now.month, now.day, 20, 35);
+
+    if (vaJadwal.isEmpty) {
+      return "-"; // atau kamu bisa return string lain sebagai fallback
+    }
 
     for (final SetNotifModel entry in vaJadwal) {
       final DateTime waktuSholat =
           DateTime(now.year, now.month, now.day, entry.hour, entry.minute);
 
       if (now.isBefore(waktuSholat)) {
-        return "${entry.hour}:${entry.minute}";
+        return "${entry.hour.toString().padLeft(2, '0')}:${entry.minute.toString().padLeft(2, '0')}";
       }
     }
-    return "${vaJadwal.first.hour}:${vaJadwal.first.minute}";
+
+    // fallback ke jadwal pertama (kalau semua sudah lewat)
+    final first = vaJadwal.first;
+    return "${first.hour.toString().padLeft(2, '0')}:${first.minute.toString().padLeft(2, '0')}";
   }
 
   /// When the location services are not enabled or permissions
