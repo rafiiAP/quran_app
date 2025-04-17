@@ -21,10 +21,12 @@ class DetailSurahGetx extends GetxController {
     super.onReady();
   }
 
-  void onTapShare(final AyatDetailEntity ayatModel) async {
+  void onTapShare(
+      final AyatDetailEntity ayatModel, DetailEntity detailModel) async {
     await Clipboard.setData(
       ClipboardData(
-        text: '${ayatModel.teksArab}\n${ayatModel.teksIndonesia}',
+        text:
+            '${detailModel.namaLatin}, ayat ke-${ayatModel.nomorAyat}\n\n${ayatModel.teksArab}\n\n${ayatModel.teksIndonesia} (${ayatModel.nomorAyat})',
       ),
     ).then((final _) {
       Get.snackbar('Sukses', 'Teks berhasil disalin');
@@ -79,7 +81,7 @@ class DetailSurahGetx extends GetxController {
             ),
             title: W.textBody(text: 'Salin'),
             onTap: () {
-              onTapShare(ayatModel);
+              onTapShare(ayatModel, detailModel);
               Get.back();
             },
           ),

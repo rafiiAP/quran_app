@@ -41,29 +41,31 @@ mixin LocalNotificationService {
     }
   }
 
-  // static Future<void> showNotification({
-  //   required int id,
-  //   required String title,
-  //   required String body,
-  // }) async {
-  //   const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-  //     'channel_id',
-  //     'channel_name',
-  //     channelDescription: 'Channel Description',
-  //     importance: Importance.high,
-  //     priority: Priority.high,
-  //   );
+  Future<void> showNotification({
+    required int id,
+    required String title,
+    required String body,
+  }) async {
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'Channel Description',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
 
-  //   const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
-  //     presentAlert: true,
-  //     presentBadge: true,
-  //     presentSound: true,
-  //   );
+    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
 
-  //   const NotificationDetails details = NotificationDetails(android: androidDetails, iOS: iosDetails);
+    const NotificationDetails details =
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
 
-  //   await _notificationsPlugin.show(id, title, body, details);
-  // }
+    await _notificationsPlugin.show(id, title, body, details);
+  }
 
   Future<void> scheduleNotification(
     final int id,
@@ -72,16 +74,22 @@ mixin LocalNotificationService {
     final String? body,
     final String? title,
   }) async {
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    final tzlocal = await FlutterTimezone.getLocalTimezone();
+    final local = tz.getLocation(tzlocal);
+
+    final tz.TZDateTime now = tz.TZDateTime.now(local);
     tz.TZDateTime scheduledTime;
     scheduledTime = tz.TZDateTime(
-      tz.local,
+      local,
+      // jakarta,
       now.year,
       now.month,
       now.day,
       hour,
       minute,
     );
+
+    C.showLog(log: '--schedule = $scheduledTime - now = $now');
 
     if (scheduledTime.isBefore(now)) {
       //kalau sudah lewat maka dijadwalkan untuk besoknya
@@ -98,11 +106,11 @@ mixin LocalNotificationService {
 
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-      'channel_id',
-      'Scheduled Notification',
+      'adzan_channel',
+      'Notifikasi Adzan',
       channelDescription: 'Notifikasi terjadwal setiap hari',
-      importance: Importance.high,
-      priority: Priority.high,
+      importance: Importance.max,
+      priority: Priority.max,
       sound: RawResourceAndroidNotificationSound('adzan'),
     );
 

@@ -95,7 +95,7 @@ class BookmarkPage extends StatelessWidget {
                             child: Text(
                               bookmarkModel.teksArab,
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 32,
                                 fontWeight: FontWeight.bold,
                                 height: 2,
                               ),
@@ -104,7 +104,7 @@ class BookmarkPage extends StatelessWidget {
                           ),
                           W.paddingheight16(),
                           Text(
-                            '${bookmarkModel.teksLatin}(${bookmarkModel.nomorAyat})',
+                            '${bookmarkModel.teksLatin} (${bookmarkModel.nomorAyat})',
                             style: const TextStyle(
                               fontSize: 16,
                               fontStyle: FontStyle.italic,
@@ -112,7 +112,8 @@ class BookmarkPage extends StatelessWidget {
                           ),
                           W.paddingheight5(),
                           W.textBody(
-                            text: bookmarkModel.teksIndonesia,
+                            text:
+                                '${bookmarkModel.teksIndonesia} (${bookmarkModel.nomorAyat})',
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),

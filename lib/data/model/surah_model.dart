@@ -17,8 +17,8 @@ class SurahaDioModel extends Equatable {
       SurahaDioModel(
         code: json["code"],
         message: json["message"],
-        data: List<SurahModel>.from((json["data"] as List<SurahModel>)
-            .map((final dynamic x) => SurahModel.fromMap(x))),
+        data: List<SurahModel>.from(
+            (json["data"]).map((final dynamic x) => SurahModel.fromMap(x))),
       );
 
   final int code;
