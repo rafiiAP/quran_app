@@ -1,5 +1,4 @@
 import 'dart:async';
-// ignore: depend_on_referenced_packages
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';

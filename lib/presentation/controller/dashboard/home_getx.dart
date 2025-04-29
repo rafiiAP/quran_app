@@ -14,6 +14,9 @@ import 'package:quran_app/presentation/view/serach_page/search_page.dart';
 import '../../view/detail_surah/detail_surah_page.dart';
 
 class HomeGetx extends GetxController {
+  final GlobalKey tandaiKey = GlobalKey();
+  final GlobalKey helpKey = GlobalKey();
+
   Rx<List<SurahEntity>> surahList = Rx<List<SurahEntity>>(<SurahEntity>[]);
 
   RxString cNamaLatin = ''.obs;
@@ -23,6 +26,7 @@ class HomeGetx extends GetxController {
   ///untuk kodisi ketika tap lastRead atau tidak
   RxBool isToLastRead = false.obs;
   RxBool isSnackbarActive = false.obs;
+  RxBool isFirstTime = false.obs;
 
   @override
   void onReady() {
@@ -90,7 +94,7 @@ class HomeGetx extends GetxController {
     await C
         .to(() => DetailSurahPage(
             detailEntity: data,
-            index: isToLastRead.value ? nNomorAyat.value : null))
+            indexTandai: isToLastRead.value ? nNomorAyat.value : null))
         .then((final _) {
       getLastRead();
     });

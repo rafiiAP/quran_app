@@ -14,6 +14,7 @@ class JadwalSholatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.put(JadwalSholatGetx());
+    c.jadwalSholat();
 
     // LocalNotificationService.scheduleNotification(1, 13, 43, body: 'tes', title: 'tes');
     // LocalNotificationService.checkScheduledNotifications();
