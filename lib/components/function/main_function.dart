@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
 import 'package:quran_app/injection.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 // import 'package:translator/translator.dart';
@@ -71,5 +72,27 @@ class MainFunction
     required final dynamic log,
   }) {
     if (config.lShowLog) dev.log("$log");
+  }
+
+  void showCase({
+    required BuildContext context,
+    required List<GlobalKey> keys,
+    required String cacheKey,
+    isShowHelp = false,
+  }) {
+    final alreadyShown = C.getBool(cKey: cacheKey, lDefaultValue: false);
+
+    if (!alreadyShown) {
+      C.setBool(cKey: cacheKey, lValue: true);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (!context.mounted) return;
+
+        ShowCaseWidget.of(context).startShowCase(keys);
+      });
+    }
+
+    if (isShowHelp) {
+      ShowCaseWidget.of(context).startShowCase(keys);
+    }
   }
 }

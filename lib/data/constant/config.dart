@@ -18,4 +18,7 @@ class AppConfig {
   String cacheNomorAyat = 'cacheNomorAyat';
   String cacheNamaLatin = 'cacheNamaLatin';
   String cacheStarted = 'cacheStarted';
+  String cacheShowCase = 'cacheShowCase';
+  String cacheShowCaseDetail = 'cacheShowCaseDetail';
+  String cacheShowCaseBottomDetail = 'cacheShowCaseBottomDetail';
 }

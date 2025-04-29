@@ -55,7 +55,8 @@ class BookmarkGetx extends GetxController {
     W.endwait();
 
     await C
-        .to(() => DetailSurahPage(detailEntity: data, index: nNomorAyat.value))
+        .to(() =>
+            DetailSurahPage(detailEntity: data, indexTandai: nNomorAyat.value))
         .then((final _) => init());
   }
 }

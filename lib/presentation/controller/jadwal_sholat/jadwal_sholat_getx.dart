@@ -17,6 +17,8 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
 
 class JadwalSholatGetx extends GetxController {
+  GlobalKey notifKey = GlobalKey();
+
   RxList<SetNotifModel> vaJadwal = RxList<SetNotifModel>();
   Rxn<Position> position = Rxn<Position>();
 
@@ -33,6 +35,33 @@ class JadwalSholatGetx extends GetxController {
     getTimeZone();
 
     super.onInit();
+  }
+
+  void getLoacationName() async {
+    // C.showLog(log: 'log: --baaa');
+    position.value = await determinePosition();
+    // C.showLog(log: '--baaa position: $position');
+
+    if (position.value == null) {
+      city.value = 'Tidak diketahui';
+      return;
+    }
+
+    // Ambil nama kota/kabupaten
+    var placemarks = await placemarkFromCoordinates(
+        position.value!.latitude, position.value!.longitude);
+    // C.showLog(log: '--baaa placemarks: $placemarks');
+
+    if (placemarks.isNotEmpty) {
+      city.value = placemarks[0].locality ?? "Tidak diketahui";
+      // C.showLog(log: '--baaa City: $city');.va
+    } else {
+      city.value = 'Tidak diketahui';
+    }
+  }
+
+  void getTimeZone() async {
+    timezone.value = await FlutterTimezone.getLocalTimezone();
   }
 
   @override
@@ -137,10 +166,7 @@ class JadwalSholatGetx extends GetxController {
   void updateSholat() {
     Future.delayed(const Duration(hours: 3)).then(
       (final _) {
-        getNextSholatText();
-        getNextSholatText();
         getTimeText();
-        getNextTime();
         updateSholat();
       },
     );
@@ -211,58 +237,6 @@ class JadwalSholatGetx extends GetxController {
     return "Subuh Besok";
   }
 
-  String getNextSholatText() {
-    final DateTime now = DateTime.now();
-
-    if (vaJadwal.isEmpty) {
-      return "-";
-    }
-
-    final List<DateTime> times = vaJadwal.map((SetNotifModel key) {
-      return DateTime(now.year, now.month, now.day, key.hour, key.minute);
-    }).toList();
-
-    int nextIndex = -1;
-
-    for (int i = 0; i < times.length; i++) {
-      if (now.isBefore(times[i])) {
-        nextIndex = i + 1; // waktu setelah yang paling dekat
-        break;
-      }
-    }
-
-    // Kalau semua waktu sudah lewat, balik ke subuh besok (index 0)
-    if (nextIndex == -1 || nextIndex >= vaJadwal.length) {
-      nextIndex = 0;
-    }
-
-    return vaJadwal[nextIndex].title;
-  }
-
-  String getNextTime() {
-    final DateTime now = DateTime.now();
-
-    final List<DateTime> dateTimes = vaJadwal.map((final SetNotifModel time) {
-      return DateTime(now.year, now.month, now.day, time.hour, time.minute);
-    }).toList();
-
-    int nextIndex = -1;
-
-    for (int i = 0; i < dateTimes.length; i++) {
-      if (now.isBefore(dateTimes[i])) {
-        nextIndex = i + 1; // Loncat +1 ke setelah yang berikutnya
-        break;
-      }
-    }
-
-    // Jika nextIndex melebihi daftar, kembali ke awal (Subuh besok)
-    if (nextIndex >= dateTimes.length) {
-      nextIndex = nextIndex % dateTimes.length;
-    }
-
-    return DateFormat('HH:mm').format(dateTimes[nextIndex]);
-  }
-
   String getTimeText() {
     final DateTime now = DateTime.now();
 
@@ -298,33 +272,6 @@ class JadwalSholatGetx extends GetxController {
     }
   }
 
-  void getLoacationName() async {
-    // C.showLog(log: 'log: --baaa');
-    position.value = await determinePosition();
-    // C.showLog(log: '--baaa position: $position');
-
-    if (position.value == null) {
-      city.value = 'Tidak diketahui';
-      return;
-    }
-
-    // Ambil nama kota/kabupaten
-    var placemarks = await placemarkFromCoordinates(
-        position.value!.latitude, position.value!.longitude);
-    // C.showLog(log: '--baaa placemarks: $placemarks');
-
-    if (placemarks.isNotEmpty) {
-      city.value = placemarks[0].locality ?? "Tidak diketahui";
-      // C.showLog(log: '--baaa City: $city');.va
-    } else {
-      city.value = 'Tidak diketahui';
-    }
-  }
-
-  void getTimeZone() async {
-    timezone.value = await FlutterTimezone.getLocalTimezone();
-  }
-
   void loadAlarmStatus() async {
     for (final SetNotifModel item in vaJadwal) {
       final bool status =
@@ -346,6 +293,7 @@ class JadwalSholatGetx extends GetxController {
   void setNotif(final int index, final SetNotifModel model) async {
     if (model.isAlarmSet.value) {
       model.isAlarmSet.value = false;
+      C.setBool(cKey: "alarm_${model.title}", lValue: model.isAlarmSet.value);
       await C.cancelNotification(index);
     } else {
       model.isAlarmSet.value = true;
@@ -376,11 +324,9 @@ class JadwalSholatGetx extends GetxController {
                   model.minute,
                 );
 
-                for (int i = 0; i < vaJadwal.length; i++) {
-                  C.setBool(
-                      cKey: "alarm_${vaJadwal[i].title}",
-                      lValue: vaJadwal[i].isAlarmSet.value);
-                }
+                C.setBool(
+                    cKey: "alarm_${model.title}",
+                    lValue: model.isAlarmSet.value);
 
                 final Duration remaining = waktuSholat.difference(now);
 

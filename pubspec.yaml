@@ -39,6 +39,7 @@ dependencies:
   timezone: ^0.10.0
   scrollable_positioned_list: ^0.3.8
   flutter_dotenv: ^5.2.1
+  showcaseview: ^4.0.1
 
 
 
