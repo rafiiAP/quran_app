@@ -60,18 +60,18 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: ListView(
                 children: [
-                  W.textBody(
-                    text: "Assalamu'alaikum",
-                    color: colorConfig.grey,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  W.paddingheight5(),
-                  W.textBody(
-                    text: 'RAF',
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  // W.textBody(
+                  //   text: "Assalamu'alaikum",
+                  //   color: colorConfig.grey,
+                  //   fontSize: 18,
+                  //   fontWeight: FontWeight.w500,
+                  // ),
+                  // W.paddingheight5(),
+                  // W.textBody(
+                  //   text: 'RAF',
+                  //   fontSize: 24,
+                  //   fontWeight: FontWeight.w600,
+                  // ),
                   W.paddingheight16(),
                   cardLastRead(c),
                   W.paddingheight16(),
