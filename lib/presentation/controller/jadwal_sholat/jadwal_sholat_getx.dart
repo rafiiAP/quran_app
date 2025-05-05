@@ -33,6 +33,48 @@ class JadwalSholatGetx extends GetxController {
     getLoacationName();
     //mengambil timezone lokasi sekrang
     getTimeZone();
+    vaJadwal.value = vaJadwal.value = <SetNotifModel>[
+      SetNotifModel(
+        iconsax: Iconsax.moon1,
+        hour: 0,
+        minute: 0,
+        title: 'Subuh',
+        body: 'Waktunya sholat Subuh',
+        isAlarmSet: false.obs,
+      ),
+      SetNotifModel(
+        iconsax: Iconsax.sun,
+        hour: 0,
+        minute: 0,
+        title: 'Dzuhur',
+        body: 'Waktunya sholat Dzuhur',
+        isAlarmSet: false.obs,
+      ),
+      SetNotifModel(
+        iconsax: Iconsax.sun_1,
+        hour: 0,
+        minute: 0,
+        title: 'Ashar',
+        body: 'Waktunya sholat Ashar',
+        isAlarmSet: false.obs,
+      ),
+      SetNotifModel(
+        iconsax: Iconsax.sun_fog,
+        hour: 0,
+        minute: 0,
+        title: 'Maghrib',
+        body: 'Waktunya sholat Maghrib',
+        isAlarmSet: false.obs,
+      ),
+      SetNotifModel(
+        iconsax: Iconsax.moon5,
+        hour: 0,
+        minute: 0,
+        title: 'Isya',
+        body: 'Waktunya sholat Isya',
+        isAlarmSet: false.obs,
+      ),
+    ];
 
     super.onInit();
   }

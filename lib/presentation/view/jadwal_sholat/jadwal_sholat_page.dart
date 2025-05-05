@@ -14,7 +14,7 @@ class JadwalSholatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.put(JadwalSholatGetx());
-    c.jadwalSholat();
+    // c.jadwalSholat();
 
     // LocalNotificationService.scheduleNotification(1, 13, 43, body: 'tes', title: 'tes');
     // LocalNotificationService.checkScheduledNotifications();
@@ -43,12 +43,13 @@ class JadwalSholatPage extends StatelessWidget {
               builder: (context, state) {
                 return state.maybeWhen(
                   orElse: () {
-                    return const LoadingSholatView();
+                    return LoadingSholatView(c: c);
                   },
                   loading: () {
-                    return const LoadingSholatView();
+                    return LoadingSholatView(c: c);
                   },
                   success: (data) {
+                    // return LoadingSholatView(c: c);
                     return JadwalSholatView(
                       data: data,
                       c: c,
