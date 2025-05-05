@@ -7,46 +7,10 @@ Dicoding final project flutter fundamental.
 ## FLutter 
 3.29.0
 
-## Java
-21
-
 ## Statemanagement
 
 - GetX
-- BLOC
-
-## Dependences
-
-- dio
-- get
-- intl
-- google_fonts
-- iconsax
-- freezed
-- freezed_annotation
-- flutter_bloc
-- geolocator
-- geocoding
-- dartz
-- equatable
-- get_it
-- get_storage
-- sqflite
-- path
-- flutter_launcher_icons
-- shimmer
-- firebase_core
-- firebase_crashlytics
-- flutter_timezone
-- flutter_local_notification
-- permission_handler
-- timezone
-- scrollable_positioned_list
-
-
-## Dev_Dependencies
-
-- build_runner
+- BLOC-Cubit
 
 <table>
     <tr>
