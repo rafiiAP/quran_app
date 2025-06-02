@@ -185,13 +185,15 @@ class HomePage extends StatelessWidget {
           c.toLastRead(index: c.nNomorSurah.value);
         },
         child: Container(
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [colorConfig.secondary, colorConfig.primary],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(15),
+            color: colorConfig.primary,
+            // gradient: LinearGradient(
+            //   colors: [colorConfig.secondary, colorConfig.primary],
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            // ),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Stack(
             children: [
@@ -259,7 +261,8 @@ class HomePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
+              Expanded(
+                flex: 2,
                 child: Row(
                   children: [
                     Container(
@@ -268,6 +271,10 @@ class HomePage extends StatelessWidget {
                       height: 40,
                       decoration: BoxDecoration(
                         image: DecorationImage(
+                          colorFilter: ColorFilter.mode(
+                            colorConfig.primary,
+                            BlendMode.srcIn,
+                          ),
                           image: AssetImage(
                             imageConfig.borderNum,
                           ),
@@ -281,7 +288,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     W.paddingWidtht16(),
-                    Flexible(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

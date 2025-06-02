@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:get/get.dart';
+
 import 'package:path/path.dart';
+
 import 'package:quran_app/data/model/bookmark_model.dart';
 import 'package:quran_app/domain/entity/detail_entity.dart';
 import 'package:quran_app/injection.dart';
@@ -41,34 +42,22 @@ class DatabaseHelper {
   }
 
   // Insert data into tables
-  void insertOrUpdateBookmark(final AyatDetailEntity ayatDetailEntity,
+  Future<void> insertOrUpdateBookmark(final AyatDetailEntity ayatDetailEntity,
       final DetailEntity detailEntity) async {
     final Database dbClient = await db;
 
-    // Cek apakah data dengan nama_latin tertentu sudah ada
-    final List<Map<dynamic, dynamic>> existingData = await dbClient.query(
+    // Jika tidak ada data, lakukan insert
+    await dbClient.insert(
       'bookmark',
-      where: 'teks_indonesia = ?',
-      whereArgs: <Object>[ayatDetailEntity.teksIndonesia],
+      <String, Object?>{
+        "nomor_surah": detailEntity.nomor,
+        "nama_latin": detailEntity.namaLatin,
+        "nomor_ayat": ayatDetailEntity.nomorAyat,
+        "teks_arab": ayatDetailEntity.teksArab,
+        "teks_indonesia": ayatDetailEntity.teksIndonesia,
+        "teks_latin": ayatDetailEntity.teksLatin,
+      },
     );
-
-    if (existingData.isEmpty) {
-      // Jika tidak ada data, lakukan insert
-      await dbClient.insert(
-        'bookmark',
-        <String, Object?>{
-          "nomor_surah": detailEntity.nomor,
-          "nama_latin": detailEntity.namaLatin,
-          "nomor_ayat": ayatDetailEntity.nomorAyat,
-          "teks_arab": ayatDetailEntity.teksArab,
-          "teks_indonesia": ayatDetailEntity.teksIndonesia,
-          "teks_latin": ayatDetailEntity.teksLatin,
-        },
-      );
-      Get.snackbar('Sukses', 'Data berhasil disimpan');
-    } else {
-      Get.snackbar('Oops', 'Data sudah ada');
-    }
   }
 
   // Get all data from tables
@@ -81,6 +70,20 @@ class DatabaseHelper {
     // Konversi List<Map<String, dynamic>> menjadi List<BookmarkModel>
     return List<BookmarkModel>.generate(
         maps.length, (final int index) => BookmarkModel.fromMap(maps[index]));
+  }
+
+  Future<bool> isBookmarkExists(final AyatDetailEntity ayatDetailEntity) async {
+    final Database dbClient = await db;
+    final List<Map<dynamic, dynamic>> existingData = await dbClient.query(
+      'bookmark',
+      where: 'teks_indonesia = ?',
+      whereArgs: <Object>[ayatDetailEntity.teksIndonesia],
+    );
+    if (existingData.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void deleteBookmark(final String teksIndonesia) async {

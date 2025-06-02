@@ -21,13 +21,14 @@ class LoadingSholatView extends StatelessWidget {
           width: C.getWidth(),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
+            color: colorConfig.primary,
             image: DecorationImage(
               alignment: Alignment.bottomRight,
               colorFilter: ColorFilter.mode(
                 colorConfig.white,
                 BlendMode.srcIn,
               ),
-              scale: 1,
+              scale: 2,
               image: AssetImage(
                 imageConfig.masjid,
               ),
@@ -46,14 +47,6 @@ class LoadingSholatView extends StatelessWidget {
                 spreadRadius: 2.0,
               ),
             ],
-            gradient: LinearGradient(
-              colors: [
-                colorConfig.white,
-                colorConfig.primary,
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomRight,
-            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,79 +63,73 @@ class LoadingSholatView extends StatelessWidget {
           ),
         ),
         W.paddingheight16(),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: colorConfig.primary),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Iconsax.location,
-                    color: colorConfig.white,
-                    size: 40,
+        W.paddingheight16(),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Iconsax.location,
+                  color: colorConfig.primary,
+                  size: 40,
+                ),
+                W.paddingWidtht16(),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      W.shimmer(width: C.getWidth() * 0.7, height: 15),
+                      W.paddingheight5(),
+                      W.shimmer(width: C.getWidth() * 0.3, height: 15),
+                    ],
                   ),
-                  W.paddingWidtht16(),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        W.shimmer(width: C.getWidth() * 0.7, height: 15),
-                        W.paddingheight5(),
-                        W.shimmer(width: C.getWidth() * 0.3, height: 15),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              W.paddingheight16(),
-              Obx(
-                () => ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    SetNotifModel data = c.vaJadwal[index];
+                )
+              ],
+            ),
+            W.paddingheight16(),
+            Obx(
+              () => ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  SetNotifModel data = c.vaJadwal[index];
 
-                    return Row(
-                      children: [
-                        Icon(
-                          data.iconsax,
-                          color: colorConfig.white,
-                        ),
-                        W.paddingWidtht16(),
-                        W.textBody(
-                          text: data.title,
-                          color: colorConfig.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        const Spacer(),
-                        W.shimmer(width: C.getWidth() * 0.1, height: 15),
-                        W.paddingWidtht5(),
-                        IconButton(
-                          onPressed: () {
-                            c.setNotif(index, data);
-                          },
-                          icon: Obx(
-                            () => Icon(
-                              data.isAlarmSet.value
-                                  ? Iconsax.alarm5
-                                  : Iconsax.alarm,
-                              color: colorConfig.white,
-                            ),
+                  return Row(
+                    children: [
+                      Icon(
+                        data.iconsax,
+                        color: colorConfig.primary,
+                      ),
+                      W.paddingWidtht16(),
+                      W.textBody(
+                        text: data.title,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      const Spacer(),
+                      W.shimmer(width: C.getWidth() * 0.1, height: 15),
+                      W.paddingWidtht5(),
+                      IconButton(
+                        onPressed: () {
+                          c.setNotif(index, data);
+                        },
+                        icon: Obx(
+                          () => Icon(
+                            data.isAlarmSet.value
+                                ? Iconsax.alarm5
+                                : Iconsax.alarm,
+                            color: colorConfig.white,
                           ),
                         ),
-                      ],
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemCount: c.vaJadwal.length,
-                ),
-              )
-            ],
-          ),
+                      ),
+                    ],
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: c.vaJadwal.length,
+              ),
+            )
+          ],
         ),
         W.paddingheight16(),
         Container(
@@ -159,6 +146,7 @@ class LoadingSholatView extends StatelessWidget {
                     W.textBody(
                       text: 'Sunrise',
                       color: colorConfig.white,
+                      fontWeight: FontWeight.w500,
                       textAlign: TextAlign.center,
                     ),
                     W.paddingheight5(),
@@ -176,6 +164,7 @@ class LoadingSholatView extends StatelessWidget {
                     W.textBody(
                       text: 'Mid night',
                       color: colorConfig.white,
+                      fontWeight: FontWeight.w500,
                       textAlign: TextAlign.center,
                     ),
                     W.paddingheight5(),
@@ -193,6 +182,7 @@ class LoadingSholatView extends StatelessWidget {
                     W.textBody(
                       text: 'Sunset',
                       color: colorConfig.white,
+                      fontWeight: FontWeight.w500,
                       textAlign: TextAlign.center,
                     ),
                     W.paddingheight5(),

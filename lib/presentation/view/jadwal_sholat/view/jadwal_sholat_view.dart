@@ -22,13 +22,14 @@ class JadwalSholatView extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
+              color: colorConfig.primary,
               image: DecorationImage(
                 alignment: Alignment.bottomRight,
                 colorFilter: ColorFilter.mode(
                   colorConfig.white,
                   BlendMode.srcIn,
                 ),
-                scale: 1,
+                scale: 2,
                 image: AssetImage(
                   imageConfig.masjid,
                 ),
@@ -47,14 +48,6 @@ class JadwalSholatView extends StatelessWidget {
                   spreadRadius: 2.0,
                 ),
               ],
-              gradient: LinearGradient(
-                colors: [
-                  colorConfig.white,
-                  colorConfig.primary,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomRight,
-              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,125 +55,115 @@ class JadwalSholatView extends StatelessWidget {
                 W.textBody(
                   text: c.getSholatText(),
                   fontWeight: FontWeight.bold,
-                  color: colorConfig.black,
+                  color: colorConfig.white,
                 ),
                 W.textBody(
                   text: c.getTimeText(),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: colorConfig.primary,
+                  color: colorConfig.white,
                 ),
                 W.paddingheight5(),
                 Obx(
                   () => W.textBody(
                     text: c.countdownText.value,
                     fontWeight: FontWeight.bold,
+                    color: colorConfig.white,
+                  ),
+                ),
+                W.paddingheight16(),
+              ],
+            ),
+          ),
+          W.paddingheight16(),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Iconsax.location,
+                    size: 40,
                     color: colorConfig.primary,
                   ),
-                ),
-                W.paddingheight16(),
-              ],
-            ),
-          ),
-          W.paddingheight16(),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: colorConfig.primary),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Iconsax.location,
-                      color: colorConfig.white,
-                      size: 40,
+                  W.paddingWidtht16(),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(
+                          () => W.textBody(
+                            text: c.city.value,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Obx(
+                          () => W.textBody(
+                            text: c.timezone.value,
+                            fontSize: 16,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                    W.paddingWidtht16(),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Obx(
-                            () => W.textBody(
-                              text: c.city.value,
-                              color: colorConfig.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Obx(
-                            () => W.textBody(
-                              text: c.timezone.value,
-                              color: colorConfig.white,
-                              fontSize: 16,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                W.paddingheight16(),
-                Obx(
-                  () => ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      SetNotifModel data = c.vaJadwal[index];
+                  )
+                ],
+              ),
+              W.paddingheight16(),
+              Obx(
+                () => ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    SetNotifModel data = c.vaJadwal[index];
 
-                      return Row(
-                        children: [
-                          Icon(
-                            data.iconsax,
-                            color: colorConfig.white,
-                          ),
-                          W.paddingWidtht16(),
-                          W.textBody(
-                            text: data.title,
-                            color: colorConfig.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          const Spacer(),
-                          W.textBody(
-                            text: "${data.hour}:${data.minute}",
-                            color: colorConfig.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          W.paddingWidtht5(),
-                          IconButton(
-                            onPressed: () {
-                              c.setNotif(index, data);
-                            },
-                            icon: Obx(
-                              () => Icon(
-                                data.isAlarmSet.value
-                                    ? Iconsax.alarm5
-                                    : Iconsax.alarm,
-                                color: colorConfig.white,
-                              ),
+                    return Row(
+                      children: [
+                        Icon(
+                          data.iconsax,
+                          color: colorConfig.primary,
+                        ),
+                        W.paddingWidtht16(),
+                        W.textBody(
+                          text: data.title,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        const Spacer(),
+                        W.textBody(
+                          text: "${data.hour}:${data.minute}",
+                          fontWeight: FontWeight.w600,
+                        ),
+                        W.paddingWidtht5(),
+                        IconButton(
+                          onPressed: () {
+                            c.setNotif(index, data);
+                          },
+                          icon: Obx(
+                            () => Icon(
+                              data.isAlarmSet.value
+                                  ? Iconsax.alarm5
+                                  : Iconsax.alarm,
+                              color: colorConfig.grey,
                             ),
                           ),
-                        ],
-                      );
-                    },
-                    separatorBuilder: (context, index) => const Divider(),
-                    itemCount: c.vaJadwal.length,
-                  ),
-                )
-              ],
-            ),
+                        ),
+                      ],
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemCount: c.vaJadwal.length,
+                ),
+              )
+            ],
           ),
           W.paddingheight16(),
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: colorConfig.primary),
@@ -193,6 +176,7 @@ class JadwalSholatView extends StatelessWidget {
                       W.textBody(
                         text: 'Sunrise',
                         color: colorConfig.white,
+                        fontWeight: FontWeight.w500,
                         textAlign: TextAlign.center,
                       ),
                       W.paddingheight5(),
@@ -214,6 +198,7 @@ class JadwalSholatView extends StatelessWidget {
                       W.textBody(
                         text: 'Mid night',
                         color: colorConfig.white,
+                        fontWeight: FontWeight.w500,
                         textAlign: TextAlign.center,
                       ),
                       W.paddingheight5(),
@@ -235,6 +220,7 @@ class JadwalSholatView extends StatelessWidget {
                       W.textBody(
                         text: 'Sunset',
                         color: colorConfig.white,
+                        fontWeight: FontWeight.w500,
                         textAlign: TextAlign.center,
                       ),
                       W.paddingheight5(),

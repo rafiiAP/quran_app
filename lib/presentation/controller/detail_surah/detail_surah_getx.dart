@@ -87,9 +87,37 @@ class DetailSurahGetx extends GetxController {
                   color: colorConfig.primary,
                 ),
                 title: W.textBody(text: 'Simpan ke bookmark'),
-                onTap: () {
-                  databaseHelper.insertOrUpdateBookmark(ayatModel, detailModel);
+                onTap: () async {
+                  //cek apakah data sudah ada atau belum
+                  bool existingData =
+                      await databaseHelper.isBookmarkExists(ayatModel);
                   Get.back();
+
+                  if (existingData) {
+                    Get.snackbar(
+                      'Oops',
+                      'Data sudah ada',
+                      snackPosition: SnackPosition.BOTTOM,
+                      borderRadius: 20,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                    );
+                  } else {
+                    databaseHelper
+                        .insertOrUpdateBookmark(ayatModel, detailModel)
+                        .then(
+                          (value) => Get.snackbar(
+                            'Sukses',
+                            'Data berhasil disimpan',
+                            snackPosition: SnackPosition.BOTTOM,
+                            borderRadius: 20,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
+                          ),
+                        );
+                  }
                 },
               ),
             ),
