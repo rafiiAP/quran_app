@@ -2,10 +2,8 @@
 
 Qur'an App
 
-Dicoding final project flutter fundamental.
-
 ## FLutter 
-3.29.0
+3.32.0
 
 ## Statemanagement
 
