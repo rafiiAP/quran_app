@@ -19,6 +19,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.put(HomeGetx());
+    C.showNotification(body: 'tes', title: 'tes', id: 1);
+    // C.cancelNotification(1)
     // C.scheduleNotification(1, 15, 04,
     //     body: 'halo hai', title: 'haloo apakah bisa');
     // C.checkScheduledNotifications();

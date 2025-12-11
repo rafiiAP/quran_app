@@ -22,8 +22,8 @@ import 'injection.dart' as di;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  di.setup();
   await dotenv.load(fileName: ".env");
+  di.setup();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
