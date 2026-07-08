@@ -5,6 +5,10 @@ import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/constant/config.dart';
 import 'package:quran_app/data/constant/image.dart';
+import 'package:quran_app/data/datasources/crash_reporter.dart';
+import 'package:quran_app/data/datasources/datasource_impl/firebase_crash_reporter.dart';
+import 'package:quran_app/data/datasources/datasource_impl/main_http_client.dart';
+import 'package:quran_app/data/datasources/http_client.dart';
 import 'package:quran_app/data/datasources/remote_datasource/remote_datasource.dart';
 import 'package:quran_app/data/db/database_helper.dart';
 import 'package:quran_app/data/repositories_impl/remote_repository_impl.dart';
@@ -22,7 +26,18 @@ void setup() {
       () => RemoteRepositoryImpl(quranDatasource: locator()));
 
   // data source
-  locator.registerLazySingleton<RemoteDatasource>(RemoteDatasourceImpl.new);
+  locator.registerLazySingleton<RemoteDatasource>(
+    () => RemoteDatasourceImpl(
+      httpClient: locator(),
+      crashReporter: locator(),
+    ),
+  );
+
+  // http client
+  locator.registerLazySingleton<AppHttpClient>(MainHttpClient.new);
+
+  // crash reporter
+  locator.registerLazySingleton<CrashReporter>(FirebaseCrashReporter.new);
 
   //main function
   locator.registerLazySingleton<MainFunction>(MainFunction.new);

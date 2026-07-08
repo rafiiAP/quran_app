@@ -19,10 +19,10 @@ class RemoteRepositoryImpl implements RemoteRepository {
       final List<SurahModel> result = await quranDatasource.getSurah();
       return right(
           result.map((final SurahModel model) => model.toEntity()).toList());
-    } on DioException catch (e, stackTrace) {
-      throw Exception(<dynamic>[e, stackTrace]);
-    } catch (e, stackTrace) {
-      throw Exception(<dynamic>[e, stackTrace]);
+    } on DioException catch (e) {
+      return left(ConnectionFailure(e.message ?? 'Gagal terhubung ke server'));
+    } catch (e) {
+      return left(ServerFailure(e.toString()));
     }
   }
 
@@ -33,10 +33,10 @@ class RemoteRepositoryImpl implements RemoteRepository {
       final DetailModel result =
           await quranDatasource.getDetailSurah(nomor: nomor);
       return right(result.toEntity());
-    } on DioException catch (e, stackTrace) {
-      throw Exception(<dynamic>[e, stackTrace]);
-    } catch (e, stackTrace) {
-      throw Exception(<dynamic>[e, stackTrace]);
+    } on DioException catch (e) {
+      return left(ConnectionFailure(e.message ?? 'Gagal terhubung ke server'));
+    } catch (e) {
+      return left(ServerFailure(e.toString()));
     }
   }
 
@@ -46,16 +46,14 @@ class RemoteRepositoryImpl implements RemoteRepository {
     required final double longitude,
     required final String date,
   }) async {
-    {
-      try {
-        final JadwalSholatModel result = await quranDatasource.getJadwalSholat(
-            latitude: latitude, longitude: longitude, date: date);
-        return right(result.toEntity());
-      } on DioException catch (e, stackTrace) {
-        throw Exception(<dynamic>[e, stackTrace]);
-      } catch (e, stackTrace) {
-        throw Exception(<dynamic>[e, stackTrace]);
-      }
+    try {
+      final JadwalSholatModel result = await quranDatasource.getJadwalSholat(
+          latitude: latitude, longitude: longitude, date: date);
+      return right(result.toEntity());
+    } on DioException catch (e) {
+      return left(ConnectionFailure(e.message ?? 'Gagal terhubung ke server'));
+    } catch (e) {
+      return left(ServerFailure(e.toString()));
     }
   }
 }

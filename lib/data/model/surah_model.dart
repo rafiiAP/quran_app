@@ -29,8 +29,7 @@ class SurahaDioModel extends Equatable {
   Map<String, dynamic> toMap() => <String, dynamic>{
         "code": code,
         "message": message,
-        "data":
-            List<SurahModel>.from(data.map((final SurahModel x) => x.toMap())),
+        "data": data.map((final SurahModel x) => x.toMap()).toList(),
       };
 
   @override

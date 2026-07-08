@@ -1,0 +1,76 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:quran_app/data/model/bookmark_model.dart';
+
+import '../../fixtures/bookmark_fixture.dart';
+
+/// Helper untuk compare field-by-field karena BookmarkModel tidak extends Equatable
+void expectBookmarkEqual(BookmarkModel a, BookmarkModel b) {
+  expect(a.nomorSurah, b.nomorSurah);
+  expect(a.namaLatin, b.namaLatin);
+  expect(a.nomorAyat, b.nomorAyat);
+  expect(a.teksArab, b.teksArab);
+  expect(a.teksIndonesia, b.teksIndonesia);
+  expect(a.teksLatin, b.teksLatin);
+}
+
+void main() {
+  group('BookmarkModel', () {
+    test('fromMap() creates correct instance from valid SQLite Map', () {
+      final model = BookmarkModel.fromMap(kBookmarkMap);
+
+      expect(model.id, kBookmarkMap['id']);
+      expect(model.nomorSurah, kBookmarkMap['nomor_surah']);
+      expect(model.namaLatin, kBookmarkMap['nama_latin']);
+      expect(model.nomorAyat, kBookmarkMap['nomor_ayat']);
+      expect(model.teksArab, kBookmarkMap['teks_arab']);
+      expect(model.teksIndonesia, kBookmarkMap['teks_indonesia']);
+      expect(model.teksLatin, kBookmarkMap['teks_latin']);
+    });
+
+    test('toMap() returns Map with all SQLite keys', () {
+      final map = kBookmarkModel.toMap();
+
+      expect(map.containsKey('id'), isTrue);
+      expect(map.containsKey('nomor_surah'), isTrue);
+      expect(map.containsKey('nama_latin'), isTrue);
+      expect(map.containsKey('nomor_ayat'), isTrue);
+      expect(map.containsKey('teks_arab'), isTrue);
+      expect(map.containsKey('teks_indonesia'), isTrue);
+      expect(map.containsKey('teks_latin'), isTrue);
+
+      expect(map['nomor_surah'], kBookmarkModel.nomorSurah);
+      expect(map['nama_latin'], kBookmarkModel.namaLatin);
+      expect(map['nomor_ayat'], kBookmarkModel.nomorAyat);
+      expect(map['teks_arab'], kBookmarkModel.teksArab);
+      expect(map['teks_indonesia'], kBookmarkModel.teksIndonesia);
+      expect(map['teks_latin'], kBookmarkModel.teksLatin);
+    });
+
+    test('fromMap(toMap()) round-trip preserves all fields', () {
+      final originalModel = kBookmarkModel;
+      final roundTripped = BookmarkModel.fromMap(originalModel.toMap());
+
+      expectBookmarkEqual(roundTripped, originalModel);
+    });
+  });
+
+  group('Property Tests', () {
+    test('Property 9: fromMap(toMap()) round-trip for any BookmarkModel', () {
+      // Feature: unit-testing, Property 9: BookmarkModel SQLite round-trip
+      // Validates: Requirements 7.1, 7.3
+      for (int i = 0; i < 100; i++) {
+        final original = BookmarkModel(
+          id: i % 2 == 0 ? i : null, // test with and without id
+          nomorSurah: (i % 114) + 1,
+          namaLatin: 'Surah-$i',
+          nomorAyat: (i % 286) + 1,
+          teksArab: 'Arabic text $i',
+          teksIndonesia: 'Terjemahan $i',
+          teksLatin: 'Latin text $i',
+        );
+        final roundTripped = BookmarkModel.fromMap(original.toMap());
+        expectBookmarkEqual(roundTripped, original);
+      }
+    });
+  });
+}

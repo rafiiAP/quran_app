@@ -54,3 +54,13 @@ app.*.map.json
 /android/app/release
 
 .env
+
+# Coverage — generated files, can be regenerated with: bash coverage_report.sh
+coverage/
+
+# GetStorage runtime files (local app data, not source code)
+GetStorage.bak
+GetStorage.gs
+
+# Kiro IDE config (personal/local, not relevant for team)
+.kiro/

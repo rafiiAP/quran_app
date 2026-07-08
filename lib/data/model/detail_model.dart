@@ -87,8 +87,7 @@ class DetailModel extends Equatable {
         "arti": arti,
         "deskripsi": deskripsi,
         "audioFull": Map<String, String>.from(audioFull).map(MapEntry.new),
-        "ayat": List<AyatDetailModel>.from(
-            ayat.map((final AyatDetailModel x) => x.toMap())),
+        "ayat": ayat.map((final AyatDetailModel x) => x.toMap()).toList(),
       };
 
   DetailEntity toEntity() {

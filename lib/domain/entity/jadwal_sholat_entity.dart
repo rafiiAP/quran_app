@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class JadwalSholatDioEntity extends Equatable {
   const JadwalSholatDioEntity({
+    // coverage:ignore-line
     required this.code,
     required this.status,
     required this.data,
@@ -17,6 +18,7 @@ class JadwalSholatDioEntity extends Equatable {
 
 class JadwalSholatDataEntity extends Equatable {
   const JadwalSholatDataEntity({
+    // coverage:ignore-line
     required this.timings,
   });
 

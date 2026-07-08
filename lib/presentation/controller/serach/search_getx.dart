@@ -25,8 +25,10 @@ class SearchGetx extends GetxController {
   }
 
   onSearch({required List<SurahEntity> surahList, required String value}) {
-    vaSearch.value =
-        surahList.where((element) => element.namaLatin.toLowerCase().contains(value.toLowerCase())).toList();
+    vaSearch.value = surahList
+        .where((element) =>
+            element.namaLatin.toLowerCase().contains(value.toLowerCase()))
+        .toList();
     if (value.isEmpty) {
       vaSearch.value.clear();
     }
