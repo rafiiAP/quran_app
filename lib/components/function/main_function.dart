@@ -16,7 +16,6 @@ import 'package:quran_app/injection.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-// import 'package:translator/translator.dart';
 
 import '../../data/constant/config.dart';
 import '../widgets/main_widget.dart';
@@ -39,24 +38,6 @@ class MainFunction
         GetStorageComponent,
         LocalNotificationService,
         PermissionService {
-  /*Future<String> translateToIndonesian(String text) async {
-    final translator = GoogleTranslator();
-
-    try {
-      // Terjemahkan teks
-      final translation = await translator.translate(
-        text,
-        to: 'id', // Bahasa Indonesia
-        from: 'en', // Bahasa Inggris
-      );
-      return translation.text;
-    } catch (e) {
-      // Tangani error
-      C.showLog(log: "Error translating text: $e");
-      return text;
-    }
-  }*/
-
   bool isDark(final BuildContext context) {
     if (Theme.of(context).brightness == Brightness.dark) {
       return true;

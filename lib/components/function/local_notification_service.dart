@@ -41,32 +41,6 @@ mixin LocalNotificationService {
     }
   }
 
-  Future<void> showNotification({
-    required int id,
-    required String title,
-    required String body,
-  }) async {
-    const AndroidNotificationDetails androidDetails =
-        AndroidNotificationDetails(
-      'channel_id',
-      'channel_name',
-      channelDescription: 'Channel Description',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-
-    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
-
-    const NotificationDetails details =
-        NotificationDetails(android: androidDetails, iOS: iosDetails);
-
-    await _notificationsPlugin.show(id, title, body, details);
-  }
-
   Future<void> scheduleNotification(
     final int id,
     final int hour,
@@ -140,10 +114,6 @@ mixin LocalNotificationService {
 
   Future<void> cancelNotification(final int id) async {
     await _notificationsPlugin.cancel(id);
-  }
-
-  Future<void> cancelAllNotifications() async {
-    await _notificationsPlugin.cancelAll();
   }
 
   Future<List<PendingNotificationRequest>> checkScheduledNotifications() async {

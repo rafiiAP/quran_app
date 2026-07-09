@@ -55,49 +55,4 @@ mixin ButtonWidget {
       child: child,
     );
   }
-
-  Widget textButton({
-    required final Function()? onPressed,
-    required final Widget child,
-    final Color? textColor,
-    final OutlinedBorder? shape,
-    final EdgeInsetsGeometry? padding,
-  }) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        foregroundColor: textColor ?? colorConfig.primary,
-        padding: padding ??
-            const EdgeInsets.symmetric(
-              vertical: 15,
-            ),
-        shape: shape ??
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-      ),
-      onPressed: onPressed,
-      child: child,
-    );
-  }
-
-  Widget buttonAKP({
-    required final String text,
-    final Color? textColor,
-    required final dynamic Function()? onPressed,
-    final double? paddingHorizontal,
-  }) {
-    return Container(
-      width: C.getWidth(),
-      padding: EdgeInsets.symmetric(
-          horizontal: paddingHorizontal ?? C.getWidth() * 0.03),
-      child: W.button(
-        onPressed: onPressed,
-        child: W.textBody(
-          text: text,
-          color: textColor ?? colorConfig.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
 }
