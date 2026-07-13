@@ -146,7 +146,7 @@ void main() {
       final decoded = json.decode(jsonStr) as Map<String, dynamic>;
       expect(decoded['code'], 200);
       expect(decoded['status'], 'OK');
-      expect(decoded['data'], isA<Map>());
+      expect(decoded['data'], isA<Map<String, dynamic>>());
     });
 
     test('props equality — two identical instances must be equal', () {
@@ -202,7 +202,7 @@ void main() {
       final result = dataModel.toMap();
 
       expect(result.containsKey('timings'), isTrue);
-      expect(result['timings'], isA<Map>());
+      expect(result['timings'], isA<Map<String, dynamic>>());
     });
 
     test('toJson() returns valid JSON string', () {
@@ -212,7 +212,7 @@ void main() {
       expect(jsonStr, isA<String>());
       final decoded = json.decode(jsonStr) as Map<String, dynamic>;
       expect(decoded.containsKey('timings'), isTrue);
-      expect(decoded['timings'], isA<Map>());
+      expect(decoded['timings'], isA<Map<String, dynamic>>());
     });
 
     test('props equality — two identical instances must be equal', () {

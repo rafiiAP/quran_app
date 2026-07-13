@@ -16,14 +16,18 @@ void main() {
     mockDatabaseHelper = MockDatabaseHelper();
 
     // Default stubs so constructor doesn't throw
-    when(() => mockStorageService.setString(
-          key: any(named: 'key'),
-          value: any(named: 'value'),
-        )).thenAnswer((_) async {});
-    when(() => mockStorageService.setInt(
-          key: any(named: 'key'),
-          value: any(named: 'value'),
-        )).thenAnswer((_) async {});
+    when(
+      () => mockStorageService.setString(
+        key: any(named: 'key'),
+        value: any(named: 'value'),
+      ),
+    ).thenAnswer((_) async {});
+    when(
+      () => mockStorageService.setInt(
+        key: any(named: 'key'),
+        value: any(named: 'value'),
+      ),
+    ).thenAnswer((_) async {});
   });
 
   // ---------------------------------------------------------------------------
@@ -50,18 +54,24 @@ void main() {
         const DetailSurahPageState.idle(),
       ],
       verify: (_) {
-        verify(() => mockStorageService.setString(
-              key: 'cacheNamaLatin',
-              value: 'Al-Fatihah',
-            )).called(1);
-        verify(() => mockStorageService.setInt(
-              key: 'cacheNomorSurah',
-              value: 1,
-            )).called(1);
-        verify(() => mockStorageService.setInt(
-              key: 'cacheNomorAyat',
-              value: 3,
-            )).called(1);
+        verify(
+          () => mockStorageService.setString(
+            key: 'cacheNamaLatin',
+            value: 'Al-Fatihah',
+          ),
+        ).called(1);
+        verify(
+          () => mockStorageService.setInt(
+            key: 'cacheNomorSurah',
+            value: 1,
+          ),
+        ).called(1);
+        verify(
+          () => mockStorageService.setInt(
+            key: 'cacheNomorAyat',
+            value: 3,
+          ),
+        ).called(1);
       },
     );
   });
@@ -240,20 +250,24 @@ void main() {
         int? capturedNomorSurah;
         int? capturedNomorAyat;
 
-        when(() => storageMock.setString(
-              key: any(named: 'key'),
-              value: any(named: 'value'),
-            )).thenAnswer((invocation) async {
+        when(
+          () => storageMock.setString(
+            key: any(named: 'key'),
+            value: any(named: 'value'),
+          ),
+        ).thenAnswer((invocation) async {
           if (invocation.namedArguments[const Symbol('key')] ==
               'cacheNamaLatin') {
             capturedNamaLatin =
                 invocation.namedArguments[const Symbol('value')] as String;
           }
         });
-        when(() => storageMock.setInt(
-              key: any(named: 'key'),
-              value: any(named: 'value'),
-            )).thenAnswer((invocation) async {
+        when(
+          () => storageMock.setInt(
+            key: any(named: 'key'),
+            value: any(named: 'value'),
+          ),
+        ).thenAnswer((invocation) async {
           final key = invocation.namedArguments[const Symbol('key')] as String;
           final value = invocation.namedArguments[const Symbol('value')] as int;
           if (key == 'cacheNomorSurah') capturedNomorSurah = value;

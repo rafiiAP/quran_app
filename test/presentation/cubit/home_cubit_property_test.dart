@@ -43,18 +43,24 @@ void main() {
           final nomorSurah = _randomPositiveNomor();
           final nomorAyat = _randomNomorAyat();
 
-          when(() => mockStorage.getString(
-                key: 'cacheNamaLatin',
-                defaultValue: any(named: 'defaultValue'),
-              )).thenReturn(namaLatin);
-          when(() => mockStorage.getInt(
-                key: 'cacheNomorSurah',
-                defaultValue: any(named: 'defaultValue'),
-              )).thenReturn(nomorSurah);
-          when(() => mockStorage.getInt(
-                key: 'cacheNomorAyat',
-                defaultValue: any(named: 'defaultValue'),
-              )).thenReturn(nomorAyat);
+          when(
+            () => mockStorage.getString(
+              key: 'cacheNamaLatin',
+              defaultValue: any(named: 'defaultValue'),
+            ),
+          ).thenReturn(namaLatin);
+          when(
+            () => mockStorage.getInt(
+              key: 'cacheNomorSurah',
+              defaultValue: any(named: 'defaultValue'),
+            ),
+          ).thenReturn(nomorSurah);
+          when(
+            () => mockStorage.getInt(
+              key: 'cacheNomorAyat',
+              defaultValue: any(named: 'defaultValue'),
+            ),
+          ).thenReturn(nomorAyat);
 
           final cubit = HomeCubit(storageService: mockStorage);
 
@@ -71,12 +77,21 @@ void main() {
             orElse: () {},
           );
 
-          expect(gotNamaLatin, equals(namaLatin),
-              reason: 'iteration $i: namaLatin mismatch');
-          expect(gotNomorSurah, equals(nomorSurah),
-              reason: 'iteration $i: nomorSurah mismatch');
-          expect(gotNomorAyat, equals(nomorAyat),
-              reason: 'iteration $i: nomorAyat mismatch');
+          expect(
+            gotNamaLatin,
+            equals(namaLatin),
+            reason: 'iteration $i: namaLatin mismatch',
+          );
+          expect(
+            gotNomorSurah,
+            equals(nomorSurah),
+            reason: 'iteration $i: nomorSurah mismatch',
+          );
+          expect(
+            gotNomorAyat,
+            equals(nomorAyat),
+            reason: 'iteration $i: nomorAyat mismatch',
+          );
 
           cubit.close();
         }
@@ -94,14 +109,18 @@ void main() {
       'setSurahList must produce state with identical surahList',
       () {
         // Provide stable storage stubs once for all iterations
-        when(() => mockStorage.getString(
-              key: any(named: 'key'),
-              defaultValue: any(named: 'defaultValue'),
-            )).thenReturn('');
-        when(() => mockStorage.getInt(
-              key: any(named: 'key'),
-              defaultValue: any(named: 'defaultValue'),
-            )).thenReturn(0);
+        when(
+          () => mockStorage.getString(
+            key: any(named: 'key'),
+            defaultValue: any(named: 'defaultValue'),
+          ),
+        ).thenReturn('');
+        when(
+          () => mockStorage.getInt(
+            key: any(named: 'key'),
+            defaultValue: any(named: 'defaultValue'),
+          ),
+        ).thenReturn(0);
 
         for (int i = 0; i < 100; i++) {
           final listSize = _rng.nextInt(10); // 0..9 surah items
@@ -121,9 +140,12 @@ void main() {
             orElse: () {},
           );
 
-          expect(gotSurahList, equals(surahList),
-              reason:
-                  'iteration $i: surahList mismatch (size ${surahList.length})');
+          expect(
+            gotSurahList,
+            equals(surahList),
+            reason:
+                'iteration $i: surahList mismatch (size ${surahList.length})',
+          );
 
           cubit.close();
         }
@@ -149,18 +171,24 @@ void main() {
           final namaLatin = _randomString(6);
 
           // Storage returns values for _loadLastRead() calls (constructor + after toLastRead)
-          when(() => mockStorage.getString(
-                key: 'cacheNamaLatin',
-                defaultValue: any(named: 'defaultValue'),
-              )).thenReturn(namaLatin);
-          when(() => mockStorage.getInt(
-                key: 'cacheNomorSurah',
-                defaultValue: any(named: 'defaultValue'),
-              )).thenReturn(nomorSurah);
-          when(() => mockStorage.getInt(
-                key: 'cacheNomorAyat',
-                defaultValue: any(named: 'defaultValue'),
-              )).thenReturn(nomorAyat);
+          when(
+            () => mockStorage.getString(
+              key: 'cacheNamaLatin',
+              defaultValue: any(named: 'defaultValue'),
+            ),
+          ).thenReturn(namaLatin);
+          when(
+            () => mockStorage.getInt(
+              key: 'cacheNomorSurah',
+              defaultValue: any(named: 'defaultValue'),
+            ),
+          ).thenReturn(nomorSurah);
+          when(
+            () => mockStorage.getInt(
+              key: 'cacheNomorAyat',
+              defaultValue: any(named: 'defaultValue'),
+            ),
+          ).thenReturn(nomorAyat);
 
           final cubit = HomeCubit(storageService: mockStorage);
 
@@ -171,36 +199,48 @@ void main() {
           cubit.toLastRead();
 
           // Allow microtask queue to flush
-          await Future.delayed(Duration.zero);
+          await Future<void>.delayed(Duration.zero);
           await sub.cancel();
 
           if (usePositive) {
             // First emitted state must be navigateToDetail
-            expect(emitted.isNotEmpty, isTrue,
-                reason:
-                    'iteration $i (nomorSurah=$nomorSurah): no states emitted');
+            expect(
+              emitted.isNotEmpty,
+              isTrue,
+              reason:
+                  'iteration $i (nomorSurah=$nomorSurah): no states emitted',
+            );
             final firstState = emitted.first;
             bool isNavigate = false;
             firstState.maybeWhen(
               navigateToDetail: (_, __) => isNavigate = true,
               orElse: () {},
             );
-            expect(isNavigate, isTrue,
-                reason:
-                    'iteration $i (nomorSurah=$nomorSurah): expected navigateToDetail, got $firstState');
+            expect(
+              isNavigate,
+              isTrue,
+              reason:
+                  'iteration $i (nomorSurah=$nomorSurah): expected navigateToDetail, got $firstState',
+            );
           } else {
             // First emitted state must be showMessage
-            expect(emitted.isNotEmpty, isTrue,
-                reason: 'iteration $i (nomorSurah=0): no states emitted');
+            expect(
+              emitted.isNotEmpty,
+              isTrue,
+              reason: 'iteration $i (nomorSurah=0): no states emitted',
+            );
             final firstState = emitted.first;
             bool isShowMessage = false;
             firstState.maybeWhen(
               showMessage: (_) => isShowMessage = true,
               orElse: () {},
             );
-            expect(isShowMessage, isTrue,
-                reason:
-                    'iteration $i (nomorSurah=0): expected showMessage, got $firstState');
+            expect(
+              isShowMessage,
+              isTrue,
+              reason:
+                  'iteration $i (nomorSurah=0): expected showMessage, got $firstState',
+            );
           }
 
           await cubit.close();

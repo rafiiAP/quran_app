@@ -18,35 +18,45 @@ mixin ApiService {
         case dio.DioExceptionType.connectionTimeout:
           await W
               .messageInfo(message: 'Koneksi timeout, periksa jaringan Anda')
-              .then((value) async =>
-                  await dioGet(url: url, requestName: requestName));
+              .then(
+                (value) async =>
+                    await dioGet(url: url, requestName: requestName),
+              );
           throw Exception('Koneksi timeout, periksa jaringan Anda');
         case dio.DioExceptionType.sendTimeout:
           await W
               .messageInfo(message: 'Koneksi timeout, periksa jaringan Anda')
-              .then((value) async =>
-                  await dioGet(url: url, requestName: requestName));
+              .then(
+                (value) async =>
+                    await dioGet(url: url, requestName: requestName),
+              );
           throw Exception('Koneksi timeout, periksa jaringan Anda');
         case dio.DioExceptionType.receiveTimeout:
           await W
               .messageInfo(message: 'Koneksi timeout, periksa jaringan Anda')
-              .then((value) async =>
-                  await dioGet(url: url, requestName: requestName));
+              .then(
+                (value) async =>
+                    await dioGet(url: url, requestName: requestName),
+              );
           break;
         case dio.DioExceptionType.badCertificate:
           throw Exception('Koneksi timeout, periksa jaringan Anda');
         case dio.DioExceptionType.badResponse:
           throw Exception(
-              'Terjadi kesalahan dari server: ${e.response?.statusCode}');
+            'Terjadi kesalahan dari server: ${e.response?.statusCode}',
+          );
         case dio.DioExceptionType.cancel:
           await W.messageInfo(message: 'Permintaan dibatalkan');
           break;
         case dio.DioExceptionType.connectionError:
           await W
               .messageInfo(
-                  message: 'Tidak dapat terhubung ke server, coba lagi')
-              .then((value) async =>
-                  await dioGet(url: url, requestName: requestName));
+                message: 'Tidak dapat terhubung ke server, coba lagi',
+              )
+              .then(
+                (value) async =>
+                    await dioGet(url: url, requestName: requestName),
+              );
           throw Exception('Tidak dapat terhubung ke server');
         case dio.DioExceptionType.unknown:
           throw Exception('Terjadi kesalahan, coba lagi nanti');

@@ -106,7 +106,7 @@ void main() {
 
         expect(states, [
           const DetailSurahState.loading(),
-          DetailSurahState.success(entity)
+          DetailSurahState.success(entity),
         ]);
         verify(() => mockUsecase.getDetailSurah(nomor: nomor)).called(1);
       }

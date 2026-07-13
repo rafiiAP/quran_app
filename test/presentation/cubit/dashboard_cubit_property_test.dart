@@ -12,7 +12,9 @@ void main() {
     mockStorage = MockLocalStorageService();
     when(
       () => mockStorage.setBool(
-          key: any(named: 'key'), value: any(named: 'value')),
+        key: any(named: 'key'),
+        value: any(named: 'value'),
+      ),
     ).thenAnswer((_) async {});
   });
 

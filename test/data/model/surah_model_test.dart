@@ -66,7 +66,7 @@ void main() {
         'arti': 'Pembuka',
         'deskripsi': 'Surah pembuka Al-Quran',
         'audioFull': <String, String>{
-          '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3'
+          '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3',
         },
       };
 
@@ -90,7 +90,8 @@ void main() {
             'arti': 'Pembuka',
             'deskripsi': 'Surah pembuka Al-Quran',
             'audioFull': {
-              '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3'
+              '01':
+                  'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3',
             },
           },
           {
@@ -102,7 +103,8 @@ void main() {
             'arti': 'Sapi',
             'deskripsi': 'Surah terpanjang',
             'audioFull': {
-              '01': 'https://cdn.islamic.network/quran/audio/2/ar.alafasy/1.mp3'
+              '01':
+                  'https://cdn.islamic.network/quran/audio/2/ar.alafasy/1.mp3',
             },
           },
         ],
@@ -205,7 +207,7 @@ void main() {
       final decoded = json.decode(jsonStr) as Map<String, dynamic>;
       expect(decoded['code'], 200);
       expect(decoded['message'], 'success');
-      expect(decoded['data'], isA<List>());
+      expect(decoded['data'], isA<List<dynamic>>());
     });
 
     test(

@@ -17,11 +17,16 @@ void _expectLoadedCount(BookmarkState state, int count) {
 
 // Helper: assert loaded state contains a specific bookmark by field comparison
 void _expectLoadedContainsBookmark(
-    BookmarkState state, BookmarkModel expected) {
+  BookmarkState state,
+  BookmarkModel expected,
+) {
   state.maybeWhen(
     loaded: (bookmarks) {
-      expect(bookmarks.isNotEmpty, isTrue,
-          reason: 'Expected at least one bookmark');
+      expect(
+        bookmarks.isNotEmpty,
+        isTrue,
+        reason: 'Expected at least one bookmark',
+      );
       final actual = bookmarks.first;
       expect(actual.nomorSurah, expected.nomorSurah);
       expect(actual.namaLatin, expected.namaLatin);
@@ -89,7 +94,7 @@ void main() {
           .thenAnswer((_) async => [kBookmarkModel]);
 
       final cubit = BookmarkCubit(databaseHelper: mockDatabaseHelper);
-      await Future.delayed(Duration.zero);
+      await Future<void>.delayed(Duration.zero);
 
       _expectLoadedCount(cubit.state, 1);
       _expectLoadedContainsBookmark(cubit.state, kBookmarkModel);
@@ -121,9 +126,11 @@ void main() {
     blocTest<BookmarkCubit, BookmarkState>(
       'calls db.deleteBookmark then reloads — final state is loaded without deleted item',
       setUp: () {
-        when(() => mockDatabaseHelper.deleteBookmark(
-              kBookmarkModel.teksIndonesia,
-            )).thenAnswer((_) async {});
+        when(
+          () => mockDatabaseHelper.deleteBookmark(
+            kBookmarkModel.teksIndonesia,
+          ),
+        ).thenAnswer((_) async {});
         int callCount = 0;
         when(() => mockDatabaseHelper.getAllBookmarks()).thenAnswer((_) async {
           callCount++;
@@ -137,9 +144,11 @@ void main() {
       verify: (cubit) {
         // After delete + reload, the list should be empty
         _expectLoadedCount(cubit.state, 0);
-        verify(() => mockDatabaseHelper.deleteBookmark(
-              kBookmarkModel.teksIndonesia,
-            )).called(1);
+        verify(
+          () => mockDatabaseHelper.deleteBookmark(
+            kBookmarkModel.teksIndonesia,
+          ),
+        ).called(1);
         // getAllBookmarks: once in constructor, once after deleteBookmark
         verify(() => mockDatabaseHelper.getAllBookmarks()).called(2);
       },
@@ -148,9 +157,11 @@ void main() {
     blocTest<BookmarkCubit, BookmarkState>(
       'after deleteBookmark, emits loading state before reloading',
       setUp: () {
-        when(() => mockDatabaseHelper.deleteBookmark(
-              kBookmarkModel.teksIndonesia,
-            )).thenAnswer((_) async {});
+        when(
+          () => mockDatabaseHelper.deleteBookmark(
+            kBookmarkModel.teksIndonesia,
+          ),
+        ).thenAnswer((_) async {});
         when(() => mockDatabaseHelper.getAllBookmarks())
             .thenAnswer((_) async => []);
       },
@@ -210,10 +221,15 @@ void main() {
       final result = cubit.formatCopyText(kBookmarkModel);
       final parts = result.split('\n');
 
-      expect(parts.length, 3,
-          reason: 'formatCopyText should produce exactly 3 lines');
-      expect(parts[0],
-          '${kBookmarkModel.namaLatin} : ${kBookmarkModel.nomorSurah}');
+      expect(
+        parts.length,
+        3,
+        reason: 'formatCopyText should produce exactly 3 lines',
+      );
+      expect(
+        parts[0],
+        '${kBookmarkModel.namaLatin} : ${kBookmarkModel.nomorSurah}',
+      );
       expect(parts[1], kBookmarkModel.teksArab);
       expect(parts[2], kBookmarkModel.teksIndonesia);
     });

@@ -65,7 +65,9 @@ class StartedPage extends StatelessWidget {
                     bottom: -20,
                     child: W.outlinedButton(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 16),
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
                       backgroundColor: colorConfig.white,
                       onPressed: () {
                         locator<LocalStorageService>().setBool(

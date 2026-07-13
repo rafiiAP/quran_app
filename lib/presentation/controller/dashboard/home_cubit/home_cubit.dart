@@ -18,32 +18,42 @@ class HomeCubit extends Cubit<HomeState> {
     final int nomorSurah = storageService.getInt(key: 'cacheNomorSurah');
     final int nomorAyat = storageService.getInt(key: 'cacheNomorAyat');
 
-    emit(HomeState.loaded(
-      namaLatin: namaLatin,
-      nomorSurah: nomorSurah,
-      nomorAyat: nomorAyat,
-      surahList: const [],
-    ));
+    emit(
+      HomeState.loaded(
+        namaLatin: namaLatin,
+        nomorSurah: nomorSurah,
+        nomorAyat: nomorAyat,
+        surahList: const [],
+      ),
+    );
   }
 
   void setSurahList(final List<SurahEntity> data) {
     state.maybeWhen(
-      loaded: (final String namaLatin, final int nomorSurah,
-          final int nomorAyat, final _) {
-        emit(HomeState.loaded(
-          namaLatin: namaLatin,
-          nomorSurah: nomorSurah,
-          nomorAyat: nomorAyat,
-          surahList: data,
-        ));
+      loaded: (
+        final String namaLatin,
+        final int nomorSurah,
+        final int nomorAyat,
+        final _,
+      ) {
+        emit(
+          HomeState.loaded(
+            namaLatin: namaLatin,
+            nomorSurah: nomorSurah,
+            nomorAyat: nomorAyat,
+            surahList: data,
+          ),
+        );
       },
       orElse: () {
-        emit(HomeState.loaded(
-          namaLatin: '',
-          nomorSurah: 0,
-          nomorAyat: 0,
-          surahList: data,
-        ));
+        emit(
+          HomeState.loaded(
+            namaLatin: '',
+            nomorSurah: 0,
+            nomorAyat: 0,
+            surahList: data,
+          ),
+        );
       },
     );
   }
@@ -54,10 +64,12 @@ class HomeCubit extends Cubit<HomeState> {
     state.maybeWhen(
       loaded: (final _, final int nomorSurah, final int nomorAyat, final __) {
         if (nomorSurah != 0) {
-          emit(HomeState.navigateToDetail(
-            nomorSurah: nomorSurah,
-            indexTandai: nomorAyat,
-          ));
+          emit(
+            HomeState.navigateToDetail(
+              nomorSurah: nomorSurah,
+              indexTandai: nomorAyat,
+            ),
+          );
           _loadLastRead();
         } else {
           emit(const HomeState.showMessage('Belum ada bacaan terakhir'));
@@ -69,10 +81,12 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void getDetailSurah(final SurahEntity data) {
-    emit(HomeState.navigateToDetail(
-      nomorSurah: data.nomor,
-      indexTandai: null,
-    ));
+    emit(
+      HomeState.navigateToDetail(
+        nomorSurah: data.nomor,
+        indexTandai: null,
+      ),
+    );
     _loadLastRead();
   }
 }

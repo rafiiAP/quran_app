@@ -25,11 +25,13 @@ void main() {
   blocTest<JadwalSholatCubit, JadwalSholatState>(
     'emits [loading, success] when usecase returns Right(JadwalSholatEntity)',
     setUp: () {
-      when(() => mockUsecase.getJadwalSholat(
-            latitude: any(named: 'latitude'),
-            longitude: any(named: 'longitude'),
-            date: any(named: 'date'),
-          )).thenAnswer((_) async => Right(tEntity));
+      when(
+        () => mockUsecase.getJadwalSholat(
+          latitude: any(named: 'latitude'),
+          longitude: any(named: 'longitude'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => Right(tEntity));
     },
     build: () => JadwalSholatCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(
@@ -46,11 +48,13 @@ void main() {
   blocTest<JadwalSholatCubit, JadwalSholatState>(
     'emits [loading, error(timeout)] when usecase returns Left(ConnectionFailure)',
     setUp: () {
-      when(() => mockUsecase.getJadwalSholat(
-            latitude: any(named: 'latitude'),
-            longitude: any(named: 'longitude'),
-            date: any(named: 'date'),
-          )).thenAnswer((_) async => const Left(ConnectionFailure('timeout')));
+      when(
+        () => mockUsecase.getJadwalSholat(
+          latitude: any(named: 'latitude'),
+          longitude: any(named: 'longitude'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => const Left(ConnectionFailure('timeout')));
     },
     build: () => JadwalSholatCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(
@@ -67,11 +71,13 @@ void main() {
   blocTest<JadwalSholatCubit, JadwalSholatState>(
     'forwards latitude, longitude, date to usecase exactly',
     setUp: () {
-      when(() => mockUsecase.getJadwalSholat(
-            latitude: any(named: 'latitude'),
-            longitude: any(named: 'longitude'),
-            date: any(named: 'date'),
-          )).thenAnswer((_) async => Right(tEntity));
+      when(
+        () => mockUsecase.getJadwalSholat(
+          latitude: any(named: 'latitude'),
+          longitude: any(named: 'longitude'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => Right(tEntity));
     },
     build: () => JadwalSholatCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(
@@ -80,11 +86,13 @@ void main() {
       date: '2024-06-20',
     ),
     verify: (_) {
-      verify(() => mockUsecase.getJadwalSholat(
-            latitude: -7.25,
-            longitude: 112.75,
-            date: '2024-06-20',
-          )).called(1);
+      verify(
+        () => mockUsecase.getJadwalSholat(
+          latitude: -7.25,
+          longitude: 112.75,
+          date: '2024-06-20',
+        ),
+      ).called(1);
     },
   );
 
@@ -102,17 +110,19 @@ void main() {
         final date =
             '2024-${(i % 12 + 1).toString().padLeft(2, '0')}-${(i % 28 + 1).toString().padLeft(2, '0')}';
 
-        when(() => mockUsecase.getJadwalSholat(
-              latitude: lat,
-              longitude: lng,
-              date: date,
-            )).thenAnswer((_) async => Right(entity));
+        when(
+          () => mockUsecase.getJadwalSholat(
+            latitude: lat,
+            longitude: lng,
+            date: date,
+          ),
+        ).thenAnswer((_) async => Right(entity));
 
         final cubit = JadwalSholatCubit(usecase: mockUsecase);
         final states = <JadwalSholatState>[];
         final sub = cubit.stream.listen(states.add);
         cubit.getPosts(latitude: lat, longitude: lng, date: date);
-        await Future.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
         await sub.cancel();
         await cubit.close();
 
@@ -120,11 +130,13 @@ void main() {
           const JadwalSholatState.loading(),
           JadwalSholatState.success(entity),
         ]);
-        verify(() => mockUsecase.getJadwalSholat(
-              latitude: lat,
-              longitude: lng,
-              date: date,
-            )).called(1);
+        verify(
+          () => mockUsecase.getJadwalSholat(
+            latitude: lat,
+            longitude: lng,
+            date: date,
+          ),
+        ).called(1);
       }
     });
   });

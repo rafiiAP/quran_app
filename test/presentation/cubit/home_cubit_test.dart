@@ -14,18 +14,24 @@ void main() {
     int nomorSurah = 0,
     int nomorAyat = 0,
   }) {
-    when(() => mockStorageService.getString(
-          key: 'cacheNamaLatin',
-          defaultValue: any(named: 'defaultValue'),
-        )).thenReturn(namaLatin);
-    when(() => mockStorageService.getInt(
-          key: 'cacheNomorSurah',
-          defaultValue: any(named: 'defaultValue'),
-        )).thenReturn(nomorSurah);
-    when(() => mockStorageService.getInt(
-          key: 'cacheNomorAyat',
-          defaultValue: any(named: 'defaultValue'),
-        )).thenReturn(nomorAyat);
+    when(
+      () => mockStorageService.getString(
+        key: 'cacheNamaLatin',
+        defaultValue: any(named: 'defaultValue'),
+      ),
+    ).thenReturn(namaLatin);
+    when(
+      () => mockStorageService.getInt(
+        key: 'cacheNomorSurah',
+        defaultValue: any(named: 'defaultValue'),
+      ),
+    ).thenReturn(nomorSurah);
+    when(
+      () => mockStorageService.getInt(
+        key: 'cacheNomorAyat',
+        defaultValue: any(named: 'defaultValue'),
+      ),
+    ).thenReturn(nomorAyat);
   }
 
   setUp(() {
@@ -55,18 +61,24 @@ void main() {
         ),
       );
 
-      verify(() => mockStorageService.getString(
-            key: 'cacheNamaLatin',
-            defaultValue: any(named: 'defaultValue'),
-          )).called(1);
-      verify(() => mockStorageService.getInt(
-            key: 'cacheNomorSurah',
-            defaultValue: any(named: 'defaultValue'),
-          )).called(1);
-      verify(() => mockStorageService.getInt(
-            key: 'cacheNomorAyat',
-            defaultValue: any(named: 'defaultValue'),
-          )).called(1);
+      verify(
+        () => mockStorageService.getString(
+          key: 'cacheNamaLatin',
+          defaultValue: any(named: 'defaultValue'),
+        ),
+      ).called(1);
+      verify(
+        () => mockStorageService.getInt(
+          key: 'cacheNomorSurah',
+          defaultValue: any(named: 'defaultValue'),
+        ),
+      ).called(1);
+      verify(
+        () => mockStorageService.getInt(
+          key: 'cacheNomorAyat',
+          defaultValue: any(named: 'defaultValue'),
+        ),
+      ).called(1);
     });
 
     test('emits loaded with empty defaults when storage returns default values',

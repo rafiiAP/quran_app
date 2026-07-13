@@ -76,7 +76,7 @@ void main() {
           'Mekah',
           'Pembuka',
           'Surah pembuka Al-Quran',
-          {'01': 'https://cdn.example.com/1.mp3'}
+          {'01': 'https://cdn.example.com/1.mp3'},
         ],
       );
     });

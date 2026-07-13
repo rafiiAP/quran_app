@@ -33,10 +33,12 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   }
 
   void navigateToDetail(final BookmarkModel bookmark) {
-    emit(BookmarkState.navigateToDetail(
-      nomorSurah: bookmark.nomorSurah,
-      nomorAyat: bookmark.nomorAyat,
-    ));
+    emit(
+      BookmarkState.navigateToDetail(
+        nomorSurah: bookmark.nomorSurah,
+        nomorAyat: bookmark.nomorAyat,
+      ),
+    );
     loadBookmarks();
   }
 }

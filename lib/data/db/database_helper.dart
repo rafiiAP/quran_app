@@ -41,8 +41,10 @@ class DatabaseHelper {
 
   // Insert data into tables
   // Returns true if inserted (new), false if already exists (duplicate)
-  Future<bool> insertOrUpdateBookmark(final AyatDetailEntity ayatDetailEntity,
-      final DetailEntity detailEntity) async {
+  Future<bool> insertOrUpdateBookmark(
+    final AyatDetailEntity ayatDetailEntity,
+    final DetailEntity detailEntity,
+  ) async {
     final Database dbClient = await db;
 
     // Cek apakah data dengan nama_latin tertentu sudah ada
@@ -57,12 +59,12 @@ class DatabaseHelper {
       await dbClient.insert(
         'bookmark',
         <String, Object?>{
-          "nomor_surah": detailEntity.nomor,
-          "nama_latin": detailEntity.namaLatin,
-          "nomor_ayat": ayatDetailEntity.nomorAyat,
-          "teks_arab": ayatDetailEntity.teksArab,
-          "teks_indonesia": ayatDetailEntity.teksIndonesia,
-          "teks_latin": ayatDetailEntity.teksLatin,
+          'nomor_surah': detailEntity.nomor,
+          'nama_latin': detailEntity.namaLatin,
+          'nomor_ayat': ayatDetailEntity.nomorAyat,
+          'teks_arab': ayatDetailEntity.teksArab,
+          'teks_indonesia': ayatDetailEntity.teksIndonesia,
+          'teks_latin': ayatDetailEntity.teksLatin,
         },
       );
       return true;
@@ -79,7 +81,9 @@ class DatabaseHelper {
 
     // Konversi List<Map<String, dynamic>> menjadi List<BookmarkModel>
     return List<BookmarkModel>.generate(
-        maps.length, (final int index) => BookmarkModel.fromMap(maps[index]));
+      maps.length,
+      (final int index) => BookmarkModel.fromMap(maps[index]),
+    );
   }
 
   Future<void> deleteBookmark(final String teksIndonesia) async {

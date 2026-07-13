@@ -29,6 +29,6 @@ class SurahEntity extends Equatable {
         tempatTurun,
         arti,
         deskripsi,
-        audioFull
+        audioFull,
       ];
 }

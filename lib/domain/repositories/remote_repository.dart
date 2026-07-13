@@ -28,8 +28,9 @@ class ResponseFailure extends Failure {
 abstract class RemoteRepository {
   Future<Either<Failure, List<SurahEntity>>> getSurah();
 
-  Future<Either<Failure, DetailEntity>> getDetailSurah(
-      {required final int nomor});
+  Future<Either<Failure, DetailEntity>> getDetailSurah({
+    required final int nomor,
+  });
 
   Future<Either<Failure, JadwalSholatEntity>> getJadwalSholat({
     required final double latitude,

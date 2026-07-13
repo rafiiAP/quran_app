@@ -20,7 +20,7 @@ Map<String, String> _randomAudioMap() {
   final int n = _rng.nextInt(5) + 1;
   return {
     for (int i = 1; i <= n; i++)
-      i.toString().padLeft(2, '0'): 'https://cdn.example.com/$i.mp3'
+      i.toString().padLeft(2, '0'): 'https://cdn.example.com/$i.mp3',
   };
 }
 

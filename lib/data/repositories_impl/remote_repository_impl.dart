@@ -18,7 +18,8 @@ class RemoteRepositoryImpl implements RemoteRepository {
     try {
       final List<SurahModel> result = await quranDatasource.getSurah();
       return right(
-          result.map((final SurahModel model) => model.toEntity()).toList());
+        result.map((final SurahModel model) => model.toEntity()).toList(),
+      );
     } on DioException catch (e) {
       return left(ConnectionFailure(e.message ?? 'Gagal terhubung ke server'));
     } catch (e) {
@@ -27,8 +28,9 @@ class RemoteRepositoryImpl implements RemoteRepository {
   }
 
   @override
-  Future<Either<Failure, DetailEntity>> getDetailSurah(
-      {required final int nomor}) async {
+  Future<Either<Failure, DetailEntity>> getDetailSurah({
+    required final int nomor,
+  }) async {
     try {
       final DetailModel result =
           await quranDatasource.getDetailSurah(nomor: nomor);
@@ -48,7 +50,10 @@ class RemoteRepositoryImpl implements RemoteRepository {
   }) async {
     try {
       final JadwalSholatModel result = await quranDatasource.getJadwalSholat(
-          latitude: latitude, longitude: longitude, date: date);
+        latitude: latitude,
+        longitude: longitude,
+        date: date,
+      );
       return right(result.toEntity());
     } on DioException catch (e) {
       return left(ConnectionFailure(e.message ?? 'Gagal terhubung ke server'));

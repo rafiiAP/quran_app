@@ -17,8 +17,10 @@ class SearchCubit extends Cubit<SearchState> {
       return;
     }
     final List<SurahEntity> filtered = surahList
-        .where((final SurahEntity e) =>
-            e.namaLatin.toLowerCase().contains(query.toLowerCase()))
+        .where(
+          (final SurahEntity e) =>
+              e.namaLatin.toLowerCase().contains(query.toLowerCase()),
+        )
         .toList();
     emit(SearchState.results(results: filtered));
   }

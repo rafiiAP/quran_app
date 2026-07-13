@@ -66,8 +66,11 @@ void main() {
         final result1 = component.date(format: format, dateTime: dt);
         final result2 = component.date(format: format, dateTime: dt);
 
-        expect(result1, result2,
-            reason: 'format="$format", dt=$dt: "$result1" != "$result2"');
+        expect(
+          result1,
+          result2,
+          reason: 'format="$format", dt=$dt: "$result1" != "$result2"',
+        );
       }
     });
   });

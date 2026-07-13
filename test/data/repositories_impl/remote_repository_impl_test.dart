@@ -122,7 +122,7 @@ void main() {
       arti: 'Pembuka',
       deskripsi: 'Surah pembuka Al-Quran',
       audioFull: {
-        '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3'
+        '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3',
       },
       ayat: [
         AyatDetailModel(
@@ -131,7 +131,7 @@ void main() {
           teksLatin: 'Bismillāhir-raḥmānir-raḥīm',
           teksIndonesia: 'Dengan nama Allah Yang Maha Pengasih, Maha Penyayang',
           audio: {
-            '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3'
+            '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3',
           },
         ),
       ],
@@ -208,11 +208,13 @@ void main() {
     test('success: returns Right(JadwalSholatEntity) with all fields',
         () async {
       // Arrange
-      when(() => mockDatasource.getJadwalSholat(
-            latitude: any(named: 'latitude'),
-            longitude: any(named: 'longitude'),
-            date: any(named: 'date'),
-          )).thenAnswer((_) async => kJadwalSholatModel);
+      when(
+        () => mockDatasource.getJadwalSholat(
+          latitude: any(named: 'latitude'),
+          longitude: any(named: 'longitude'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => kJadwalSholatModel);
 
       // Act
       final result = await repositoryImpl.getJadwalSholat(
@@ -239,21 +241,25 @@ void main() {
           expect(data.lastthird, kJadwalSholatModel.lastthird);
         },
       );
-      verify(() => mockDatasource.getJadwalSholat(
-            latitude: -6.2,
-            longitude: 106.8,
-            date: '2024-01-15',
-          )).called(1);
+      verify(
+        () => mockDatasource.getJadwalSholat(
+          latitude: -6.2,
+          longitude: 106.8,
+          date: '2024-01-15',
+        ),
+      ).called(1);
     });
 
     test('DioException: returns Left(ConnectionFailure) with error message',
         () async {
       // Arrange
-      when(() => mockDatasource.getJadwalSholat(
-            latitude: any(named: 'latitude'),
-            longitude: any(named: 'longitude'),
-            date: any(named: 'date'),
-          )).thenThrow(
+      when(
+        () => mockDatasource.getJadwalSholat(
+          latitude: any(named: 'latitude'),
+          longitude: any(named: 'longitude'),
+          date: any(named: 'date'),
+        ),
+      ).thenThrow(
         DioException(
           requestOptions: RequestOptions(),
           message: 'timeout',
@@ -281,11 +287,13 @@ void main() {
     test('generic Exception: returns Left(ServerFailure) with e.toString()',
         () async {
       // Arrange
-      when(() => mockDatasource.getJadwalSholat(
-            latitude: any(named: 'latitude'),
-            longitude: any(named: 'longitude'),
-            date: any(named: 'date'),
-          )).thenThrow(Exception('unknown error'));
+      when(
+        () => mockDatasource.getJadwalSholat(
+          latitude: any(named: 'latitude'),
+          longitude: any(named: 'longitude'),
+          date: any(named: 'date'),
+        ),
+      ).thenThrow(Exception('unknown error'));
 
       // Act
       final result = await repositoryImpl.getJadwalSholat(

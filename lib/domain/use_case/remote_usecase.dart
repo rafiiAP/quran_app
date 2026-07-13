@@ -13,8 +13,9 @@ class RemoteUsecase {
     return repositoryAPI.getSurah();
   }
 
-  Future<Either<Failure, DetailEntity>> getDetailSurah(
-      {required final int nomor}) {
+  Future<Either<Failure, DetailEntity>> getDetailSurah({
+    required final int nomor,
+  }) {
     return repositoryAPI.getDetailSurah(nomor: nomor);
   }
 
@@ -24,6 +25,9 @@ class RemoteUsecase {
     required final String date,
   }) {
     return repositoryAPI.getJadwalSholat(
-        latitude: latitude, longitude: longitude, date: date);
+      latitude: latitude,
+      longitude: longitude,
+      date: date,
+    );
   }
 }

@@ -10,7 +10,7 @@ const Map<String, dynamic> kSurahMap = {
   'arti': 'Pembuka',
   'deskripsi': 'Surah pembuka Al-Quran',
   'audioFull': {
-    '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3'
+    '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3',
   },
 };
 
@@ -23,7 +23,7 @@ const SurahModel kSurahModel = SurahModel(
   arti: 'Pembuka',
   deskripsi: 'Surah pembuka Al-Quran',
   audioFull: {
-    '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3'
+    '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3',
   },
 );
 
@@ -36,6 +36,6 @@ const SurahEntity kSurahEntity = SurahEntity(
   arti: 'Pembuka',
   deskripsi: 'Surah pembuka Al-Quran',
   audioFull: {
-    '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3'
+    '01': 'https://cdn.islamic.network/quran/audio/1/ar.alafasy/1.mp3',
   },
 );

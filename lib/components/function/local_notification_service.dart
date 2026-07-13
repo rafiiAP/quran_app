@@ -35,9 +35,9 @@ mixin LocalNotificationService {
         );
 
     if (granted != null && granted) {
-      C.showLog(log: "--Izin notifikasi diberikan.");
+      C.showLog(log: '--Izin notifikasi diberikan.');
     } else {
-      C.showLog(log: "--Izin notifikasi ditolak.");
+      C.showLog(log: '--Izin notifikasi ditolak.');
     }
   }
 
@@ -75,7 +75,7 @@ mixin LocalNotificationService {
         hour,
         minute,
       );
-      C.showLog(log: "Waktu sudah lewat, tidak bisa menjadwalkan notifikasi.");
+      C.showLog(log: 'Waktu sudah lewat, tidak bisa menjadwalkan notifikasi.');
     }
 
     const AndroidNotificationDetails androidDetails =
@@ -122,12 +122,13 @@ mixin LocalNotificationService {
 
     for (final PendingNotificationRequest notif in pendingNotifications) {
       C.showLog(
-          log:
-              '--📅 Notifikasi ID: ${notif.id}, Title: ${notif.title}, Body: ${notif.body}, ${notif.payload}');
+        log:
+            '--📅 Notifikasi ID: ${notif.id}, Title: ${notif.title}, Body: ${notif.body}, ${notif.payload}',
+      );
     }
 
     if (pendingNotifications.isEmpty) {
-      C.showLog(log: "--🚫 Tidak ada notifikasi yang terjadwal.");
+      C.showLog(log: '--🚫 Tidak ada notifikasi yang terjadwal.');
     }
 
     return pendingNotifications; // Tidak lagi mengembalikan null

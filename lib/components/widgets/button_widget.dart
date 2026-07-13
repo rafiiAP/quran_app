@@ -2,7 +2,7 @@ part of 'main_widget.dart';
 
 mixin ButtonWidget {
   Widget button({
-    required final Function()? onPressed,
+    required final void Function()? onPressed,
     required final Widget child,
     final Color? textColor,
     final Color? backgroundColor,
@@ -28,7 +28,7 @@ mixin ButtonWidget {
   }
 
   Widget outlinedButton({
-    required final Function()? onPressed,
+    required final void Function()? onPressed,
     required final Widget child,
     final Color? borderColor,
     final EdgeInsetsGeometry? padding,

@@ -33,7 +33,7 @@ void main() {
       final result = await usecase.execute();
 
       // assert
-      expect(result, Right(tSurahList));
+      expect(result, Right<Failure, List<SurahEntity>>(tSurahList));
       verify(() => mockRepository.getSurah()).called(1);
       verifyNoMoreInteractions(mockRepository);
     });
@@ -70,7 +70,7 @@ void main() {
       final result = await usecase.getDetailSurah(nomor: tNomor);
 
       // assert
-      expect(result, const Right(tDetailEntity));
+      expect(result, const Right<Failure, DetailEntity>(tDetailEntity));
       verify(() => mockRepository.getDetailSurah(nomor: tNomor)).called(1);
       verifyNoMoreInteractions(mockRepository);
     });
@@ -96,11 +96,16 @@ void main() {
 
     test('should forward all three arguments exactly to repository', () async {
       // arrange
-      when(() => mockRepository.getJadwalSholat(
-            latitude: tLatitude,
-            longitude: tLongitude,
-            date: tDate,
-          )).thenAnswer((_) async => const Right(tJadwalSholatEntity));
+      when(
+        () => mockRepository.getJadwalSholat(
+          latitude: tLatitude,
+          longitude: tLongitude,
+          date: tDate,
+        ),
+      ).thenAnswer(
+        (_) async =>
+            const Right<Failure, JadwalSholatEntity>(tJadwalSholatEntity),
+      );
 
       // act
       final result = await usecase.getJadwalSholat(
@@ -110,12 +115,17 @@ void main() {
       );
 
       // assert
-      expect(result, const Right(tJadwalSholatEntity));
-      verify(() => mockRepository.getJadwalSholat(
-            latitude: tLatitude,
-            longitude: tLongitude,
-            date: tDate,
-          )).called(1);
+      expect(
+        result,
+        const Right<Failure, JadwalSholatEntity>(tJadwalSholatEntity),
+      );
+      verify(
+        () => mockRepository.getJadwalSholat(
+          latitude: tLatitude,
+          longitude: tLongitude,
+          date: tDate,
+        ),
+      ).called(1);
       verifyNoMoreInteractions(mockRepository);
     });
   });
@@ -134,7 +144,7 @@ void main() {
       final result = await usecase.execute();
 
       // assert
-      expect(result, const Left(tServerFailure));
+      expect(result, const Left<Failure, List<SurahEntity>>(tServerFailure));
       verify(() => mockRepository.getSurah()).called(1);
     });
 
@@ -149,7 +159,7 @@ void main() {
       final result = await usecase.getDetailSurah(nomor: 1);
 
       // assert
-      expect(result, const Left(tServerFailure));
+      expect(result, const Left<Failure, DetailEntity>(tServerFailure));
     });
 
     test(
@@ -158,11 +168,13 @@ void main() {
       const tConnectionFailure = ConnectionFailure('No internet connection');
 
       // arrange
-      when(() => mockRepository.getJadwalSholat(
-            latitude: any(named: 'latitude'),
-            longitude: any(named: 'longitude'),
-            date: any(named: 'date'),
-          )).thenAnswer((_) async => const Left(tConnectionFailure));
+      when(
+        () => mockRepository.getJadwalSholat(
+          latitude: any(named: 'latitude'),
+          longitude: any(named: 'longitude'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => const Left(tConnectionFailure));
 
       // act
       final result = await usecase.getJadwalSholat(
@@ -172,7 +184,10 @@ void main() {
       );
 
       // assert
-      expect(result, const Left(tConnectionFailure));
+      expect(
+        result,
+        const Left<Failure, JadwalSholatEntity>(tConnectionFailure),
+      );
     });
   });
 
@@ -258,11 +273,13 @@ void main() {
         final date = '2024-01-${(i % 28 + 1).toString().padLeft(2, '0')}';
         final expected = Right<Failure, JadwalSholatEntity>(entity);
 
-        when(() => mockRepository.getJadwalSholat(
-              latitude: latitude,
-              longitude: longitude,
-              date: date,
-            )).thenAnswer((_) async => expected);
+        when(
+          () => mockRepository.getJadwalSholat(
+            latitude: latitude,
+            longitude: longitude,
+            date: date,
+          ),
+        ).thenAnswer((_) async => expected);
 
         final result = await usecase.getJadwalSholat(
           latitude: latitude,
@@ -284,11 +301,13 @@ void main() {
         final failure = failures[i % 3];
         final expected = Left<Failure, JadwalSholatEntity>(failure);
 
-        when(() => mockRepository.getJadwalSholat(
-              latitude: any(named: 'latitude'),
-              longitude: any(named: 'longitude'),
-              date: any(named: 'date'),
-            )).thenAnswer((_) async => expected);
+        when(
+          () => mockRepository.getJadwalSholat(
+            latitude: any(named: 'latitude'),
+            longitude: any(named: 'longitude'),
+            date: any(named: 'date'),
+          ),
+        ).thenAnswer((_) async => expected);
 
         final result = await usecase.getJadwalSholat(
           latitude: -6.2 + i,

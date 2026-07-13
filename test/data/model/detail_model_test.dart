@@ -86,8 +86,8 @@ void main() {
       final decoded = json.decode(jsonStr) as Map<String, dynamic>;
       expect(decoded['nomor'], 1);
       expect(decoded['namaLatin'], 'Al-Fatihah');
-      expect(decoded['ayat'], isA<List>());
-      expect((decoded['ayat'] as List).length, 3);
+      expect(decoded['ayat'], isA<List<dynamic>>());
+      expect((decoded['ayat'] as List<dynamic>).length, 3);
     });
   });
 
@@ -110,8 +110,10 @@ void main() {
       expect(result.nomorAyat, 5);
       expect(result.teksArab, 'اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَعِيْنُ');
       expect(result.teksLatin, 'Iyyāka naʿbudu wa iyyāka nastaʿīn(u).');
-      expect(result.teksIndonesia,
-          'Hanya kepada Engkaulah kami menyembah dan hanya kepada Engkaulah kami mohon pertolongan.');
+      expect(
+        result.teksIndonesia,
+        'Hanya kepada Engkaulah kami menyembah dan hanya kepada Engkaulah kami mohon pertolongan.',
+      );
       expect(result.audio, {
         '01': 'https://cdn.example.com/001005.mp3',
         '02': 'https://cdn.example.com/001005_2.mp3',
@@ -148,7 +150,7 @@ void main() {
       final decoded = json.decode(jsonStr) as Map<String, dynamic>;
       expect(decoded['nomorAyat'], 5);
       expect(decoded['teksArab'], 'اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَعِيْنُ');
-      expect(decoded['audio'], isA<Map>());
+      expect(decoded['audio'], isA<Map<String, dynamic>>());
     });
   });
 
@@ -218,7 +220,7 @@ void main() {
       final decoded = json.decode(jsonStr) as Map<String, dynamic>;
       expect(decoded['code'], 200);
       expect(decoded['message'], 'success');
-      expect(decoded['data'], isA<Map>());
+      expect(decoded['data'], isA<Map<String, dynamic>>());
     });
 
     test('props equality — two identical instances must be equal', () {

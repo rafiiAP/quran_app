@@ -5,7 +5,7 @@ mixin BottomsheetWidget {
     final Widget? bottomSheet,
     final Color? backgroundColor,
     final BottomSheetMode bottomSheetMode = BottomSheetMode.defaultSheet,
-    final String cLoadingMessage = "",
+    final String cLoadingMessage = '',
     final bool isDismissible = true,
     final String? title,
     final bool isScrollControlled = false,
@@ -41,7 +41,7 @@ mixin BottomsheetWidget {
                   ),
                   W.textBody(
                     text:
-                        "${C.datetime()} VAP: ${config.cAppVersion} (${config.nAppVersion})",
+                        '${C.datetime()} VAP: ${config.cAppVersion} (${config.nAppVersion})',
                     color:
                         C.isDark(ctx) ? colorConfig.white : colorConfig.black,
                     fontSize: 14,
@@ -78,7 +78,7 @@ mixin BottomsheetWidget {
                 ),
                 W.textBody(
                   text:
-                      "DT: ${C.datetime()} VAP: ${config.cAppVersion} (${config.nAppVersion})",
+                      'DT: ${C.datetime()} VAP: ${config.cAppVersion} (${config.nAppVersion})',
                   color: C.isDark(ctx) ? colorConfig.white : colorConfig.black,
                   fontSize: 14,
                 ),
@@ -150,7 +150,7 @@ mixin BottomsheetWidget {
                 Navigator.of(navigatorKey.currentContext!).pop();
               },
               child: W.textBody(
-                text: "OKE",
+                text: 'OKE',
                 fontWeight: FontWeight.w600,
                 color: colorConfig.white,
               ),
@@ -169,7 +169,7 @@ mixin BottomsheetWidget {
       backgroundColor:
           C.isDark(ctx) ? colorConfig.background : colorConfig.white,
       bottomSheetMode: BottomSheetMode.loading,
-      cLoadingMessage: message ?? "Mohon tunggu...",
+      cLoadingMessage: message ?? 'Mohon tunggu...',
       isDismissible: false,
       isScrollControlled: true,
     );

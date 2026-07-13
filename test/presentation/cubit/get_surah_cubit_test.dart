@@ -70,7 +70,9 @@ void main() {
       for (int i = 0; i < 100; i++) {
         final listSize = i % 5;
         final entities = List.generate(
-            listSize, (_) => generateRandomSurahModel().toEntity());
+          listSize,
+          (_) => generateRandomSurahModel().toEntity(),
+        );
         when(() => mockUsecase.execute())
             .thenAnswer((_) async => Right(entities));
 
@@ -78,12 +80,14 @@ void main() {
         final states = <GetSurahState>[];
         final sub = cubit.stream.listen(states.add);
         cubit.getPosts();
-        await Future.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
         await sub.cancel();
         await cubit.close();
 
-        expect(states,
-            [const GetSurahState.loading(), GetSurahState.success(entities)]);
+        expect(
+          states,
+          [const GetSurahState.loading(), GetSurahState.success(entities)],
+        );
       }
     });
 
@@ -104,12 +108,14 @@ void main() {
         final states = <GetSurahState>[];
         final sub = cubit.stream.listen(states.add);
         cubit.getPosts();
-        await Future.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
         await sub.cancel();
         await cubit.close();
 
-        expect(states,
-            [const GetSurahState.loading(), GetSurahState.error(message)]);
+        expect(
+          states,
+          [const GetSurahState.loading(), GetSurahState.error(message)],
+        );
       }
     });
   });

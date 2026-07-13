@@ -22,8 +22,10 @@ void main() {
     });
 
     test('returns defaultValue when key is absent', () {
-      expect(sut.getString(key: 'missing', defaultValue: 'default'),
-          equals('default'));
+      expect(
+        sut.getString(key: 'missing', defaultValue: 'default'),
+        equals('default'),
+      );
     });
   });
 
@@ -59,7 +61,9 @@ void main() {
       await sut.setString(key: 'toRemove', value: 'bye');
       await sut.remove(key: 'toRemove');
       expect(
-          sut.getString(key: 'toRemove', defaultValue: 'gone'), equals('gone'));
+        sut.getString(key: 'toRemove', defaultValue: 'gone'),
+        equals('gone'),
+      );
     });
   });
 

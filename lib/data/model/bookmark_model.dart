@@ -13,13 +13,13 @@ class BookmarkModel {
   /// Factory method untuk konversi dari Map ke BookmarkModel
   factory BookmarkModel.fromMap(final Map<String, dynamic> map) {
     return BookmarkModel(
-      id: map['id'], // Misalnya ada kolom ID di tabel
-      nomorSurah: map['nomor_surah'],
-      namaLatin: map['nama_latin'],
-      nomorAyat: map['nomor_ayat'],
-      teksArab: map['teks_arab'],
-      teksIndonesia: map['teks_indonesia'],
-      teksLatin: map['teks_latin'],
+      id: map['id'] as int?,
+      nomorSurah: map['nomor_surah'] as int,
+      namaLatin: map['nama_latin'] as String,
+      nomorAyat: map['nomor_ayat'] as int,
+      teksArab: map['teks_arab'] as String,
+      teksIndonesia: map['teks_indonesia'] as String,
+      teksLatin: map['teks_latin'] as String,
     );
   }
 

@@ -10,6 +10,6 @@ mixin DatetimeComponent {
   }
 
   String datetime() {
-    return date(format: "yyyy-MM-dd HH:mm:ss");
+    return date(format: 'yyyy-MM-dd HH:mm:ss');
   }
 }

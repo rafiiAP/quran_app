@@ -11,13 +11,13 @@ class ResponseDetailModel extends Equatable {
   });
 
   factory ResponseDetailModel.fromJson(final String str) =>
-      ResponseDetailModel.fromMap(json.decode(str));
+      ResponseDetailModel.fromMap(json.decode(str) as Map<String, dynamic>);
 
   factory ResponseDetailModel.fromMap(final Map<String, dynamic> json) =>
       ResponseDetailModel(
-        code: json["code"],
-        message: json["message"],
-        data: DetailModel.fromMap(json["data"]),
+        code: json['code'] as int,
+        message: json['message'] as String,
+        data: DetailModel.fromMap(json['data'] as Map<String, dynamic>),
       );
 
   final int code;
@@ -27,9 +27,9 @@ class ResponseDetailModel extends Equatable {
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        "code": code,
-        "message": message,
-        "data": data.toMap(),
+        'code': code,
+        'message': message,
+        'data': data.toMap(),
       };
 
   @override
@@ -50,20 +50,25 @@ class DetailModel extends Equatable {
   });
 
   factory DetailModel.fromJson(final String str) =>
-      DetailModel.fromMap(json.decode(str));
+      DetailModel.fromMap(json.decode(str) as Map<String, dynamic>);
 
   factory DetailModel.fromMap(final Map<String, dynamic> json) => DetailModel(
-        nomor: json["nomor"],
-        nama: json["nama"],
-        namaLatin: json["namaLatin"],
-        jumlahAyat: json["jumlahAyat"],
-        tempatTurun: json["tempatTurun"],
-        arti: json["arti"],
-        deskripsi: json["deskripsi"],
-        audioFull:
-            Map<String, String>.from(json["audioFull"]).map(MapEntry.new),
-        ayat: List<AyatDetailModel>.from((json["ayat"])
-            .map((final dynamic x) => AyatDetailModel.fromMap(x))),
+        nomor: json['nomor'] as int,
+        nama: json['nama'] as String,
+        namaLatin: json['namaLatin'] as String,
+        jumlahAyat: json['jumlahAyat'] as int,
+        tempatTurun: json['tempatTurun'] as String,
+        arti: json['arti'] as String,
+        deskripsi: json['deskripsi'] as String,
+        audioFull: Map<String, String>.from(
+          json['audioFull'] as Map<dynamic, dynamic>,
+        ).map(MapEntry.new),
+        ayat: (json['ayat'] as List<dynamic>)
+            .map(
+              (final dynamic x) =>
+                  AyatDetailModel.fromMap(x as Map<String, dynamic>),
+            )
+            .toList(),
       );
 
   final int nomor;
@@ -79,28 +84,29 @@ class DetailModel extends Equatable {
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        "nomor": nomor,
-        "nama": nama,
-        "namaLatin": namaLatin,
-        "jumlahAyat": jumlahAyat,
-        "tempatTurun": tempatTurun,
-        "arti": arti,
-        "deskripsi": deskripsi,
-        "audioFull": Map<String, String>.from(audioFull).map(MapEntry.new),
-        "ayat": ayat.map((final AyatDetailModel x) => x.toMap()).toList(),
+        'nomor': nomor,
+        'nama': nama,
+        'namaLatin': namaLatin,
+        'jumlahAyat': jumlahAyat,
+        'tempatTurun': tempatTurun,
+        'arti': arti,
+        'deskripsi': deskripsi,
+        'audioFull': Map<String, String>.from(audioFull).map(MapEntry.new),
+        'ayat': ayat.map((final AyatDetailModel x) => x.toMap()).toList(),
       };
 
   DetailEntity toEntity() {
     return DetailEntity(
-        nomor: nomor,
-        nama: nama,
-        namaLatin: namaLatin,
-        jumlahAyat: jumlahAyat,
-        tempatTurun: tempatTurun,
-        arti: arti,
-        deskripsi: deskripsi,
-        audioFull: audioFull,
-        ayat: ayat.map((final AyatDetailModel x) => x.toEntity()).toList());
+      nomor: nomor,
+      nama: nama,
+      namaLatin: namaLatin,
+      jumlahAyat: jumlahAyat,
+      tempatTurun: tempatTurun,
+      arti: arti,
+      deskripsi: deskripsi,
+      audioFull: audioFull,
+      ayat: ayat.map((final AyatDetailModel x) => x.toEntity()).toList(),
+    );
   }
 
   @override
@@ -113,7 +119,7 @@ class DetailModel extends Equatable {
         arti,
         deskripsi,
         audioFull,
-        ayat
+        ayat,
       ];
 }
 
@@ -127,15 +133,17 @@ class AyatDetailModel extends Equatable {
   });
 
   factory AyatDetailModel.fromJson(final String str) =>
-      AyatDetailModel.fromMap(json.decode(str));
+      AyatDetailModel.fromMap(json.decode(str) as Map<String, dynamic>);
 
   factory AyatDetailModel.fromMap(final Map<String, dynamic> json) =>
       AyatDetailModel(
-        nomorAyat: json["nomorAyat"],
-        teksArab: json["teksArab"],
-        teksLatin: json["teksLatin"],
-        teksIndonesia: json["teksIndonesia"],
-        audio: Map<String, String>.from(json["audio"]).map(MapEntry.new),
+        nomorAyat: json['nomorAyat'] as int,
+        teksArab: json['teksArab'] as String,
+        teksLatin: json['teksLatin'] as String,
+        teksIndonesia: json['teksIndonesia'] as String,
+        audio: Map<String, String>.from(
+          json['audio'] as Map<dynamic, dynamic>,
+        ).map(MapEntry.new),
       );
 
   final int nomorAyat;
@@ -147,11 +155,11 @@ class AyatDetailModel extends Equatable {
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        "nomorAyat": nomorAyat,
-        "teksArab": teksArab,
-        "teksLatin": teksLatin,
-        "teksIndonesia": teksIndonesia,
-        "audio": Map<String, String>.from(audio).map(MapEntry.new),
+        'nomorAyat': nomorAyat,
+        'teksArab': teksArab,
+        'teksLatin': teksLatin,
+        'teksIndonesia': teksIndonesia,
+        'audio': Map<String, String>.from(audio).map(MapEntry.new),
       };
 
   AyatDetailEntity toEntity() {

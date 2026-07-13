@@ -45,7 +45,8 @@ Future<void> setup() async {
 
   // repository
   locator.registerLazySingleton<RemoteRepository>(
-      () => RemoteRepositoryImpl(quranDatasource: locator()));
+    () => RemoteRepositoryImpl(quranDatasource: locator()),
+  );
 
   // data source
   locator.registerLazySingleton<RemoteDatasource>(

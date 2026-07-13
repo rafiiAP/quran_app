@@ -46,37 +46,41 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
     final Position? position = await _determinePosition();
 
     if (position == null) {
-      emit(JadwalSholatPageState.loaded(
-        city: 'Tidak diketahui',
-        timezone: _cachedTimezone,
-        jadwalList: const <SetNotifModel>[],
-        countdownText: '-',
-        sholatText: '-',
-        timeText: '-',
-        entity: _cachedEntity ??
-            const JadwalSholatEntity(
-              fajr: '-',
-              sunrise: '-',
-              dhuhr: '-',
-              asr: '-',
-              sunset: '-',
-              maghrib: '-',
-              isha: '-',
-              imsak: '-',
-              midnight: '-',
-              firstthird: '-',
-              lastthird: '-',
-            ),
-      ));
+      emit(
+        JadwalSholatPageState.loaded(
+          city: 'Tidak diketahui',
+          timezone: _cachedTimezone,
+          jadwalList: const <SetNotifModel>[],
+          countdownText: '-',
+          sholatText: '-',
+          timeText: '-',
+          entity: _cachedEntity ??
+              const JadwalSholatEntity(
+                fajr: '-',
+                sunrise: '-',
+                dhuhr: '-',
+                asr: '-',
+                sunset: '-',
+                maghrib: '-',
+                isha: '-',
+                imsak: '-',
+                midnight: '-',
+                firstthird: '-',
+                lastthird: '-',
+              ),
+        ),
+      );
       return;
     }
 
     final String city = await _getCityName(position);
-    emit(JadwalSholatPageState.awaitingSchedule(
-      city: city,
-      latitude: position.latitude,
-      longitude: position.longitude,
-    ));
+    emit(
+      JadwalSholatPageState.awaitingSchedule(
+        city: city,
+        latitude: position.latitude,
+        longitude: position.longitude,
+      ),
+    );
   }
 
   /// Called when [JadwalSholatCubit] emits a success state with new data.
@@ -315,28 +319,30 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
       orElse: () => _cachedTimezone,
     );
 
-    emit(JadwalSholatPageState.loaded(
-      city: city,
-      timezone: timezone,
-      jadwalList: updatedList,
-      countdownText: countdownText,
-      sholatText: sholatText,
-      timeText: timeText,
-      entity: _cachedEntity ??
-          const JadwalSholatEntity(
-            fajr: '-',
-            sunrise: '-',
-            dhuhr: '-',
-            asr: '-',
-            sunset: '-',
-            maghrib: '-',
-            isha: '-',
-            imsak: '-',
-            midnight: '-',
-            firstthird: '-',
-            lastthird: '-',
-          ),
-    ));
+    emit(
+      JadwalSholatPageState.loaded(
+        city: city,
+        timezone: timezone,
+        jadwalList: updatedList,
+        countdownText: countdownText,
+        sholatText: sholatText,
+        timeText: timeText,
+        entity: _cachedEntity ??
+            const JadwalSholatEntity(
+              fajr: '-',
+              sunrise: '-',
+              dhuhr: '-',
+              asr: '-',
+              sunset: '-',
+              maghrib: '-',
+              isha: '-',
+              imsak: '-',
+              midnight: '-',
+              firstthird: '-',
+              lastthird: '-',
+            ),
+      ),
+    );
 
     _startCountdownTimer(updatedList, city, timezone);
   }
@@ -354,28 +360,30 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
         final String countdownText = calculateCountdown(jadwalList, now);
         final String sholatText = getSholatText(jadwalList, now);
         final String timeText = getTimeText(jadwalList, now);
-        emit(JadwalSholatPageState.loaded(
-          city: city,
-          timezone: timezone,
-          jadwalList: jadwalList,
-          countdownText: countdownText,
-          sholatText: sholatText,
-          timeText: timeText,
-          entity: _cachedEntity ??
-              const JadwalSholatEntity(
-                fajr: '-',
-                sunrise: '-',
-                dhuhr: '-',
-                asr: '-',
-                sunset: '-',
-                maghrib: '-',
-                isha: '-',
-                imsak: '-',
-                midnight: '-',
-                firstthird: '-',
-                lastthird: '-',
-              ),
-        ));
+        emit(
+          JadwalSholatPageState.loaded(
+            city: city,
+            timezone: timezone,
+            jadwalList: jadwalList,
+            countdownText: countdownText,
+            sholatText: sholatText,
+            timeText: timeText,
+            entity: _cachedEntity ??
+                const JadwalSholatEntity(
+                  fajr: '-',
+                  sunrise: '-',
+                  dhuhr: '-',
+                  asr: '-',
+                  sunset: '-',
+                  maghrib: '-',
+                  isha: '-',
+                  imsak: '-',
+                  midnight: '-',
+                  firstthird: '-',
+                  lastthird: '-',
+                ),
+          ),
+        );
       },
     );
   }

@@ -60,7 +60,10 @@ class _JadwalSholatPageState extends State<JadwalSholatPage> {
   }
 
   void _triggerFetch(
-      final BuildContext context, double latitude, double longitude) {
+    final BuildContext context,
+    double latitude,
+    double longitude,
+  ) {
     final String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
     context.read<JadwalSholatCubit>().getPosts(
           latitude: latitude,

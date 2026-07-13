@@ -43,14 +43,14 @@ class MainFunction
   void showLog({
     required final dynamic log,
   }) {
-    if (config.lShowLog) dev.log("$log");
+    if (config.lShowLog) dev.log('$log');
   }
 
   void showCase({
     required BuildContext context,
     required List<GlobalKey> keys,
     required String cacheKey,
-    isShowHelp = false,
+    bool isShowHelp = false,
   }) {
     final storageService = locator<LocalStorageService>();
     final alreadyShown = storageService.getBool(key: cacheKey);

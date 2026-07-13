@@ -54,7 +54,7 @@ void main() {
 
         final cubit = BookmarkCubit(databaseHelper: mockDb);
         // Wait for constructor's loadBookmarks() to complete
-        await Future.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
 
         // Perform delete
         await cubit.deleteBookmark(targetItem);
@@ -98,7 +98,7 @@ void main() {
       when(() => mockDb.getAllBookmarks()).thenAnswer((_) async => []);
 
       final cubit = BookmarkCubit(databaseHelper: mockDb);
-      await Future.delayed(Duration.zero);
+      await Future<void>.delayed(Duration.zero);
 
       for (int i = 0; i < 100; i++) {
         final BookmarkModel bookmark = generateRandomBookmarkModel();

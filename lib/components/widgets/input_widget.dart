@@ -11,9 +11,9 @@ mixin InputWidget {
     final TextEditingController? controller,
     final String? initialValue,
     final List<TextInputFormatter>? inputFormatters,
-    final Function(String)? onChanged,
-    final Function(String?)? onSaved,
-    final Function(String)? onFieldSubmitted,
+    final void Function(String)? onChanged,
+    final void Function(String?)? onSaved,
+    final void Function(String)? onFieldSubmitted,
     final FocusNode? focusNode,
     final TextInputAction? textInputAction,
     final TextAlign textAlign = TextAlign.start,
@@ -52,10 +52,12 @@ mixin InputWidget {
       validator: validator,
       keyboardType: keyboardType,
       buildCounter: hideMaxLength
-          ? (final BuildContext context,
-              {required final int currentLength,
+          ? (
+              final BuildContext context, {
+              required final int currentLength,
               required final bool isFocused,
-              final int? maxLength}) {
+              final int? maxLength,
+            }) {
               return null;
             }
           : null,

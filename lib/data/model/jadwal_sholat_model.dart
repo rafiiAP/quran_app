@@ -11,13 +11,15 @@ class JadwalSholatDioModel extends Equatable {
   });
 
   factory JadwalSholatDioModel.fromJson(final String str) =>
-      JadwalSholatDioModel.fromMap(json.decode(str));
+      JadwalSholatDioModel.fromMap(json.decode(str) as Map<String, dynamic>);
 
   factory JadwalSholatDioModel.fromMap(final Map<String, dynamic> json) =>
       JadwalSholatDioModel(
-        code: json["code"],
-        status: json["status"],
-        data: JadwalSholatDataModel.fromMap(json["data"]),
+        code: json['code'] as int,
+        status: json['status'] as String,
+        data: JadwalSholatDataModel.fromMap(
+          json['data'] as Map<String, dynamic>,
+        ),
       );
 
   String toJson() => json.encode(toMap());
@@ -27,9 +29,9 @@ class JadwalSholatDioModel extends Equatable {
   final JadwalSholatDataModel data;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        "code": code,
-        "status": status,
-        "data": data.toMap(),
+        'code': code,
+        'status': status,
+        'data': data.toMap(),
       };
 
   @override
@@ -42,15 +44,17 @@ class JadwalSholatDataModel extends Equatable {
   });
 
   factory JadwalSholatDataModel.fromJson(final String str) =>
-      JadwalSholatDataModel.fromMap(json.decode(str));
+      JadwalSholatDataModel.fromMap(json.decode(str) as Map<String, dynamic>);
 
   factory JadwalSholatDataModel.fromMap(final Map<String, dynamic> json) =>
       JadwalSholatDataModel(
-        timings: JadwalSholatModel.fromMap(json["timings"]),
+        timings: JadwalSholatModel.fromMap(
+          json['timings'] as Map<String, dynamic>,
+        ),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        "timings": timings.toMap(),
+        'timings': timings.toMap(),
       };
   String toJson() => json.encode(toMap());
 
@@ -75,21 +79,21 @@ class JadwalSholatModel extends Equatable {
   });
 
   factory JadwalSholatModel.fromJson(final String str) =>
-      JadwalSholatModel.fromMap(json.decode(str));
+      JadwalSholatModel.fromMap(json.decode(str) as Map<String, dynamic>);
 
   factory JadwalSholatModel.fromMap(final Map<String, dynamic> json) =>
       JadwalSholatModel(
-        fajr: json["Fajr"],
-        sunrise: json["Sunrise"],
-        dhuhr: json["Dhuhr"],
-        asr: json["Asr"],
-        sunset: json["Sunset"],
-        maghrib: json["Maghrib"],
-        isha: json["Isha"],
-        imsak: json["Imsak"],
-        midnight: json["Midnight"],
-        firstthird: json["Firstthird"],
-        lastthird: json["Lastthird"],
+        fajr: json['Fajr'] as String,
+        sunrise: json['Sunrise'] as String,
+        dhuhr: json['Dhuhr'] as String,
+        asr: json['Asr'] as String,
+        sunset: json['Sunset'] as String,
+        maghrib: json['Maghrib'] as String,
+        isha: json['Isha'] as String,
+        imsak: json['Imsak'] as String,
+        midnight: json['Midnight'] as String,
+        firstthird: json['Firstthird'] as String,
+        lastthird: json['Lastthird'] as String,
       );
 
   final String fajr;
@@ -106,17 +110,17 @@ class JadwalSholatModel extends Equatable {
 
   String toJson() => json.encode(toMap());
   Map<String, dynamic> toMap() => <String, dynamic>{
-        "Fajr": fajr,
-        "Sunrise": sunrise,
-        "Dhuhr": dhuhr,
-        "Asr": asr,
-        "Sunset": sunset,
-        "Maghrib": maghrib,
-        "Isha": isha,
-        "Imsak": imsak,
-        "Midnight": midnight,
-        "Firstthird": firstthird,
-        "Lastthird": lastthird,
+        'Fajr': fajr,
+        'Sunrise': sunrise,
+        'Dhuhr': dhuhr,
+        'Asr': asr,
+        'Sunset': sunset,
+        'Maghrib': maghrib,
+        'Isha': isha,
+        'Imsak': imsak,
+        'Midnight': midnight,
+        'Firstthird': firstthird,
+        'Lastthird': lastthird,
       };
 
   JadwalSholatEntity toEntity() {

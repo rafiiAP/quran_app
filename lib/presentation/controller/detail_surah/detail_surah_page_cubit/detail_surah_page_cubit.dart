@@ -24,9 +24,11 @@ class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
     await storageService.setString(key: 'cacheNamaLatin', value: namaLatin);
     await storageService.setInt(key: 'cacheNomorSurah', value: nomorSurah);
     await storageService.setInt(key: 'cacheNomorAyat', value: nomorAyat);
-    emit(const DetailSurahPageState.actionCompleted(
-      message: 'Berhasil ditandai sebagai bacaan terakhir',
-    ));
+    emit(
+      const DetailSurahPageState.actionCompleted(
+        message: 'Berhasil ditandai sebagai bacaan terakhir',
+      ),
+    );
     emit(const DetailSurahPageState.idle());
   }
 
@@ -36,9 +38,11 @@ class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
   }) async {
     final bool isNew =
         await databaseHelper.insertOrUpdateBookmark(ayat, detail);
-    emit(DetailSurahPageState.actionCompleted(
-      message: isNew ? 'Berhasil disimpan ke bookmark' : 'Data sudah ada',
-    ));
+    emit(
+      DetailSurahPageState.actionCompleted(
+        message: isNew ? 'Berhasil disimpan ke bookmark' : 'Data sudah ada',
+      ),
+    );
     emit(const DetailSurahPageState.idle());
   }
 

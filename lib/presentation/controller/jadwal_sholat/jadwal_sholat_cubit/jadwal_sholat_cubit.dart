@@ -14,10 +14,11 @@ class JadwalSholatCubit extends Cubit<JadwalSholatState> {
 
   final RemoteUsecase usecase;
 
-  void getPosts(
-      {final double latitude = 0.0,
-      final double longitude = 0.0,
-      final String date = ''}) async {
+  void getPosts({
+    final double latitude = 0.0,
+    final double longitude = 0.0,
+    final String date = '',
+  }) async {
     emit(const JadwalSholatState.loading());
 
     final Either<Failure, JadwalSholatEntity> result = await usecase
