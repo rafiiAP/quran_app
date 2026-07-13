@@ -10,10 +10,22 @@ mixin BottomsheetWidget {
     final String? title,
     final bool isScrollControlled = false,
   }) {
+    final BuildContext ctx = navigatorKey.currentContext!;
+
     switch (bottomSheetMode) {
       case BottomSheetMode.message:
-        return Get.bottomSheet(
-          SingleChildScrollView(
+        return showModalBottomSheet(
+          context: ctx,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          backgroundColor: backgroundColor,
+          isDismissible: isDismissible,
+          isScrollControlled: isScrollControlled,
+          builder: (_) => SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -24,37 +36,36 @@ mixin BottomsheetWidget {
                     text: title ?? config.cAppName,
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
-                    color: C.isDark(Get.context!)
-                        ? colorConfig.white
-                        : colorConfig.black,
+                    color:
+                        C.isDark(ctx) ? colorConfig.white : colorConfig.black,
                   ),
                   W.textBody(
                     text:
                         "${C.datetime()} VAP: ${config.cAppVersion} (${config.nAppVersion})",
-                    color: C.isDark(Get.context!)
-                        ? colorConfig.white
-                        : colorConfig.black,
+                    color:
+                        C.isDark(ctx) ? colorConfig.white : colorConfig.black,
                     fontSize: 14,
                   ),
-                  Divider(
-                    color: colorConfig.grey,
-                  ),
+                  Divider(color: colorConfig.grey),
                   bottomSheet ?? Container(),
                 ],
               ),
             ),
           ),
+        );
+      case BottomSheetMode.loading:
+        return showModalBottomSheet(
+          context: ctx,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
           ),
           backgroundColor: backgroundColor,
           isDismissible: isDismissible,
           isScrollControlled: isScrollControlled,
-        );
-      case BottomSheetMode.loading:
-        return Get.bottomSheet(
-          Container(
+          builder: (_) => Container(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -68,9 +79,7 @@ mixin BottomsheetWidget {
                 W.textBody(
                   text:
                       "DT: ${C.datetime()} VAP: ${config.cAppVersion} (${config.nAppVersion})",
-                  color: C.isDark(Get.context!)
-                      ? colorConfig.white
-                      : colorConfig.black,
+                  color: C.isDark(ctx) ? colorConfig.white : colorConfig.black,
                   fontSize: 14,
                 ),
                 const Divider(),
@@ -80,13 +89,9 @@ mixin BottomsheetWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      CircularProgressIndicator(
-                        color: colorConfig.primary,
-                      ),
+                      CircularProgressIndicator(color: colorConfig.primary),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16.0,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: W.textBody(
                           text: cLoadingMessage,
                           fontWeight: FontWeight.w600,
@@ -99,24 +104,20 @@ mixin BottomsheetWidget {
               ],
             ),
           ),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-          ),
-          backgroundColor: backgroundColor,
-          isDismissible: isDismissible,
-          isScrollControlled: isScrollControlled,
         );
       case BottomSheetMode.defaultSheet:
-        return Get.bottomSheet(
-          bottomSheet ?? Container(),
+        return showModalBottomSheet(
+          context: ctx,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
           ),
           backgroundColor: backgroundColor,
           isDismissible: isDismissible,
           isScrollControlled: isScrollControlled,
+          builder: (_) => bottomSheet ?? Container(),
         );
     }
   }
@@ -124,24 +125,21 @@ mixin BottomsheetWidget {
   Future<void> messageInfo({
     required final String message,
   }) {
+    final BuildContext ctx = navigatorKey.currentContext!;
     return showBottomSheet(
       isScrollControlled: true,
       backgroundColor:
-          C.isDark(Get.context!) ? colorConfig.background : colorConfig.white,
+          C.isDark(ctx) ? colorConfig.background : colorConfig.white,
       bottomSheetMode: BottomSheetMode.message,
       bottomSheet: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: W.textBody(
               text: message,
               fontSize: 16,
-              color: C.isDark(Get.context!)
-                  ? colorConfig.white
-                  : colorConfig.black,
+              color: C.isDark(ctx) ? colorConfig.white : colorConfig.black,
             ),
           ),
           const Divider(),
@@ -149,7 +147,7 @@ mixin BottomsheetWidget {
             width: double.infinity,
             child: W.button(
               onPressed: () {
-                C.back();
+                Navigator.of(navigatorKey.currentContext!).pop();
               },
               child: W.textBody(
                 text: "OKE",
@@ -166,9 +164,10 @@ mixin BottomsheetWidget {
   Future<void> wait({
     final String? message,
   }) {
+    final BuildContext ctx = navigatorKey.currentContext!;
     return showBottomSheet(
       backgroundColor:
-          C.isDark(Get.context!) ? colorConfig.background : colorConfig.white,
+          C.isDark(ctx) ? colorConfig.background : colorConfig.white,
       bottomSheetMode: BottomSheetMode.loading,
       cLoadingMessage: message ?? "Mohon tunggu...",
       isDismissible: false,
@@ -176,5 +175,5 @@ mixin BottomsheetWidget {
     );
   }
 
-  void endwait() => C.back();
+  void endwait() => Navigator.of(navigatorKey.currentContext!).pop();
 }

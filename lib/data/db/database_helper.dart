@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
 import 'package:quran_app/domain/entity/detail_entity.dart';
@@ -41,7 +40,8 @@ class DatabaseHelper {
   }
 
   // Insert data into tables
-  void insertOrUpdateBookmark(final AyatDetailEntity ayatDetailEntity,
+  // Returns true if inserted (new), false if already exists (duplicate)
+  Future<bool> insertOrUpdateBookmark(final AyatDetailEntity ayatDetailEntity,
       final DetailEntity detailEntity) async {
     final Database dbClient = await db;
 
@@ -65,10 +65,9 @@ class DatabaseHelper {
           "teks_latin": ayatDetailEntity.teksLatin,
         },
       );
-      Get.snackbar('Sukses', 'Data berhasil disimpan');
-    } else {
-      Get.snackbar('Oops', 'Data sudah ada');
+      return true;
     }
+    return false;
   }
 
   // Get all data from tables
@@ -83,7 +82,7 @@ class DatabaseHelper {
         maps.length, (final int index) => BookmarkModel.fromMap(maps[index]));
   }
 
-  void deleteBookmark(final String teksIndonesia) async {
+  Future<void> deleteBookmark(final String teksIndonesia) async {
     final Database dbClient = await db;
 
     // Hapus data berdasarkan nama_latin

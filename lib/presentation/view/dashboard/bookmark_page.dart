@@ -1,134 +1,190 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
-import 'package:quran_app/presentation/controller/dashboard/bookmark_getx.dart';
-import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
+import 'package:quran_app/presentation/controller/dashboard/bookmark_cubit/bookmark_cubit.dart';
 
-class BookmarkPage extends StatelessWidget {
-  BookmarkPage({super.key});
+class BookmarkPage extends StatefulWidget {
+  const BookmarkPage({super.key});
 
-  final c = Get.put(BookmarkGetx());
+  @override
+  State<BookmarkPage> createState() => _BookmarkPageState();
+}
+
+class _BookmarkPageState extends State<BookmarkPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<BookmarkCubit>().loadBookmarks();
+  }
 
   @override
   Widget build(BuildContext context) {
-    c.init();
-    return BlocListener<DetailSurahCubit, DetailSurahState>(
+    return BlocConsumer<BookmarkCubit, BookmarkState>(
       listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
-          loading: () => W.wait(),
-          error: (message) {
-            W.endwait();
-            W.messageInfo(message: message);
+          navigateToDetail: (nomorSurah, nomorAyat) {
+            context.push('/detail-surah/$nomorSurah?ayat=$nomorAyat').then((_) {
+              if (context.mounted) {
+                context.read<BookmarkCubit>().loadBookmarks();
+              }
+            });
           },
-          success: (detailModel) => c.onSuccesDetailSurah(detailModel),
         );
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: W.title(text: 'Bookmark'),
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-        ),
-        body: Obx(
-          () => ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: c.bookmarks.value.length,
-            itemBuilder: (context, index) {
-              BookmarkModel bookmarkModel = c.bookmarks.value[index];
-              return InkWell(
-                onTap: () {
-                  c.getDetailSurah(bookmarkModel);
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: C.isDark(context)
-                            ? colorConfig.bgBottom
-                            : colorConfig.lightGrey.withValues(alpha: 0.4),
-                        borderRadius: BorderRadius.circular(16),
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: W.title(text: 'Bookmark'),
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+          ),
+          body: state.maybeWhen(
+            orElse: () => const SizedBox.shrink(),
+            loading: () => ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: 5,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: W.shimmer(width: double.infinity, height: 120),
+              ),
+            ),
+            loaded: (bookmarks) {
+              if (bookmarks.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.bookmark_border,
+                        size: 64,
+                        color: colorConfig.grey,
                       ),
-                      child: Row(
-                        children: [
-                          W.textBody(
-                            text:
-                                '${bookmarkModel.namaLatin} : ${bookmarkModel.nomorSurah}',
-                            fontWeight: FontWeight.w500,
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              c.onTapShare(bookmarkModel);
-                            },
-                            child: Icon(
-                              Icons.share,
-                              color: colorConfig.primary,
-                            ),
-                          ),
-                          W.paddingWidtht8(),
-                          GestureDetector(
-                            onTap: () {
-                              c.onTapDelete(bookmarkModel);
-                            },
-                            child: Icon(
-                              Icons.delete_outline,
-                              color: colorConfig.primary,
-                            ),
-                          ),
-                          W.paddingWidtht8(),
-                        ],
+                      W.paddingheight16(),
+                      W.textBody(
+                        text: 'Belum ada bookmark',
+                        color: colorConfig.grey,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              bookmarkModel.teksArab,
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                height: 2,
+                    ],
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: bookmarks.length,
+                itemBuilder: (context, index) {
+                  final BookmarkModel bookmark = bookmarks[index];
+                  return InkWell(
+                    onTap: () {
+                      context.read<BookmarkCubit>().navigateToDetail(bookmark);
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: C.isDark(context)
+                                ? colorConfig.bgBottom
+                                : colorConfig.lightGrey.withValues(alpha: 0.4),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Row(
+                            children: [
+                              W.textBody(
+                                text:
+                                    '${bookmark.namaLatin} : ${bookmark.nomorSurah}',
+                                fontWeight: FontWeight.w500,
                               ),
-                              textAlign: TextAlign.end,
-                            ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () async {
+                                  final copyText = context
+                                      .read<BookmarkCubit>()
+                                      .formatCopyText(bookmark);
+                                  await Clipboard.setData(
+                                    ClipboardData(text: copyText),
+                                  );
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Berhasil disalin'),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.share,
+                                  color: colorConfig.primary,
+                                ),
+                              ),
+                              W.paddingWidtht8(),
+                              GestureDetector(
+                                onTap: () {
+                                  context
+                                      .read<BookmarkCubit>()
+                                      .deleteBookmark(bookmark);
+                                },
+                                child: Icon(
+                                  Icons.delete_outline,
+                                  color: colorConfig.primary,
+                                ),
+                              ),
+                              W.paddingWidtht8(),
+                            ],
                           ),
-                          W.paddingheight16(),
-                          Text(
-                            '${bookmarkModel.teksLatin} (${bookmarkModel.nomorAyat})',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontStyle: FontStyle.italic,
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  bookmark.teksArab,
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    height: 2,
+                                  ),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              W.paddingheight16(),
+                              Text(
+                                '${bookmark.teksLatin} (${bookmark.nomorAyat})',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                              W.paddingheight5(),
+                              W.textBody(
+                                text:
+                                    '${bookmark.teksIndonesia} (${bookmark.nomorAyat})',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              W.paddingheight16(),
+                              Divider(color: colorConfig.grey),
+                            ],
                           ),
-                          W.paddingheight5(),
-                          W.textBody(
-                            text:
-                                '${bookmarkModel.teksIndonesia} (${bookmarkModel.nomorAyat})',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          W.paddingheight16(),
-                          Divider(color: colorConfig.grey),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               );
             },
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

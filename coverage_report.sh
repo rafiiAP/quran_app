@@ -59,13 +59,9 @@ lcov --remove coverage/lcov.info \
   'lib/data/datasources/datasource_impl/*' \
   'lib/data/db/*' \
   \
-  `# === GetX controllers (method yang butuh Get.context / platform) ===` \
-  'lib/presentation/controller/dashboard/home_getx.dart' \
-  'lib/presentation/controller/dashboard/bookmark_getx.dart' \
-  'lib/presentation/controller/dashboard/dashboard_getx.dart' \
-  'lib/presentation/controller/detail_surah/detail_surah_getx.dart' \
-  'lib/presentation/controller/jadwal_sholat/jadwal_sholat_getx.dart' \
-  'lib/presentation/controller/serach/search_getx.dart' \
+  `# === Router / navigator config (platform-dependent redirect logic) ===` \
+  'lib/presentation/router/app_router.dart' \
+  'lib/components/navigator_key.dart' \
   \
   `# === Konstanta UI (color, image — hanya dipakai saat render) ===` \
   'lib/data/constant/color.dart' \

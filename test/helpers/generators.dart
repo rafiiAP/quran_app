@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:quran_app/data/model/bookmark_model.dart';
 import 'package:quran_app/data/model/detail_model.dart';
 import 'package:quran_app/data/model/jadwal_sholat_model.dart';
 import 'package:quran_app/data/model/surah_model.dart';
@@ -65,6 +66,21 @@ DetailModel generateRandomDetailModel() {
     audioFull: _randomAudioMap(),
     ayat: List.generate(ayatCount, (_) => _generateRandomAyatDetailModel()),
   );
+}
+
+BookmarkModel generateRandomBookmarkModel() {
+  return BookmarkModel(
+    nomorSurah: _randomInt(min: 1, max: 114),
+    namaLatin: _randomString(10),
+    nomorAyat: _randomInt(min: 1, max: 286),
+    teksArab: _randomString(20),
+    teksIndonesia: _randomString(30),
+    teksLatin: _randomString(25),
+  );
+}
+
+List<BookmarkModel> generateRandomBookmarkList(int size) {
+  return List.generate(size, (_) => generateRandomBookmarkModel());
 }
 
 JadwalSholatModel generateRandomJadwalSholatModel() {

@@ -1,8 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
-class SetNotifModel {
-  SetNotifModel({
+class SetNotifModel extends Equatable {
+  const SetNotifModel({
     required this.iconsax,
     required this.hour,
     required this.minute,
@@ -16,5 +16,33 @@ class SetNotifModel {
   final int minute;
   final String title;
   final String body;
-  RxBool isAlarmSet = false.obs;
+  final bool isAlarmSet;
+
+  SetNotifModel copyWith({
+    IconData? iconsax,
+    int? hour,
+    int? minute,
+    String? title,
+    String? body,
+    bool? isAlarmSet,
+  }) {
+    return SetNotifModel(
+      iconsax: iconsax ?? this.iconsax,
+      hour: hour ?? this.hour,
+      minute: minute ?? this.minute,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      isAlarmSet: isAlarmSet ?? this.isAlarmSet,
+    );
+  }
+
+  @override
+  List<Object?> get props => <Object?>[
+        iconsax,
+        hour,
+        minute,
+        title,
+        body,
+        isAlarmSet,
+      ];
 }

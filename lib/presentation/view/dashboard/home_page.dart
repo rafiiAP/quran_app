@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
@@ -9,142 +8,143 @@ import 'package:quran_app/data/constant/config.dart';
 import 'package:quran_app/data/constant/image.dart';
 import 'package:quran_app/domain/entity/surah_entity.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_cubit/get_surah_cubit.dart';
-import 'package:quran_app/presentation/controller/dashboard/home_getx.dart';
-import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
+import 'package:quran_app/presentation/controller/dashboard/home_cubit/home_cubit.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final c = Get.put(HomeGetx());
-    // C.scheduleNotification(1, 15, 04,
-    //     body: 'halo hai', title: 'haloo apakah bisa');
-    // C.checkScheduledNotifications();
-    // c.init();
-    return ShowCaseWidget(builder: (context) {
-      return Scaffold(
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          title: W.title(text: 'Quran App'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                c.toSearchPage();
-              },
-              icon: const Icon(
-                CupertinoIcons.search_circle,
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: Showcase(
-          key: c.helpKey,
-          description: 'Ketuk untuk menampilkan panduan',
-          child: FloatingActionButton(
-            child: const Icon(Icons.help_outline_rounded),
-            onPressed: () {
-              C.showCase(
-                context: context,
-                cacheKey: config.cacheShowCase,
-                keys: [c.tandaiKey],
-                isShowHelp: true,
-              );
-            },
-          ),
-        ),
-        body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: ListView(
-                children: [
-                  // W.textBody(
-                  //   text: "Assalamu'alaikum",
-                  //   color: colorConfig.grey,
-                  //   fontSize: 18,
-                  //   fontWeight: FontWeight.w500,
-                  // ),
-                  // W.paddingheight5(),
-                  // W.textBody(
-                  //   text: 'RAF',
-                  //   fontSize: 24,
-                  //   fontWeight: FontWeight.w600,
-                  // ),
-                  W.paddingheight16(),
-                  cardLastRead(c),
-                  W.paddingheight16(),
-                  W.paddingheight16(),
-                  BlocConsumer<GetSurahCubit, GetSurahState>(
-                    listener: (context, state) {
-                      state.maybeWhen(
-                          orElse: () {},
-                          error: (message) => W.messageInfo(message: message),
-                          success: (surah) => c.onSuccesGetSurah(surah));
-                    },
-                    builder: (context, state) {
-                      return state.maybeWhen(
-                        orElse: () {
-                          return Container();
-                        },
-                        loading: () {
-                          return ListView.builder(
-                            itemCount: 10,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return loadList(c);
-                            },
-                          );
-                        },
-                        success: (surah) {
-                          return BlocListener<DetailSurahCubit,
-                              DetailSurahState>(
-                            listener: (context, state) {
-                              state.maybeWhen(
-                                orElse: () {},
-                                error: (message) {
-                                  W.messageInfo(message: message);
-                                },
-                                loading: () => W.wait(),
-                                success: (detailModel) =>
-                                    c.onSuccesDetailSurah(detailModel),
-                              );
-                            },
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: surah.length,
-                              itemBuilder: (context, index) {
-                                SurahEntity surahEntity = surah[index];
-                                return listSurah(c, surahEntity);
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
-            Builder(
-              builder: (context) {
-                C.showCase(
-                    context: context,
-                    cacheKey: config.cacheShowCase,
-                    keys: [c.helpKey, c.tandaiKey]);
-                return const SizedBox.shrink();
-              },
-            ) // return widget kosong
-          ],
-        ),
-      );
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey tandaiKey = GlobalKey();
+  final GlobalKey helpKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    // Trigger surah list fetch on page load
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<GetSurahCubit>().getPosts();
+      }
     });
   }
 
-  loadList(HomeGetx c) {
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<GetSurahCubit, GetSurahState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          orElse: () {},
+          error: (message) => W.messageInfo(message: message),
+          success: (surah) => context.read<HomeCubit>().setSurahList(surah),
+        );
+      },
+      child: BlocConsumer<HomeCubit, HomeState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            orElse: () {},
+            navigateToDetail: (nomorSurah, indexTandai) {
+              final route = indexTandai != null
+                  ? '/detail-surah/$nomorSurah?ayat=$indexTandai'
+                  : '/detail-surah/$nomorSurah';
+              context.push(route).then((_) {
+                if (context.mounted) {
+                  context.read<HomeCubit>().refreshLastRead();
+                }
+              });
+            },
+            showMessage: (message) => W.messageInfo(message: message),
+          );
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              scrolledUnderElevation: 0,
+              title: W.title(text: 'Quran App'),
+              actions: [
+                IconButton(
+                  onPressed: () => context.push('/search'),
+                  icon: const Icon(Icons.search_rounded),
+                ),
+              ],
+            ),
+            floatingActionButton: Showcase(
+              key: helpKey,
+              description: 'Ketuk untuk menampilkan panduan',
+              child: FloatingActionButton(
+                child: const Icon(Icons.help_outline_rounded),
+                onPressed: () {
+                  C.showCase(
+                    context: context,
+                    cacheKey: config.cacheShowCase,
+                    keys: [tandaiKey],
+                    isShowHelp: true,
+                  );
+                },
+              ),
+            ),
+            body: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: ListView(
+                    children: [
+                      W.paddingheight16(),
+                      _cardLastRead(context, state),
+                      W.paddingheight16(),
+                      W.paddingheight16(),
+                      _buildSurahList(context, state),
+                    ],
+                  ),
+                ),
+                Builder(
+                  builder: (innerContext) {
+                    C.showCase(
+                      context: innerContext,
+                      cacheKey: config.cacheShowCase,
+                      keys: [helpKey, tandaiKey],
+                    );
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSurahList(BuildContext context, HomeState state) {
+    return BlocBuilder<GetSurahCubit, GetSurahState>(
+      builder: (context, getSurahState) {
+        return getSurahState.maybeWhen(
+          orElse: () => Container(),
+          loading: () => ListView.builder(
+            itemCount: 10,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => _loadList(),
+          ),
+          success: (surah) => ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: surah.length,
+            itemBuilder: (context, index) {
+              final surahEntity = surah[index];
+              return _listSurah(context, surahEntity);
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _loadList() {
     return Column(
       children: [
         W.paddingheight5(),
@@ -160,7 +160,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     W.shimmer(width: 200, height: 15),
                     W.paddingheight5(),
-                    W.shimmer(width: 200, height: 15)
+                    W.shimmer(width: 200, height: 15),
                   ],
                 ),
               ],
@@ -169,21 +169,30 @@ class HomePage extends StatelessWidget {
           ],
         ),
         W.paddingheight5(),
-        Divider(
-          color: colorConfig.grey,
-        ),
+        Divider(color: colorConfig.grey),
       ],
     );
   }
 
-  cardLastRead(HomeGetx c) {
+  Widget _cardLastRead(BuildContext context, HomeState state) {
+    final String namaLatin = state.maybeWhen(
+      orElse: () => '',
+      loaded: (namaLatin, _, __, ___) => namaLatin,
+    );
+    final int nomorSurah = state.maybeWhen(
+      orElse: () => 0,
+      loaded: (_, nomorSurah, __, ___) => nomorSurah,
+    );
+    final int nomorAyat = state.maybeWhen(
+      orElse: () => 0,
+      loaded: (_, __, nomorAyat, ___) => nomorAyat,
+    );
+
     return Showcase(
-      key: c.tandaiKey,
+      key: tandaiKey,
       description: 'Ketuk untuk ke halaman bacaan terakhir',
       child: InkWell(
-        onTap: () {
-          c.toLastRead(index: c.nNomorSurah.value);
-        },
+        onTap: () => context.read<HomeCubit>().toLastRead(),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -212,22 +221,18 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                     W.paddingheight16(),
-                    Obx(
-                      () => W.textBody(
-                        text: c.cNamaLatin.value,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: colorConfig.white,
-                      ),
+                    W.textBody(
+                      text: namaLatin,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: colorConfig.white,
                     ),
                     W.paddingheight5(),
-                    Obx(
-                      () => W.textBody(
-                        text:
-                            'Surah : ${c.nNomorSurah.value == 0 ? '-' : c.nNomorSurah.value} , Ayat : ${c.nNomorAyat.value == 0 ? '-' : c.nNomorAyat.value}',
-                        color: colorConfig.white,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    W.textBody(
+                      text:
+                          'Surah : ${nomorSurah == 0 ? '-' : nomorSurah} , Ayat : ${nomorAyat == 0 ? '-' : nomorAyat}',
+                      color: colorConfig.white,
+                      fontWeight: FontWeight.w500,
                     ),
                   ],
                 ),
@@ -237,7 +242,7 @@ class HomePage extends StatelessWidget {
                 bottom: -30,
                 child: Image.asset(
                   imageConfig.quran,
-                  width: C.getWidth() * 0.5,
+                  width: MediaQuery.sizeOf(context).width * 0.5,
                 ),
               ),
             ],
@@ -247,11 +252,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  listSurah(HomeGetx c, SurahEntity surahEntity) {
+  Widget _listSurah(BuildContext context, SurahEntity surahEntity) {
     return InkWell(
-      onTap: () {
-        c.getDetailSurah(surahEntity);
-      },
+      onTap: () => context.read<HomeCubit>().getDetailSurah(surahEntity),
       borderRadius: BorderRadius.circular(15),
       child: Column(
         children: [
@@ -268,9 +271,7 @@ class HomePage extends StatelessWidget {
                       height: 40,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(
-                            imageConfig.borderNum,
-                          ),
+                          image: AssetImage(imageConfig.borderNum),
                         ),
                       ),
                       child: Align(
@@ -313,9 +314,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
           W.paddingheight5(),
-          Divider(
-            color: colorConfig.grey,
-          ),
+          Divider(color: colorConfig.grey),
         ],
       ),
     );

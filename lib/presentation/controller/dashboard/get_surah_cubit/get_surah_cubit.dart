@@ -14,6 +14,9 @@ class GetSurahCubit extends Cubit<GetSurahState> {
   final RemoteUsecase quranUsecase;
 
   void getPosts() async {
+    // Skip jika data sudah ada — mencegah re-fetch saat tab navigation
+    if (state is _Success) return;
+
     emit(const GetSurahState.loading());
 
     final Either<Failure, List<SurahEntity>> result =

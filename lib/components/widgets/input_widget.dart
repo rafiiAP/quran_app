@@ -64,17 +64,21 @@ mixin InputWidget {
         isDense: isDense,
         prefixIcon: prefixIcon,
         prefixStyle: GoogleFonts.poppins(
-          textStyle: Get.textTheme.titleLarge!.copyWith(
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            letterSpacing: letterSpacing,
-            color: color,
-          ),
+          textStyle: Theme.of(navigatorKey.currentContext!)
+              .textTheme
+              .titleLarge!
+              .copyWith(
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+                letterSpacing: letterSpacing,
+                color: color,
+              ),
         ),
 
         // fillColor: Color(0xFFeeeef8),
-        fillColor:
-            C.isDark(Get.context!) ? colorConfig.bgBottom : colorConfig.white,
+        fillColor: C.isDark(navigatorKey.currentContext!)
+            ? colorConfig.bgBottom
+            : colorConfig.white,
         labelText: labelText,
         contentPadding: contentPadding ??
             const EdgeInsets.symmetric(
@@ -112,30 +116,39 @@ mixin InputWidget {
         prefixText: prefixText,
         hintText: hintText,
         hintStyle: GoogleFonts.poppins(
-          textStyle: Get.textTheme.bodyMedium!.copyWith(
-            fontWeight: FontWeight.bold,
-            color: colorConfig.grey.withValues(alpha: 0.4),
-          ),
+          textStyle: Theme.of(navigatorKey.currentContext!)
+              .textTheme
+              .bodyMedium!
+              .copyWith(
+                fontWeight: FontWeight.bold,
+                color: colorConfig.grey.withValues(alpha: 0.4),
+              ),
         ),
         labelStyle: labelText == null
             ? null
             : GoogleFonts.poppins(
-                textStyle: Get.textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colorConfig.grey.withValues(alpha: 0.4),
-                ),
+                textStyle: Theme.of(navigatorKey.currentContext!)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorConfig.grey.withValues(alpha: 0.4),
+                    ),
               ),
 
         suffixIcon: suffixIcon,
         errorMaxLines: 3,
       ),
       style: GoogleFonts.poppins(
-        textStyle: Get.textTheme.bodyMedium!.copyWith(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          letterSpacing: letterSpacing,
-          color: color,
-        ),
+        textStyle: Theme.of(navigatorKey.currentContext!)
+            .textTheme
+            .bodyMedium!
+            .copyWith(
+              fontSize: fontSize,
+              fontWeight: fontWeight,
+              letterSpacing: letterSpacing,
+              color: color,
+            ),
       ),
       controller: controller,
       initialValue: initialValue,

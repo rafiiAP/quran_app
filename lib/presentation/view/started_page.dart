@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:quran_app/components/function/main_function.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quran_app/components/widgets/main_widget.dart';
 import 'package:quran_app/data/constant/color.dart';
+import 'package:quran_app/data/constant/config.dart';
 import 'package:quran_app/data/constant/image.dart';
-import 'package:quran_app/presentation/view/dashboard/dashboard_page.dart';
+import 'package:quran_app/data/datasources/local_storage_service.dart';
+import 'package:quran_app/injection.dart';
 
 class StartedPage extends StatelessWidget {
   const StartedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.sizeOf(context).width;
+    final double screenHeight = MediaQuery.sizeOf(context).height;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(25),
@@ -30,12 +35,12 @@ class StartedPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: C.getHeight() * 0.05,
+              height: screenHeight * 0.05,
             ),
             Container(
               clipBehavior: Clip.none,
-              height: C.getHeight() * 0.5,
-              width: C.getWidth(),
+              height: screenHeight * 0.5,
+              width: screenWidth,
               decoration: BoxDecoration(
                 color: colorConfig.primary,
                 borderRadius: BorderRadius.circular(30),
@@ -50,10 +55,10 @@ class StartedPage extends StatelessWidget {
                 children: [
                   Positioned(
                     bottom: 0,
-                    top: C.getHeight() * 0.13,
+                    top: screenHeight * 0.13,
                     child: Image.asset(
                       imageConfig.quran,
-                      width: C.getWidth() * 0.7,
+                      width: screenWidth * 0.7,
                     ),
                   ),
                   Positioned(
@@ -63,7 +68,11 @@ class StartedPage extends StatelessWidget {
                           horizontal: 32, vertical: 16),
                       backgroundColor: colorConfig.white,
                       onPressed: () {
-                        C.offAll(() => DashboardPage());
+                        locator<LocalStorageService>().setBool(
+                          key: config.cacheStarted,
+                          value: true,
+                        );
+                        context.go('/home');
                       },
                       child: W.textBody(
                         text: 'Get Started',

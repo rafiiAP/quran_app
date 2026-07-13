@@ -7,17 +7,39 @@ import 'package:quran_app/data/constant/config.dart';
 import 'package:quran_app/data/constant/image.dart';
 import 'package:quran_app/data/datasources/crash_reporter.dart';
 import 'package:quran_app/data/datasources/datasource_impl/firebase_crash_reporter.dart';
+import 'package:quran_app/data/datasources/datasource_impl/flutter_notification_service.dart';
 import 'package:quran_app/data/datasources/datasource_impl/main_http_client.dart';
+import 'package:quran_app/data/datasources/datasource_impl/shared_preferences_storage_service.dart';
 import 'package:quran_app/data/datasources/http_client.dart';
+import 'package:quran_app/data/datasources/local_storage_service.dart';
+import 'package:quran_app/data/datasources/notification_service.dart';
 import 'package:quran_app/data/datasources/remote_datasource/remote_datasource.dart';
 import 'package:quran_app/data/db/database_helper.dart';
 import 'package:quran_app/data/repositories_impl/remote_repository_impl.dart';
 import 'package:quran_app/domain/repositories/remote_repository.dart';
 import 'package:quran_app/domain/use_case/remote_usecase.dart';
+import 'package:quran_app/presentation/router/app_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt locator = GetIt.instance;
 
-void setup() {
+Future<void> setup() async {
+  // local storage — SharedPreferences requires async init
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  locator.registerLazySingleton<LocalStorageService>(
+    () => SharedPreferencesStorageService(prefs: prefs),
+  );
+
+  // notification service
+  locator.registerLazySingleton<NotificationService>(
+    FlutterNotificationService.new,
+  );
+
+  // router
+  locator.registerLazySingleton<AppRouter>(
+    () => AppRouter(storageService: locator()),
+  );
+
   // usecase
   locator.registerLazySingleton(() => RemoteUsecase(locator()));
 

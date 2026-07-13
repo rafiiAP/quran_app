@@ -16,23 +16,24 @@ mixin TextWidget {
     final Color? underlineColor,
     final FontStyle? fontStyle,
   }) {
+    final BuildContext ctx = navigatorKey.currentContext!;
     return Text(
       text,
       style: GoogleFonts.poppins(
-        textStyle: Get.textTheme.bodyMedium!.copyWith(
-          decoration: textDecoration,
-          decorationColor: underlineColor,
-          color: color ??
-              (Theme.of(Get.context!).brightness == Brightness.dark
-                  ? colorConfig.white
-                  : colorConfig.black),
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          shadows: shadows,
-          height: textHeight,
-          letterSpacing: letterSpacing,
-          fontStyle: fontStyle,
-        ),
+        textStyle: Theme.of(ctx).textTheme.bodyMedium!.copyWith(
+              decoration: textDecoration,
+              decorationColor: underlineColor,
+              color: color ??
+                  (Theme.of(ctx).brightness == Brightness.dark
+                      ? colorConfig.white
+                      : colorConfig.black),
+              fontSize: fontSize,
+              fontWeight: fontWeight,
+              shadows: shadows,
+              height: textHeight,
+              letterSpacing: letterSpacing,
+              fontStyle: fontStyle,
+            ),
       ),
       textAlign: textAlign,
       maxLines: maxLines,
@@ -54,23 +55,24 @@ mixin TextWidget {
     final Color? underlineColor,
     final FontStyle? fontStyle,
   }) {
+    final BuildContext ctx = navigatorKey.currentContext!;
     return Text(
       text,
       style: GoogleFonts.poppins(
-        textStyle: Get.textTheme.bodyMedium!.copyWith(
-          decoration: textDecoration,
-          decorationColor: underlineColor,
-          color: color ??
-              (Theme.of(Get.context!).brightness == Brightness.dark
-                  ? colorConfig.white
-                  : colorConfig.black),
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          shadows: shadows,
-          height: textHeight,
-          letterSpacing: letterSpacing,
-          fontStyle: fontStyle,
-        ),
+        textStyle: Theme.of(ctx).textTheme.bodyMedium!.copyWith(
+              decoration: textDecoration,
+              decorationColor: underlineColor,
+              color: color ??
+                  (Theme.of(ctx).brightness == Brightness.dark
+                      ? colorConfig.white
+                      : colorConfig.black),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              shadows: shadows,
+              height: textHeight,
+              letterSpacing: letterSpacing,
+              fontStyle: fontStyle,
+            ),
       ),
       textAlign: textAlign,
       maxLines: maxLines,

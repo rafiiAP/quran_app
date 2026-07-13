@@ -4,25 +4,29 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:quran_app/components/function/main_function.dart';
 import 'package:quran_app/components/style.dart';
 import 'package:quran_app/data/db/database_helper.dart';
 import 'package:quran_app/domain/use_case/remote_usecase.dart';
 import 'package:quran_app/firebase_options.dart';
 import 'package:quran_app/injection.dart';
-import 'package:quran_app/main_getx.dart';
+import 'package:quran_app/presentation/controller/dashboard/bookmark_cubit/bookmark_cubit.dart';
+import 'package:quran_app/presentation/controller/dashboard/dashboard_cubit/dashboard_cubit.dart';
 import 'package:quran_app/presentation/controller/dashboard/get_surah_cubit/get_surah_cubit.dart';
+import 'package:quran_app/presentation/controller/dashboard/home_cubit/home_cubit.dart';
 import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
 import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
+import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_page_cubit/jadwal_sholat_page_cubit.dart';
+import 'package:quran_app/presentation/controller/detail_surah/detail_surah_page_cubit/detail_surah_page_cubit.dart';
+import 'package:quran_app/presentation/controller/search/search_cubit/search_cubit.dart';
+import 'package:quran_app/presentation/router/app_router.dart';
 
 import 'injection.dart' as di;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  di.setup();
+  await di.setup();
   await dotenv.load(fileName: ".env");
 
   await Firebase.initializeApp(
@@ -46,17 +50,14 @@ Future<void> main() async {
   await C.initLocalNotif();
 
   await databaseHelper.db;
-  await GetStorage.init();
 
   style.setSystemUIOverlay();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final MainGetx _c = Get.put(MainGetx());
+  const MyApp({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -73,15 +74,42 @@ class MyApp extends StatelessWidget {
         BlocProvider<JadwalSholatCubit>(
           create: (final BuildContext context) =>
               JadwalSholatCubit(usecase: di.locator<RemoteUsecase>()),
-        )
+        ),
+        BlocProvider<DashboardCubit>(
+          create: (final BuildContext context) =>
+              DashboardCubit(storageService: di.locator()),
+        ),
+        BlocProvider<HomeCubit>(
+          create: (final BuildContext context) =>
+              HomeCubit(storageService: di.locator()),
+        ),
+        BlocProvider<BookmarkCubit>(
+          create: (final BuildContext context) =>
+              BookmarkCubit(databaseHelper: di.locator()),
+        ),
+        BlocProvider<SearchCubit>(
+          create: (final BuildContext context) => SearchCubit(),
+        ),
+        BlocProvider<DetailSurahPageCubit>(
+          create: (final BuildContext context) => DetailSurahPageCubit(
+            storageService: di.locator(),
+            databaseHelper: di.locator(),
+          ),
+        ),
+        BlocProvider<JadwalSholatPageCubit>(
+          create: (final BuildContext context) => JadwalSholatPageCubit(
+            storageService: di.locator(),
+            notificationService: di.locator(),
+          ),
+        ),
       ],
-      child: GetMaterialApp(
+      child: MaterialApp.router(
         title: 'Quran App',
         theme: style.light,
         darkTheme: style.dark,
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
-        home: _c.page,
+        routerConfig: locator<AppRouter>().router,
       ),
     );
   }
