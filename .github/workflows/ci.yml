@@ -1,7 +1,33 @@
-- name: Run SonarQube Scanner
-  run: |
-    sonar-scanner \
-      -Dsonar.projectKey=Quran-App \
-      -Dsonar.sources=lib \
-      -Dsonar.host.url=http://localhost:9000 \
-      -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+
+      - run: flutter pub get
+
+      - run: flutter analyze
+
+      - run: flutter test --coverage
+
+      - name: Coverage gate
+        run: |
+          bash coverage_report.sh
+          COVERAGE=$(lcov --summary coverage/lcov_filtered.info 2>&1 | grep "lines" | grep -oP '\d+\.\d+')
+          if (( $(echo "$COVERAGE < 90.0" | bc -l) )); then
+            echo "Coverage $COVERAGE% is below 90% threshold"
+            exit 1
+          fi
