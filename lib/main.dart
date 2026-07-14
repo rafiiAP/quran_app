@@ -5,24 +5,21 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quran_app/components/function/main_function.dart';
-import 'package:quran_app/components/style.dart';
-import 'package:quran_app/data/db/database_helper.dart';
-import 'package:quran_app/domain/use_case/remote_usecase.dart';
+import 'package:quran_app/core/style.dart';
+import 'package:quran_app/core/services/crash_reporter.dart';
+import 'package:quran_app/core/services/flutter_notification_service.dart';
+import 'package:quran_app/core/services/permission_service.dart';
+import 'package:quran_app/core/storage/database_helper.dart';
+import 'package:quran_app/features/surah/domain/usecases/get_surah_usecase.dart';
 import 'package:quran_app/firebase_options.dart';
-import 'package:quran_app/injection.dart';
-import 'package:quran_app/presentation/controller/dashboard/bookmark_cubit/bookmark_cubit.dart';
-import 'package:quran_app/presentation/controller/dashboard/dashboard_cubit/dashboard_cubit.dart';
-import 'package:quran_app/presentation/controller/dashboard/get_surah_cubit/get_surah_cubit.dart';
-import 'package:quran_app/presentation/controller/dashboard/home_cubit/home_cubit.dart';
-import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
-import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
-import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_page_cubit/jadwal_sholat_page_cubit.dart';
-import 'package:quran_app/presentation/controller/detail_surah/detail_surah_page_cubit/detail_surah_page_cubit.dart';
-import 'package:quran_app/presentation/controller/search/search_cubit/search_cubit.dart';
-import 'package:quran_app/presentation/router/app_router.dart';
-
-import 'injection.dart' as di;
+import 'package:quran_app/core/di/injection.dart';
+import 'package:quran_app/core/di/injection.dart' as di;
+import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
+import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
+import 'package:quran_app/features/surah/presentation/cubits/get_surah_cubit/get_surah_cubit.dart';
+import 'package:quran_app/features/dashboard/presentation/cubits/home_cubit/home_cubit.dart';
+import 'package:quran_app/core/router/app_router.dart';
+import 'package:quran_app/core/services/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,22 +29,32 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // Pastikan Firebase Crashlytics tetap aktif di mode debug
+  // Firebase Crashlytics collection — platform-level init (cannot be abstracted)
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
+  // Route uncaught errors through the CrashReporter abstraction
+  final crashReporter = locator<CrashReporter>();
+
   // Menangkap error sinkron (UI Thread)
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  FlutterError.onError = (details) {
+    crashReporter.recordError(
+      details.exception,
+      details.stack,
+    );
+  };
 
   // Menangkap error dari kode async yang tidak tertangkap di try-catch
   PlatformDispatcher.instance.onError =
       (final Object error, final StackTrace stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    crashReporter.recordError(error, stack);
     return true;
   };
 
-  await C.requestAllPermissions();
+  await locator<PermissionService>().requestAllPermissions();
 
-  await C.initLocalNotif();
+  final notificationService =
+      locator<NotificationService>() as FlutterNotificationService;
+  await notificationService.initLocalNotif();
 
   await databaseHelper.db;
 
@@ -63,18 +70,6 @@ class MyApp extends StatelessWidget {
   Widget build(final BuildContext context) {
     return MultiBlocProvider(
       providers: <BlocProvider>[
-        BlocProvider<GetSurahCubit>(
-          create: (final BuildContext context) =>
-              GetSurahCubit(quranUsecase: locator<RemoteUsecase>()),
-        ),
-        BlocProvider<DetailSurahCubit>(
-          create: (final BuildContext context) =>
-              DetailSurahCubit(quranUsecase: di.locator<RemoteUsecase>()),
-        ),
-        BlocProvider<JadwalSholatCubit>(
-          create: (final BuildContext context) =>
-              JadwalSholatCubit(usecase: di.locator<RemoteUsecase>()),
-        ),
         BlocProvider<DashboardCubit>(
           create: (final BuildContext context) =>
               DashboardCubit(storageService: di.locator()),
@@ -83,24 +78,13 @@ class MyApp extends StatelessWidget {
           create: (final BuildContext context) =>
               HomeCubit(storageService: di.locator()),
         ),
+        BlocProvider<GetSurahCubit>(
+          create: (final BuildContext context) =>
+              GetSurahCubit(usecase: locator<GetSurahUseCase>()),
+        ),
         BlocProvider<BookmarkCubit>(
           create: (final BuildContext context) =>
               BookmarkCubit(databaseHelper: di.locator()),
-        ),
-        BlocProvider<SearchCubit>(
-          create: (final BuildContext context) => SearchCubit(),
-        ),
-        BlocProvider<DetailSurahPageCubit>(
-          create: (final BuildContext context) => DetailSurahPageCubit(
-            storageService: di.locator(),
-            databaseHelper: di.locator(),
-          ),
-        ),
-        BlocProvider<JadwalSholatPageCubit>(
-          create: (final BuildContext context) => JadwalSholatPageCubit(
-            storageService: di.locator(),
-            notificationService: di.locator(),
-          ),
         ),
       ],
       child: MaterialApp.router(

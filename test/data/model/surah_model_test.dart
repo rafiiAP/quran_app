@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/data/model/surah_model.dart';
-import 'package:quran_app/domain/entity/surah_entity.dart';
+import 'package:quran_app/features/surah/data/models/surah_model.dart';
+import 'package:quran_app/features/surah/domain/entities/surah_entity.dart';
 
 import '../../fixtures/surah_fixture.dart';
 import '../../helpers/generators.dart';
@@ -55,8 +55,8 @@ void main() {
       expect(entity, equals(kSurahEntity));
     });
 
-    test('fromMap() throws TypeError when nomor is not int', () {
-      // Validates: Requirements 4.6
+    test('fromMap() throws FormatException when nomor is not int', () {
+      // Validates: Requirements 7.2
       final badMap = <String, dynamic>{
         'nomor': 'bukan_int',
         'nama': 'سُورَةُ الْفَاتِحَةِ',
@@ -70,7 +70,16 @@ void main() {
         },
       };
 
-      expect(() => SurahModel.fromMap(badMap), throwsA(isA<TypeError>()));
+      expect(
+        () => SurahModel.fromMap(badMap),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('nomor'),
+          ),
+        ),
+      );
     });
   });
 

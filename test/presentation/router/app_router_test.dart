@@ -1,8 +1,10 @@
+import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/di/injection.dart';
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/presentation/router/app_router.dart';
+import 'package:quran_app/core/router/app_router.dart';
 
 import '../../mocks.dart';
 
@@ -11,9 +13,12 @@ void main() {
   late AppRouter appRouter;
 
   setUp(() {
+    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockStorageService = MockLocalStorageService();
     appRouter = AppRouter(storageService: mockStorageService);
   });
+
+  tearDown(() => locator.reset());
 
   group('AppRouter.evaluateRedirect — onboarding guard', () {
     test(

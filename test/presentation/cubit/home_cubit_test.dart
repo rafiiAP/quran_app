@@ -1,7 +1,9 @@
+import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/di/injection.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/presentation/controller/dashboard/home_cubit/home_cubit.dart';
+import 'package:quran_app/features/dashboard/presentation/cubits/home_cubit/home_cubit.dart';
 
 import '../../mocks.dart';
 import '../../fixtures/surah_fixture.dart';
@@ -35,8 +37,11 @@ void main() {
   }
 
   setUp(() {
+    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockStorageService = MockLocalStorageService();
   });
+
+  tearDown(() => locator.reset());
 
   // Requirements: 4.1 — HomeCubit reads last-read data from LocalStorageService on construction
   group('_loadLastRead (called on construction)', () {

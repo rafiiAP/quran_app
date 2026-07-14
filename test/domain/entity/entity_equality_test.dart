@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/domain/entity/surah_entity.dart';
-import 'package:quran_app/domain/entity/detail_entity.dart';
-import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
-import 'package:quran_app/domain/repositories/remote_repository.dart';
+import 'package:quran_app/features/surah/domain/entities/surah_entity.dart';
+import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
+import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
+import 'package:quran_app/core/error/failure.dart';
 
 import '../../helpers/generators.dart';
 

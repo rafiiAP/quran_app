@@ -1,16 +1,16 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/domain/entity/detail_entity.dart';
-import 'package:quran_app/domain/repositories/remote_repository.dart';
-import 'package:quran_app/presentation/controller/detail_surah/cubit/detail_surah_cubit.dart';
+import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
+import 'package:quran_app/features/detail_surah/presentation/cubits/detail_surah_cubit/detail_surah_cubit.dart';
 
 import '../../helpers/generators.dart';
 import '../../mocks.dart';
 
 void main() {
-  late MockRemoteUsecase mockUsecase;
+  late MockGetDetailSurahUseCase mockUsecase;
 
   const tDetailEntity = DetailEntity(
     nomor: 36,
@@ -33,21 +33,21 @@ void main() {
   );
 
   setUp(() {
-    mockUsecase = MockRemoteUsecase();
+    mockUsecase = MockGetDetailSurahUseCase();
   });
 
   test('initial state is DetailSurahState.initial()', () {
-    final cubit = DetailSurahCubit(quranUsecase: mockUsecase);
+    final cubit = DetailSurahCubit(usecase: mockUsecase);
     expect(cubit.state, const DetailSurahState.initial());
   });
 
   blocTest<DetailSurahCubit, DetailSurahState>(
     'emits [loading, success] when usecase returns Right(DetailEntity)',
     setUp: () {
-      when(() => mockUsecase.getDetailSurah(nomor: 36))
+      when(() => mockUsecase.call(nomor: 36))
           .thenAnswer((_) async => const Right(tDetailEntity));
     },
-    build: () => DetailSurahCubit(quranUsecase: mockUsecase),
+    build: () => DetailSurahCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(number: 36),
     expect: () => [
       const DetailSurahState.loading(),
@@ -58,10 +58,10 @@ void main() {
   blocTest<DetailSurahCubit, DetailSurahState>(
     'emits [loading, error] when usecase returns Left(ServerFailure)',
     setUp: () {
-      when(() => mockUsecase.getDetailSurah(nomor: 36))
+      when(() => mockUsecase.call(nomor: 36))
           .thenAnswer((_) async => const Left(ServerFailure('Server error')));
     },
-    build: () => DetailSurahCubit(quranUsecase: mockUsecase),
+    build: () => DetailSurahCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(number: 36),
     expect: () => [
       const DetailSurahState.loading(),
@@ -72,13 +72,13 @@ void main() {
   blocTest<DetailSurahCubit, DetailSurahState>(
     'forwards nomor argument to usecase without modification',
     setUp: () {
-      when(() => mockUsecase.getDetailSurah(nomor: 36))
+      when(() => mockUsecase.call(nomor: 36))
           .thenAnswer((_) async => const Right(tDetailEntity));
     },
-    build: () => DetailSurahCubit(quranUsecase: mockUsecase),
+    build: () => DetailSurahCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(number: 36),
     verify: (_) {
-      verify(() => mockUsecase.getDetailSurah(nomor: 36)).called(1);
+      verify(() => mockUsecase.call(nomor: 36)).called(1);
     },
   );
 
@@ -93,10 +93,10 @@ void main() {
         final entity = model.toEntity();
         final nomor = model.nomor;
 
-        when(() => mockUsecase.getDetailSurah(nomor: nomor))
+        when(() => mockUsecase.call(nomor: nomor))
             .thenAnswer((_) async => Right(entity));
 
-        final cubit = DetailSurahCubit(quranUsecase: mockUsecase);
+        final cubit = DetailSurahCubit(usecase: mockUsecase);
         final states = <DetailSurahState>[];
         final sub = cubit.stream.listen(states.add);
         await cubit.getPosts(number: nomor);
@@ -108,7 +108,7 @@ void main() {
           const DetailSurahState.loading(),
           DetailSurahState.success(entity),
         ]);
-        verify(() => mockUsecase.getDetailSurah(nomor: nomor)).called(1);
+        verify(() => mockUsecase.call(nomor: nomor)).called(1);
       }
     });
   });

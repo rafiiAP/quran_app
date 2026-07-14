@@ -1,12 +1,15 @@
+import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/di/injection.dart';
 // ignore_for_file: avoid_dynamic_calls
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/data/model/set_notif_model.dart';
-import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
-import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_page_cubit/jadwal_sholat_page_cubit.dart';
+import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_page_cubit/jadwal_sholat_page_cubit.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/helpers/prayer_time_helpers.dart';
 
 import '../../mocks.dart';
 import '../../helpers/generators.dart';
@@ -34,7 +37,7 @@ String _hm(final int hour, final int minute) =>
 
 List<SetNotifModel> _buildJadwal() => <SetNotifModel>[
       const SetNotifModel(
-        iconsax: Iconsax.moon1,
+        iconsax: Iconsax.moon,
         hour: 5,
         minute: 0,
         title: 'Subuh',
@@ -66,7 +69,7 @@ List<SetNotifModel> _buildJadwal() => <SetNotifModel>[
         isAlarmSet: false,
       ),
       const SetNotifModel(
-        iconsax: Iconsax.moon5,
+        iconsax: Iconsax.moon,
         hour: 19,
         minute: 15,
         title: 'Isya',
@@ -80,15 +83,21 @@ List<SetNotifModel> _buildJadwal() => <SetNotifModel>[
 void main() {
   late MockNotificationService mockNotification;
   late MockLocalStorageService mockStorage;
+  late MockLocationService mockLocation;
 
   setUp(() {
+    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockNotification = MockNotificationService();
     mockStorage = MockLocalStorageService();
+    mockLocation = MockLocationService();
   });
+
+  tearDown(() => locator.reset());
 
   JadwalSholatPageCubit buildCubit() => JadwalSholatPageCubit(
         storageService: mockStorage,
         notificationService: mockNotification,
+        locationService: mockLocation,
       );
 
   // -------------------------------------------------------------------------
@@ -108,40 +117,40 @@ void main() {
   // -------------------------------------------------------------------------
   group('parseJadwal()', () {
     test('returns exactly 5 items — Validates: Requirements 7.3', () {
-      expect(JadwalSholatPageCubit.parseJadwal(kTestEntity).length, 5);
+      expect(PrayerTimeHelpers.parseJadwal(kTestEntity).length, 5);
     });
     test('index 0 Subuh hour=5 minute=0 — Validates: Requirements 7.3', () {
-      final r = JadwalSholatPageCubit.parseJadwal(kTestEntity);
+      final r = PrayerTimeHelpers.parseJadwal(kTestEntity);
       expect(r[0].title, 'Subuh');
       expect(r[0].hour, 5);
       expect(r[0].minute, 0);
     });
     test('index 1 Dzuhur hour=12 minute=0 — Validates: Requirements 7.3', () {
-      final r = JadwalSholatPageCubit.parseJadwal(kTestEntity);
+      final r = PrayerTimeHelpers.parseJadwal(kTestEntity);
       expect(r[1].title, 'Dzuhur');
       expect(r[1].hour, 12);
       expect(r[1].minute, 0);
     });
     test('index 2 Ashar hour=15 minute=30 — Validates: Requirements 7.3', () {
-      final r = JadwalSholatPageCubit.parseJadwal(kTestEntity);
+      final r = PrayerTimeHelpers.parseJadwal(kTestEntity);
       expect(r[2].title, 'Ashar');
       expect(r[2].hour, 15);
       expect(r[2].minute, 30);
     });
     test('index 3 Maghrib hour=18 minute=10 — Validates: Requirements 7.3', () {
-      final r = JadwalSholatPageCubit.parseJadwal(kTestEntity);
+      final r = PrayerTimeHelpers.parseJadwal(kTestEntity);
       expect(r[3].title, 'Maghrib');
       expect(r[3].hour, 18);
       expect(r[3].minute, 10);
     });
     test('index 4 Isya hour=19 minute=15 — Validates: Requirements 7.3', () {
-      final r = JadwalSholatPageCubit.parseJadwal(kTestEntity);
+      final r = PrayerTimeHelpers.parseJadwal(kTestEntity);
       expect(r[4].title, 'Isya');
       expect(r[4].hour, 19);
       expect(r[4].minute, 15);
     });
     test('all items isAlarmSet=false — Validates: Requirements 7.3', () {
-      final r = JadwalSholatPageCubit.parseJadwal(kTestEntity);
+      final r = PrayerTimeHelpers.parseJadwal(kTestEntity);
       expect(r.every((e) => !e.isAlarmSet), isTrue);
     });
   });
@@ -151,7 +160,7 @@ void main() {
   // -------------------------------------------------------------------------
   group('calculateCountdown()', () {
     test('countdown to Subuh when now=04:00 — Validates: Requirements 7.4', () {
-      final r = JadwalSholatPageCubit.calculateCountdown(
+      final r = PrayerTimeHelpers.calculateCountdown(
         _buildJadwal(),
         DateTime(2024, 1, 15, 4, 0, 0),
       );
@@ -161,7 +170,7 @@ void main() {
     });
     test('countdown to Dzuhur when now=08:00 — Validates: Requirements 7.4',
         () {
-      final r = JadwalSholatPageCubit.calculateCountdown(
+      final r = PrayerTimeHelpers.calculateCountdown(
         _buildJadwal(),
         DateTime(2024, 1, 15, 8, 0, 0),
       );
@@ -171,7 +180,7 @@ void main() {
     test(
         'countdown to Subuh tomorrow when all passed (23:00) — Validates: Requirements 7.5',
         () {
-      final r = JadwalSholatPageCubit.calculateCountdown(
+      final r = PrayerTimeHelpers.calculateCountdown(
         _buildJadwal(),
         DateTime(2024, 1, 15, 23, 0, 0),
       );
@@ -180,7 +189,7 @@ void main() {
     });
     test('returns "-" for empty list — Validates: Requirements 7.4', () {
       expect(
-        JadwalSholatPageCubit.calculateCountdown(
+        PrayerTimeHelpers.calculateCountdown(
           const <SetNotifModel>[],
           DateTime(2024, 1, 15, 10),
         ),
@@ -196,7 +205,7 @@ void main() {
     test('"Mendekati waktu Subuh" when now=04:30 — Validates: Requirements 7.6',
         () {
       expect(
-        JadwalSholatPageCubit.getSholatText(
+        PrayerTimeHelpers.getSholatText(
           _buildJadwal(),
           DateTime(2024, 1, 15, 4, 30),
         ),
@@ -207,7 +216,7 @@ void main() {
         '"Mendekati waktu Dzuhur" when now=10:00 — Validates: Requirements 7.6',
         () {
       expect(
-        JadwalSholatPageCubit.getSholatText(
+        PrayerTimeHelpers.getSholatText(
           _buildJadwal(),
           DateTime(2024, 1, 15, 10),
         ),
@@ -217,7 +226,7 @@ void main() {
     test('"Subuh Besok" when all passed (23:30) — Validates: Requirements 7.6',
         () {
       expect(
-        JadwalSholatPageCubit.getSholatText(
+        PrayerTimeHelpers.getSholatText(
           _buildJadwal(),
           DateTime(2024, 1, 15, 23, 30),
         ),
@@ -232,7 +241,7 @@ void main() {
   group('getTimeText()', () {
     test('"05:00" when now=04:00 — Validates: Requirements 7.7', () {
       expect(
-        JadwalSholatPageCubit.getTimeText(
+        PrayerTimeHelpers.getTimeText(
           _buildJadwal(),
           DateTime(2024, 1, 15, 4),
         ),
@@ -241,7 +250,7 @@ void main() {
     });
     test('"12:00" when now=09:00 — Validates: Requirements 7.7', () {
       expect(
-        JadwalSholatPageCubit.getTimeText(
+        PrayerTimeHelpers.getTimeText(
           _buildJadwal(),
           DateTime(2024, 1, 15, 9),
         ),
@@ -251,7 +260,7 @@ void main() {
     test('zero-pads "05:03" — Validates: Requirements 7.7', () {
       final jadwal = <SetNotifModel>[
         const SetNotifModel(
-          iconsax: Iconsax.moon1,
+          iconsax: Iconsax.moon,
           hour: 5,
           minute: 3,
           title: 'Subuh',
@@ -260,7 +269,7 @@ void main() {
         ),
       ];
       expect(
-        JadwalSholatPageCubit.getTimeText(jadwal, DateTime(2024, 1, 15, 4)),
+        PrayerTimeHelpers.getTimeText(jadwal, DateTime(2024, 1, 15, 4)),
         '05:03',
       );
     });
@@ -268,7 +277,7 @@ void main() {
         'falls back to "05:00" when all passed (23:30) — Validates: Requirements 7.7',
         () {
       expect(
-        JadwalSholatPageCubit.getTimeText(
+        PrayerTimeHelpers.getTimeText(
           _buildJadwal(),
           DateTime(2024, 1, 15, 23, 30),
         ),
@@ -277,7 +286,7 @@ void main() {
     });
     test('returns "-" for empty list — Validates: Requirements 7.7', () {
       expect(
-        JadwalSholatPageCubit.getTimeText(
+        PrayerTimeHelpers.getTimeText(
           const <SetNotifModel>[],
           DateTime(2024, 1, 15, 10),
         ),
@@ -292,18 +301,18 @@ void main() {
   group('formatDuration()', () {
     test('"02:30:05" — Validates: Requirements 7.8', () {
       expect(
-        JadwalSholatPageCubit.formatDuration(
+        PrayerTimeHelpers.formatDuration(
           const Duration(hours: 2, minutes: 30, seconds: 5),
         ),
         '02:30:05',
       );
     });
     test('"00:00:00" — Validates: Requirements 7.8', () {
-      expect(JadwalSholatPageCubit.formatDuration(Duration.zero), '00:00:00');
+      expect(PrayerTimeHelpers.formatDuration(Duration.zero), '00:00:00');
     });
     test('"01:00:00" — Validates: Requirements 7.8', () {
       expect(
-        JadwalSholatPageCubit.formatDuration(const Duration(hours: 1)),
+        PrayerTimeHelpers.formatDuration(const Duration(hours: 1)),
         '01:00:00',
       );
     });
@@ -348,7 +357,7 @@ void main() {
       await cubit.toggleNotification(
         0,
         const SetNotifModel(
-          iconsax: Iconsax.moon1,
+          iconsax: Iconsax.moon,
           hour: 5,
           minute: 0,
           title: 'Subuh',
@@ -382,7 +391,7 @@ void main() {
       await cubit.toggleNotification(
         0,
         const SetNotifModel(
-          iconsax: Iconsax.moon1,
+          iconsax: Iconsax.moon,
           hour: 5,
           minute: 0,
           title: 'Subuh',
@@ -423,7 +432,7 @@ void main() {
       await cubit.toggleNotification(
         0,
         const SetNotifModel(
-          iconsax: Iconsax.moon1,
+          iconsax: Iconsax.moon,
           hour: 5,
           minute: 0,
           title: 'Subuh',
@@ -449,7 +458,7 @@ void main() {
       await cubit.toggleNotification(
         0,
         const SetNotifModel(
-          iconsax: Iconsax.moon1,
+          iconsax: Iconsax.moon,
           hour: 5,
           minute: 0,
           title: 'Subuh',
@@ -464,46 +473,73 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // GPS failure fallback state
+  // GPS failure retry mechanism
   // -------------------------------------------------------------------------
-  group('GPS failure fallback state', () {
+  group('GPS failure retry mechanism', () {
     test(
-        'city="Tidak diketahui" and empty jadwalList — Validates: Requirements 7.1',
+        'locationError state contains message and retryCount — Validates: Requirements 16.1',
         () {
-      const JadwalSholatEntity kEmptyEntity = JadwalSholatEntity(
-        fajr: '-',
-        sunrise: '-',
-        dhuhr: '-',
-        asr: '-',
-        sunset: '-',
-        maghrib: '-',
-        isha: '-',
-        imsak: '-',
-        midnight: '-',
-        firstthird: '-',
-        lastthird: '-',
-      );
-      const JadwalSholatPageState state = JadwalSholatPageState.loaded(
-        city: 'Tidak diketahui',
-        timezone: '',
-        jadwalList: <SetNotifModel>[],
-        countdownText: '-',
-        sholatText: '-',
-        timeText: '-',
-        entity: kEmptyEntity,
+      const JadwalSholatPageState state = JadwalSholatPageState.locationError(
+        message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
+        retryCount: 1,
       );
 
-      final String city = state.maybeWhen(
-        loaded: (c, _, __, ___, ____, _____, ______) => c,
+      final String message = state.maybeWhen(
+        locationError: (msg, _) => msg,
         orElse: () => '',
       );
-      final List<SetNotifModel> jadwalList = state.maybeWhen(
-        loaded: (_, __, jl, ___, ____, _____, ______) => jl,
-        orElse: () => const <SetNotifModel>[],
+      final int retryCount = state.maybeWhen(
+        locationError: (_, count) => count,
+        orElse: () => -1,
       );
 
-      expect(city, 'Tidak diketahui');
-      expect(jadwalList, isEmpty);
+      expect(message, 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.');
+      expect(retryCount, 1);
+    });
+
+    test(
+        'locationPermissionError state contains message — Validates: Requirements 16.3',
+        () {
+      const JadwalSholatPageState state =
+          JadwalSholatPageState.locationPermissionError(
+        message:
+            'Gagal mendapatkan lokasi setelah 3 percobaan. Periksa pengaturan lokasi di perangkat Anda.',
+      );
+
+      final String message = state.maybeWhen(
+        locationPermissionError: (msg) => msg,
+        orElse: () => '',
+      );
+
+      expect(
+        message,
+        'Gagal mendapatkan lokasi setelah 3 percobaan. Periksa pengaturan lokasi di perangkat Anda.',
+      );
+    });
+
+    test(
+        'locationError retryCount increments on subsequent failures — Validates: Requirements 16.1',
+        () {
+      const state1 = JadwalSholatPageState.locationError(
+        message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
+        retryCount: 1,
+      );
+      const state2 = JadwalSholatPageState.locationError(
+        message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
+        retryCount: 2,
+      );
+
+      final int count1 = state1.maybeWhen(
+        locationError: (_, count) => count,
+        orElse: () => -1,
+      );
+      final int count2 = state2.maybeWhen(
+        locationError: (_, count) => count,
+        orElse: () => -1,
+      );
+
+      expect(count1, 1);
+      expect(count2, 2);
     });
   });
 
@@ -564,7 +600,7 @@ void main() {
         'for any JadwalSholatEntity', () {
       for (int i = 0; i < 100; i++) {
         final entity = generateRandomJadwalSholatModel().toEntity();
-        final result = JadwalSholatPageCubit.parseJadwal(entity);
+        final result = PrayerTimeHelpers.parseJadwal(entity);
         expect(
           result.length,
           equals(5),
@@ -593,8 +629,8 @@ void main() {
           firstthird: base.firstthird,
           lastthird: base.lastthird,
         );
-        final jadwal = JadwalSholatPageCubit.parseJadwal(entity);
-        final countdown = JadwalSholatPageCubit.calculateCountdown(jadwal, now);
+        final jadwal = PrayerTimeHelpers.parseJadwal(entity);
+        final countdown = PrayerTimeHelpers.calculateCountdown(jadwal, now);
         expect(
           countdown,
           contains('Subuh'),

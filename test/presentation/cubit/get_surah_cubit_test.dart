@@ -1,33 +1,33 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/domain/repositories/remote_repository.dart';
-import 'package:quran_app/presentation/controller/dashboard/get_surah_cubit/get_surah_cubit.dart';
+import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/features/surah/presentation/cubits/get_surah_cubit/get_surah_cubit.dart';
 
 import '../../mocks.dart';
 import '../../fixtures/surah_fixture.dart';
 import '../../helpers/generators.dart';
 
 void main() {
-  late MockRemoteUsecase mockUsecase;
+  late MockGetSurahUseCase mockUsecase;
 
   setUp(() {
-    mockUsecase = MockRemoteUsecase();
+    mockUsecase = MockGetSurahUseCase();
   });
 
   test('initial state is GetSurahState.initial()', () {
-    final cubit = GetSurahCubit(quranUsecase: mockUsecase);
+    final cubit = GetSurahCubit(usecase: mockUsecase);
     expect(cubit.state, const GetSurahState.initial());
   });
 
   blocTest<GetSurahCubit, GetSurahState>(
     'emits [loading, success] when usecase returns Right(list)',
     setUp: () {
-      when(() => mockUsecase.execute())
+      when(() => mockUsecase.call())
           .thenAnswer((_) async => const Right([kSurahEntity]));
     },
-    build: () => GetSurahCubit(quranUsecase: mockUsecase),
+    build: () => GetSurahCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(),
     expect: () => [
       const GetSurahState.loading(),
@@ -38,10 +38,9 @@ void main() {
   blocTest<GetSurahCubit, GetSurahState>(
     'emits [loading, success([])] when usecase returns Right([])',
     setUp: () {
-      when(() => mockUsecase.execute())
-          .thenAnswer((_) async => const Right([]));
+      when(() => mockUsecase.call()).thenAnswer((_) async => const Right([]));
     },
-    build: () => GetSurahCubit(quranUsecase: mockUsecase),
+    build: () => GetSurahCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(),
     expect: () => [
       const GetSurahState.loading(),
@@ -52,10 +51,10 @@ void main() {
   blocTest<GetSurahCubit, GetSurahState>(
     'emits [loading, error(message)] when usecase returns Left(ServerFailure)',
     setUp: () {
-      when(() => mockUsecase.execute())
+      when(() => mockUsecase.call())
           .thenAnswer((_) async => const Left(ServerFailure('Server error')));
     },
-    build: () => GetSurahCubit(quranUsecase: mockUsecase),
+    build: () => GetSurahCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(),
     expect: () => [
       const GetSurahState.loading(),
@@ -73,10 +72,9 @@ void main() {
           listSize,
           (_) => generateRandomSurahModel().toEntity(),
         );
-        when(() => mockUsecase.execute())
-            .thenAnswer((_) async => Right(entities));
+        when(() => mockUsecase.call()).thenAnswer((_) async => Right(entities));
 
-        final cubit = GetSurahCubit(quranUsecase: mockUsecase);
+        final cubit = GetSurahCubit(usecase: mockUsecase);
         final states = <GetSurahState>[];
         final sub = cubit.stream.listen(states.add);
         cubit.getPosts();
@@ -101,10 +99,10 @@ void main() {
           ConnectionFailure(message),
           ResponseFailure(message),
         ];
-        when(() => mockUsecase.execute())
+        when(() => mockUsecase.call())
             .thenAnswer((_) async => Left(failures[i % 3]));
 
-        final cubit = GetSurahCubit(quranUsecase: mockUsecase);
+        final cubit = GetSurahCubit(usecase: mockUsecase);
         final states = <GetSurahState>[];
         final sub = cubit.stream.listen(states.add);
         cubit.getPosts();

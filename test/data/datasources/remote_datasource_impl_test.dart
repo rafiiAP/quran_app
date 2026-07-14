@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/data/datasources/remote_datasource/remote_datasource.dart';
-import 'package:quran_app/data/model/surah_model.dart';
+import 'package:quran_app/features/surah/data/datasources/surah_datasource.dart';
+import 'package:quran_app/features/jadwal_sholat/data/datasources/jadwal_sholat_datasource.dart';
+import 'package:quran_app/features/surah/data/models/surah_model.dart';
 
 import '../../mocks.dart';
 
@@ -78,183 +79,222 @@ const _kJadwalJson = '''
 ''';
 
 // ---------------------------------------------------------------------------
-// Tests
+// Tests — SurahDatasourceImpl
 // ---------------------------------------------------------------------------
 
 void main() {
-  late MockAppHttpClient mockHttpClient;
-  late MockCrashReporter mockCrashReporter;
-  late RemoteDatasourceImpl datasource;
+  group('SurahDatasourceImpl', () {
+    late MockAppHttpClient mockHttpClient;
+    late MockCrashReporter mockCrashReporter;
+    late SurahDatasourceImpl datasource;
 
-  setUp(() {
-    mockHttpClient = MockAppHttpClient();
-    mockCrashReporter = MockCrashReporter();
-    datasource = RemoteDatasourceImpl(
-      httpClient: mockHttpClient,
-      crashReporter: mockCrashReporter,
-    );
-    // Default: crashReporter.recordError selalu sukses
-    when(() => mockCrashReporter.recordError(any(), any()))
-        .thenAnswer((_) async {});
+    setUp(() {
+      mockHttpClient = MockAppHttpClient();
+      mockCrashReporter = MockCrashReporter();
+      datasource = SurahDatasourceImpl(
+        httpClient: mockHttpClient,
+        crashReporter: mockCrashReporter,
+        baseUrl: 'https://equran.id/api/v2/surat',
+      );
+      when(() => mockCrashReporter.recordError(any(), any()))
+          .thenAnswer((_) async {});
+    });
+
+    group('getSurah()', () {
+      test('returns List<SurahModel> on success', () async {
+        when(
+          () => mockHttpClient.get(
+            url: any(named: 'url'),
+            requestName: any(named: 'requestName'),
+          ),
+        ).thenAnswer((_) async => _kSurahJson);
+
+        final result = await datasource.getSurah();
+
+        expect(result, isA<List<SurahModel>>());
+        expect(result.length, 1);
+        expect(result.first.nomor, 1);
+        expect(result.first.namaLatin, 'Al-Fatihah');
+      });
+
+      test('calls httpClient with correct URL', () async {
+        when(
+          () => mockHttpClient.get(
+            url: any(named: 'url'),
+            requestName: any(named: 'requestName'),
+          ),
+        ).thenAnswer((_) async => _kSurahJson);
+
+        await datasource.getSurah();
+
+        verify(
+          () => mockHttpClient.get(
+            url: 'https://equran.id/api/v2/surat',
+            requestName: 'getSurah',
+          ),
+        ).called(1);
+      });
+
+      test('records DioException to CrashReporter and throws Exception',
+          () async {
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: ''),
+          message: 'timeout',
+        );
+        when(
+          () => mockHttpClient.get(
+            url: any(named: 'url'),
+            requestName: any(named: 'requestName'),
+          ),
+        ).thenThrow(dioException);
+
+        await expectLater(datasource.getSurah(), throwsA(isA<Exception>()));
+
+        verify(() => mockCrashReporter.recordError(dioException, any()))
+            .called(1);
+      });
+
+      test('records generic Exception to CrashReporter and rethrows', () async {
+        final genericError = Exception('unknown');
+        when(
+          () => mockHttpClient.get(
+            url: any(named: 'url'),
+            requestName: any(named: 'requestName'),
+          ),
+        ).thenThrow(genericError);
+
+        await expectLater(datasource.getSurah(), throwsA(isA<Exception>()));
+
+        verify(() => mockCrashReporter.recordError(genericError, any()))
+            .called(1);
+      });
+    });
+
+    group('getDetailSurah()', () {
+      test('returns DetailModel on success', () async {
+        when(
+          () => mockHttpClient.get(
+            url: any(named: 'url'),
+            requestName: any(named: 'requestName'),
+          ),
+        ).thenAnswer((_) async => _kDetailJson);
+
+        final result = await datasource.getDetailSurah(nomor: 1);
+
+        expect(result.nomor, 1);
+        expect(result.namaLatin, 'Al-Fatihah');
+        expect(result.ayat.length, 1);
+      });
+
+      test('calls httpClient with nomor in URL', () async {
+        when(
+          () => mockHttpClient.get(
+            url: any(named: 'url'),
+            requestName: any(named: 'requestName'),
+          ),
+        ).thenAnswer((_) async => _kDetailJson);
+
+        await datasource.getDetailSurah(nomor: 5);
+
+        verify(
+          () => mockHttpClient.get(
+            url: 'https://equran.id/api/v2/surat/5',
+            requestName: 'getDetailSurah',
+          ),
+        ).called(1);
+      });
+
+      test('records DioException and throws Exception', () async {
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: ''),
+          message: 'connection error',
+        );
+        when(
+          () => mockHttpClient.get(
+            url: any(named: 'url'),
+            requestName: any(named: 'requestName'),
+          ),
+        ).thenThrow(dioException);
+
+        await expectLater(
+          datasource.getDetailSurah(nomor: 1),
+          throwsA(isA<Exception>()),
+        );
+
+        verify(() => mockCrashReporter.recordError(dioException, any()))
+            .called(1);
+      });
+
+      test('records generic Exception to CrashReporter and rethrows', () async {
+        final genericError = Exception('parse error');
+        when(
+          () => mockHttpClient.get(
+            url: any(named: 'url'),
+            requestName: any(named: 'requestName'),
+          ),
+        ).thenThrow(genericError);
+
+        await expectLater(
+          datasource.getDetailSurah(nomor: 1),
+          throwsA(isA<Exception>()),
+        );
+
+        verify(() => mockCrashReporter.recordError(genericError, any()))
+            .called(1);
+      });
+    });
+
+    group('Property Tests', () {
+      test('Property: getDetailSurah always passes nomor in URL', () async {
+        for (int nomor = 1; nomor <= 114; nomor++) {
+          when(
+            () => mockHttpClient.get(
+              url: any(named: 'url'),
+              requestName: any(named: 'requestName'),
+            ),
+          ).thenAnswer((_) async => _kDetailJson);
+
+          await datasource.getDetailSurah(nomor: nomor);
+
+          final captured = verify(
+            () => mockHttpClient.get(
+              url: captureAny(named: 'url'),
+              requestName: any(named: 'requestName'),
+            ),
+          ).captured;
+
+          final url = captured.first as String;
+          expect(
+            url,
+            contains('/$nomor'),
+            reason: 'URL harus mengandung /$nomor untuk nomor=$nomor',
+          );
+        }
+      });
+    });
   });
 
   // -------------------------------------------------------------------------
-  // getSurah()
+  // Tests — JadwalSholatDatasourceImpl
   // -------------------------------------------------------------------------
 
-  group('getSurah()', () {
-    test('returns List<SurahModel> on success', () async {
-      when(
-        () => mockHttpClient.get(
-          url: any(named: 'url'),
-          requestName: any(named: 'requestName'),
-        ),
-      ).thenAnswer((_) async => _kSurahJson);
+  group('JadwalSholatDatasourceImpl', () {
+    late MockAppHttpClient mockHttpClient;
+    late MockCrashReporter mockCrashReporter;
+    late JadwalSholatDatasourceImpl datasource;
 
-      final result = await datasource.getSurah();
-
-      expect(result, isA<List<SurahModel>>());
-      expect(result.length, 1);
-      expect(result.first.nomor, 1);
-      expect(result.first.namaLatin, 'Al-Fatihah');
-    });
-
-    test('calls httpClient with correct URL', () async {
-      when(
-        () => mockHttpClient.get(
-          url: any(named: 'url'),
-          requestName: any(named: 'requestName'),
-        ),
-      ).thenAnswer((_) async => _kSurahJson);
-
-      await datasource.getSurah();
-
-      verify(
-        () => mockHttpClient.get(
-          url: 'https://equran.id/api/v2/surat',
-          requestName: 'getSurah',
-        ),
-      ).called(1);
-    });
-
-    test('records DioException to CrashReporter and throws Exception',
-        () async {
-      final dioException = DioException(
-        requestOptions: RequestOptions(path: ''),
-        message: 'timeout',
+    setUp(() {
+      mockHttpClient = MockAppHttpClient();
+      mockCrashReporter = MockCrashReporter();
+      datasource = JadwalSholatDatasourceImpl(
+        httpClient: mockHttpClient,
+        crashReporter: mockCrashReporter,
+        baseUrl: 'https://api.aladhan.com/v1/timings',
       );
-      when(
-        () => mockHttpClient.get(
-          url: any(named: 'url'),
-          requestName: any(named: 'requestName'),
-        ),
-      ).thenThrow(dioException);
-
-      await expectLater(datasource.getSurah(), throwsA(isA<Exception>()));
-
-      verify(() => mockCrashReporter.recordError(dioException, any()))
-          .called(1);
+      when(() => mockCrashReporter.recordError(any(), any()))
+          .thenAnswer((_) async {});
     });
 
-    test('records generic Exception to CrashReporter and rethrows', () async {
-      final genericError = Exception('unknown');
-      when(
-        () => mockHttpClient.get(
-          url: any(named: 'url'),
-          requestName: any(named: 'requestName'),
-        ),
-      ).thenThrow(genericError);
-
-      await expectLater(datasource.getSurah(), throwsA(isA<Exception>()));
-
-      verify(() => mockCrashReporter.recordError(genericError, any()))
-          .called(1);
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // getDetailSurah()
-  // -------------------------------------------------------------------------
-
-  group('getDetailSurah()', () {
-    test('returns DetailModel on success', () async {
-      when(
-        () => mockHttpClient.get(
-          url: any(named: 'url'),
-          requestName: any(named: 'requestName'),
-        ),
-      ).thenAnswer((_) async => _kDetailJson);
-
-      final result = await datasource.getDetailSurah(nomor: 1);
-
-      expect(result.nomor, 1);
-      expect(result.namaLatin, 'Al-Fatihah');
-      expect(result.ayat.length, 1);
-    });
-
-    test('calls httpClient with nomor in URL', () async {
-      when(
-        () => mockHttpClient.get(
-          url: any(named: 'url'),
-          requestName: any(named: 'requestName'),
-        ),
-      ).thenAnswer((_) async => _kDetailJson);
-
-      await datasource.getDetailSurah(nomor: 5);
-
-      verify(
-        () => mockHttpClient.get(
-          url: 'https://equran.id/api/v2/surat/5',
-          requestName: 'getDetailSurah',
-        ),
-      ).called(1);
-    });
-
-    test('records DioException and throws Exception', () async {
-      final dioException = DioException(
-        requestOptions: RequestOptions(path: ''),
-        message: 'connection error',
-      );
-      when(
-        () => mockHttpClient.get(
-          url: any(named: 'url'),
-          requestName: any(named: 'requestName'),
-        ),
-      ).thenThrow(dioException);
-
-      await expectLater(
-        datasource.getDetailSurah(nomor: 1),
-        throwsA(isA<Exception>()),
-      );
-
-      verify(() => mockCrashReporter.recordError(dioException, any()))
-          .called(1);
-    });
-
-    test('records generic Exception to CrashReporter and rethrows', () async {
-      final genericError = Exception('parse error');
-      when(
-        () => mockHttpClient.get(
-          url: any(named: 'url'),
-          requestName: any(named: 'requestName'),
-        ),
-      ).thenThrow(genericError);
-
-      await expectLater(
-        datasource.getDetailSurah(nomor: 1),
-        throwsA(isA<Exception>()),
-      );
-
-      verify(() => mockCrashReporter.recordError(genericError, any()))
-          .called(1);
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // getJadwalSholat()
-  // -------------------------------------------------------------------------
-
-  group('getJadwalSholat()', () {
     test('returns JadwalSholatModel on success', () async {
       when(
         () => mockHttpClient.get(
@@ -345,40 +385,6 @@ void main() {
 
       verify(() => mockCrashReporter.recordError(genericError, any()))
           .called(1);
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // Property test
-  // -------------------------------------------------------------------------
-
-  group('Property Tests', () {
-    test('Property: getDetailSurah always passes nomor in URL', () async {
-      // For any valid surah number (1-114), URL must contain that number.
-      for (int nomor = 1; nomor <= 114; nomor++) {
-        when(
-          () => mockHttpClient.get(
-            url: any(named: 'url'),
-            requestName: any(named: 'requestName'),
-          ),
-        ).thenAnswer((_) async => _kDetailJson);
-
-        await datasource.getDetailSurah(nomor: nomor);
-
-        final captured = verify(
-          () => mockHttpClient.get(
-            url: captureAny(named: 'url'),
-            requestName: any(named: 'requestName'),
-          ),
-        ).captured;
-
-        final url = captured.first as String;
-        expect(
-          url,
-          contains('/$nomor'),
-          reason: 'URL harus mengandung /$nomor untuk nomor=$nomor',
-        );
-      }
     });
   });
 }

@@ -1,17 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/components/function/main_function.dart';
-
-/// Concrete test class karena DatetimeComponent adalah mixin
-class _TestDatetime with DatetimeComponent {}
+import 'package:quran_app/core/services/datetime_service.dart';
 
 void main() {
-  late _TestDatetime component;
+  late DatetimeServiceImpl component;
 
   setUp(() {
-    component = _TestDatetime();
+    component = DatetimeServiceImpl();
   });
 
-  group('DatetimeComponent', () {
+  group('DatetimeService', () {
     test('date() formats yyyy-MM-dd correctly', () {
       /// Validates: Requirements 16.1
       expect(

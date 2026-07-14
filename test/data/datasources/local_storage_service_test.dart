@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/data/datasources/datasource_impl/shared_preferences_storage_service.dart';
+import 'package:quran_app/core/storage/shared_preferences_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

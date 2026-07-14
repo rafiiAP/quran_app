@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flutter Architecture Assessment — Quran App v5</title>
+<style>
+:root { --green: #4caf50; --yellow: #ff9800; --red: #f44336; --bg: #0f0f23; --card: #1a1a3e; --text: #e0e0e0; --muted: #a0a0c0; --border: #2a2a5a; --primary: #672CBC; --secondary: #DF98FA; }
+@media (prefers-color-scheme: light) { :root { --bg: #f5f5f5; --card: #ffffff; --text: #1a1a1a; --muted: #666; --border: #e0e0e0; } }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; }
+.container { max-width: 1000px; margin: 0 auto; }
+h1 { font-size: 1.8rem; text-align: center; margin-bottom: 0.3rem; }
+h2 { font-size: 1.3rem; margin: 2rem 0 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; color: var(--secondary); }
+h3 { font-size: 1rem; margin: 0.8rem 0 0.4rem; }
+p, li { font-size: 0.92rem; }
+.subtitle { text-align: center; color: var(--muted); margin-bottom: 2rem; font-size: 0.85rem; }
+.score-hero { text-align: center; padding: 2rem; background: linear-gradient(135deg, var(--card), #25254a); border-radius: 16px; border: 1px solid var(--border); margin: 1.5rem 0; }
+.score-num { font-size: 4rem; font-weight: bold; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.grade { display: inline-block; padding: 0.3rem 1.2rem; border-radius: 20px; font-weight: bold; font-size: 1rem; margin-top: 0.5rem; background: #4caf50; color: #000; }
+.delta { font-size: 1rem; margin-top: 0.6rem; color: var(--green); font-weight: bold; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; margin: 0.8rem 0; }
+.dim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.dim-score { font-size: 1.5rem; font-weight: bold; }
+.dim-score.high { color: var(--green); }
+.dim-score.mid { color: var(--yellow); }
+.bar { width: 100%; height: 6px; background: #2a2a4a; border-radius: 3px; margin: 0.4rem 0 0.8rem; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; }
+.bar-fill.high { background: var(--green); }
+.bar-fill.mid { background: var(--yellow); }
+.finding { margin: 0.2rem 0; padding-left: 1.4rem; position: relative; font-size: 0.88rem; }
+.finding::before { position: absolute; left: 0; }
+.finding.good::before { content: "✅"; }
+.finding.warn::before { content: "⚠️"; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.88rem; }
+th, td { padding: 0.5rem 0.8rem; text-align: left; border-bottom: 1px solid var(--border); }
+th { color: var(--secondary); font-weight: 600; }
+.priority { border-left: 3px solid; padding-left: 0.8rem; margin: 0.6rem 0; font-size: 0.88rem; }
+.priority.low { border-color: var(--green); }
+pre { background: #12122a; padding: 0.8rem; border-radius: 6px; overflow-x: auto; font-size: 0.8rem; margin: 0.5rem 0; color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🕌 Quran App — Architecture Assessment</h1>
+<p class="subtitle">Assessment Date: July 14, 2026 · Assessor: Kiro · Tech Stack: Flutter + BLoC Cubit + go_router + fpdart + GetIt</p>
+
+<div class="score-hero">
+  <div class="score-num">96/100</div>
+  <div><span class="grade">Grade A — Excellent</span></div>
+  <div class="delta">↑ +3 from v4 (93/100) · ↑ +18 from v3 (78/100)</div>
+  <p style="margin-top:0.8rem; color:var(--muted); font-size:0.9rem;">Production-grade Clean Architecture. All v4 findings resolved: FirebaseCrashlytics routed through abstraction, coverage_report.sh updated, detail_surah_page split to 198 lines, legacy getx/ folder removed. Only cosmetic items remain (iconsax audit, home_page.dart at 326 lines).</p>
+</div>
+
+<h2>Score Summary</h2>
+<table>
+<tr><th>Dimension</th><th>Score</th><th>Δ v4</th><th>Justification</th></tr>
+<tr><td>1. Layer Separation</td><td style="color:var(--green);font-weight:bold;">10/10</td><td>0</td><td>Zero violations. Domain pure. Repository never imports Dio. Data never imports presentation.</td></tr>
+<tr><td>2. DI & Coupling</td><td style="color:var(--green);font-weight:bold;">9/10</td><td>0</td><td>All deps via constructor injection with abstract types. locator() in route builders and convenience getters backed by abstract interfaces.</td></tr>
+<tr><td>3. State Management</td><td style="color:var(--green);font-weight:bold;">10/10</td><td>0</td><td>Pure Cubit + freezed. No GetX. Scoped providers for detail_surah and jadwal_sholat. Global only app-wide cubits.</td></tr>
+<tr><td>4. Error Handling</td><td style="color:var(--green);font-weight:bold;">10/10</td><td>0</td><td>DataException → Failure pipeline. GPS retry with user feedback. CrashReporter abstraction used in main.dart error boundaries.</td></tr>
+<tr><td>5. Navigation & Routing</td><td style="color:var(--green);font-weight:bold;">10/10</td><td>0</td><td>go_router only. Modular per-feature routes. int.tryParse with redirect guard. No imperative navigation.</td></tr>
+<tr><td>6. Testability</td><td style="color:var(--green);font-weight:bold;">10/10</td><td style="color:var(--green);">+1</td><td>281 tests (39 test files). Coverage report updated to current structure. No legacy test artifacts. Property-based + widget + integration.</td></tr>
+<tr><td>7. Code Organization</td><td style="color:var(--green);font-weight:bold;">9/10</td><td>0</td><td>Feature-modular. detail_surah_page.dart now 198 lines (fixed from 392). -1 for home_page.dart at 326 lines.</td></tr>
+<tr><td>8. Dependency Management</td><td style="color:var(--green);font-weight:bold;">9/10</td><td>0</td><td>All pinned. Dependabot configured. fpdart active. -1 for iconsax ^0.0.8 (pre-1.0, unmaintained).</td></tr>
+<tr><td>9. Security & Config</td><td style="color:var(--green);font-weight:bold;">10/10</td><td style="color:var(--green);">+1</td><td>.env gitignored. Secrets externalized. Certificate pinning. Model input validation. CrashReporter abstraction — no direct FirebaseCrashlytics in error handlers.</td></tr>
+<tr><td>10. Scalability & Maintainability</td><td style="color:var(--green);font-weight:bold;">9/10</td><td style="color:var(--green);">+1</td><td>Feature-first modular. CI with analyze+test+coverage gate. Proper dispose. No God objects. Coverage script up to date. -1 for empty lib/data/db/ folder.</td></tr>
+</table>
+
+<h2>Dimension Details</h2>
+
+<div class="card">
+<div class="dim-header"><h3>1. Layer Separation & Dependency Rule</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">Domain layer imports only fpdart, equatable, freezed_annotation — zero violations</div>
+<div class="finding good">Repository files have zero Dio imports — DataException abstraction encapsulates network</div>
+<div class="finding good">Data never imports presentation. Explicit toEntity() mapping in all Models</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>2. DI & Coupling</h3><span class="dim-score high">9/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:90%"></div></div>
+<div class="finding good">All UseCases, Cubits, Datasources receive dependencies via constructor (abstract types)</div>
+<div class="finding good">No C.* or W.* global accessors remain — all refactored to typed locator getters backed by abstract interfaces</div>
+<div class="finding warn">locator&lt;T&gt;() convenience getters used in core/widgets/* and some pages (ShowcaseService) — mockable via GetIt but slightly couples to service locator pattern</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>3. State Management Consistency</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">100% Cubit-only — zero GetX remnants in lib/ and test/</div>
+<div class="finding good">All states use @freezed sealed classes</div>
+<div class="finding good">Scoped BlocProviders at route/page level for feature-specific cubits</div>
+<div class="finding good">Global MultiBlocProvider only retains app-wide cubits (Dashboard, Home, GetSurah, Bookmark)</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>4. Error Handling Strategy</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">Repository returns Future&lt;Either&lt;Failure, T&gt;&gt; via fpdart</div>
+<div class="finding good">DataException at datasource, mapped to domain Failure at repository</div>
+<div class="finding good">GPS retry with locationError/locationPermissionError states after 3 attempts</div>
+<div class="finding good">main.dart error boundaries route through locator&lt;CrashReporter&gt;() — only setCrashlyticsCollectionEnabled is direct (platform init, cannot be abstracted)</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>5. Navigation & Routing</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">go_router exclusively — zero imperative navigation calls</div>
+<div class="finding good">Modular per-feature route files (dashboard_routes, detail_surah_routes, search_routes)</div>
+<div class="finding good">int.tryParse for all path params with redirect to /home + CrashReporter logging on invalid</div>
+<div class="finding good">Redirect guard extracted to pure testable evaluateRedirect() method</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>6. Testability</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">281 tests across 39 test files — unit, widget, integration, property-based</div>
+<div class="finding good">coverage_report.sh updated to current structure (no stale paths)</div>
+<div class="finding good">No legacy test artifacts (getx/ folder removed)</div>
+<div class="finding good">5 property-based tests, 5 widget tests (one per page), 1 integration test</div>
+<div class="finding good">All business logic classes fully mockable via abstract interfaces</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>7. Code Organization & Naming</h3><span class="dim-score high">9/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:90%"></div></div>
+<div class="finding good">Feature-modular: lib/features/{surah,detail_surah,jadwal_sholat,bookmark,search,dashboard}/</div>
+<div class="finding good">detail_surah_page.dart reduced from 392 → 198 lines (extracted ayat_list_item.dart + ayat_bottom_sheet.dart)</div>
+<div class="finding good">Per-feature repositories, usecases, datasources (SRP applied)</div>
+<div class="finding warn">home_page.dart at 326 lines — consider extracting surah list item widget and showcase logic</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>8. Dependency Management</h3><span class="dim-score high">9/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:90%"></div></div>
+<div class="finding good">All dependencies pinned with caret (^X.Y.Z)</div>
+<div class="finding good">Dependabot configured for weekly pub ecosystem monitoring targeting develop branch</div>
+<div class="finding good">fpdart ^1.1.0 — actively maintained FP library (dartz fully removed)</div>
+<div class="finding good">Dev dependencies properly separated</div>
+<div class="finding warn">iconsax ^0.0.8 — pre-1.0, minimal maintenance. Consider migrating to iconsax_flutter ^1.0.x</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>9. Security & Configuration</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">.env in .gitignore — secrets properly externalized via flutter_dotenv</div>
+<div class="finding good">API URLs in AppConfig constants class — not scattered in feature code</div>
+<div class="finding good">Certificate pinning for equran.id and api.aladhan.com domains</div>
+<div class="finding good">Input validation in all Model.fromMap factories via requireField&lt;T&gt; helper</div>
+<div class="finding good">CrashReporter abstraction — main.dart error handlers use locator&lt;CrashReporter&gt;() not FirebaseCrashlytics.instance directly</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>10. Scalability & Maintainability</h3><span class="dim-score high">9/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:90%"></div></div>
+<div class="finding good">Adding new feature: create feature folder + register in injection.dart + add route module — minimal existing file changes</div>
+<div class="finding good">CI pipeline: flutter analyze + flutter test --coverage + 90% coverage gate (15 min timeout)</div>
+<div class="finding good">Proper dispose in cubits (Timer cancelled in close()). No God Object pattern</div>
+<div class="finding good">Coverage script updated to current architecture paths</div>
+<div class="finding warn">Empty lib/data/db/ folder (legacy from migration) — should be removed</div>
+</div>
+
+<h2>Key Strengths</h2>
+<ol>
+<li><strong>Zero layer violations</strong> — Domain is pure, repository encapsulates all network concerns via typed exceptions</li>
+<li><strong>Complete test ecosystem</strong> — 281 tests covering unit, widget, integration, and property-based testing with CI enforcement</li>
+<li><strong>Robust error handling pipeline</strong> — DataException → Failure → Either → Cubit.emit with GPS retry UX and crash reporting abstraction</li>
+<li><strong>Feature-modular architecture</strong> — 6 features with colocated domain/data/presentation layers, clean shared core/</li>
+<li><strong>Production security hardening</strong> — Certificate pinning, input validation, secrets externalization, CrashReporter abstraction</li>
+</ol>
+
+<h2>Remaining Items (All Low Priority)</h2>
+<div class="priority low">🟡 <strong>Split home_page.dart (326 lines)</strong> — Extract surah list item and showcase logic into sub-widgets</div>
+<div class="priority low">🟡 <strong>Migrate iconsax → iconsax_flutter</strong> — Current package (^0.0.8) is pre-1.0 with minimal updates</div>
+<div class="priority low">🟡 <strong>Remove empty lib/data/db/ folder</strong> — Legacy artifact from the migration (DatabaseHelper moved to core/storage/)</div>
+
+<h2>Comparison History</h2>
+<table>
+<tr><th>Version</th><th>Date</th><th>Score</th><th>Grade</th><th>Key Change</th></tr>
+<tr><td>v3</td><td>—</td><td>78/100</td><td>B</td><td>Baseline after initial GetX→BLoC migration</td></tr>
+<tr><td>v4</td><td>Jul 14, 2026</td><td>93/100</td><td>A</td><td>Full architecture spec completed (Phases 1-6)</td></tr>
+<tr><td><strong>v5</strong></td><td><strong>Jul 14, 2026</strong></td><td><strong>96/100</strong></td><td><strong>A</strong></td><td><strong>All v4 findings resolved (CrashReporter, coverage script, page split, getx cleanup)</strong></td></tr>
+</table>
+
+<h2>Architecture Diagram</h2>
+<pre>
+┌────────────────────────────────────────────────────────────────┐
+│  main.dart → MultiBlocProvider (app-wide) → MaterialApp.router │
+└───────────────────────────┬────────────────────────────────────┘
+                            │
+┌───────────────────────────▼────────────────────────────────────┐
+│  core/router/app_router.dart                                    │
+│  GoRouter → [...onboardingRoutes, ...dashboardRoutes,           │
+│              ...detailSurahRoutes, ...searchRoutes]              │
+└───────────────────────────┬────────────────────────────────────┘
+                            │
+┌───────────────────────────▼────────────────────────────────────┐
+│  lib/features/                                                  │
+│  ┌───────┐ ┌────────────┐ ┌──────────────┐ ┌────────┐ ┌─────┐│
+│  │ surah │ │detail_surah│ │jadwal_sholat │ │bookmark│ │search││
+│  │       │ │            │ │              │ │        │ │     ││
+│  │domain/│ │  domain/   │ │   domain/    │ │present/│ │pres/││
+│  │ data/ │ │   data/    │ │    data/     │ │        │ │     ││
+│  │present│ │  present/  │ │   present/   │ │        │ │     ││
+│  └───────┘ └────────────┘ └──────────────┘ └────────┘ └─────┘│
+└────────────────────────────────────────────────────────────────┘
+                            │
+┌───────────────────────────▼────────────────────────────────────┐
+│  lib/core/                                                      │
+│  di/ · error/ · network/ · router/ · services/ · storage/       │
+│  utils/ · widgets/ · constants/                                 │
+│  (shared infrastructure — abstract interfaces + implementations)│
+└────────────────────────────────────────────────────────────────┘
+</pre>
+
+<h2>Meta Information</h2>
+<table>
+<tr><td>Assessment Tool</td><td>Kiro Architecture Assessment Skill v1</td></tr>
+<tr><td>Assessment Date</td><td>July 14, 2026</td></tr>
+<tr><td>Previous Report</td><td>v4 — Score: 93/100 (Grade A)</td></tr>
+<tr><td>Source Files</td><td>~85 .dart files (6,153 lines excl. generated)</td></tr>
+<tr><td>Test Files</td><td>39 files, 281 tests (all passing)</td></tr>
+<tr><td>Total Violations</td><td>3 cosmetic (no critical/medium issues)</td></tr>
+<tr><td>Grade</td><td>A — Production-grade, highly scalable</td></tr>
+</table>
+
+</div>
+</body>
+</html>

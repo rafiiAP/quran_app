@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/domain/entity/surah_entity.dart';
-import 'package:quran_app/presentation/controller/search/search_cubit/search_cubit.dart';
+import 'package:quran_app/features/surah/domain/entities/surah_entity.dart';
+import 'package:quran_app/features/search/presentation/cubits/search_cubit/search_cubit.dart';
 
 import '../../fixtures/surah_fixture.dart';
 import '../../helpers/generators.dart';

@@ -1,20 +1,20 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/domain/repositories/remote_repository.dart';
-import 'package:quran_app/presentation/controller/jadwal_sholat/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
+import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
 
 import '../../mocks.dart';
 import '../../fixtures/jadwal_sholat_fixture.dart';
 import '../../helpers/generators.dart';
 
 void main() {
-  late MockRemoteUsecase mockUsecase;
+  late MockGetJadwalSholatUseCase mockUsecase;
   final tEntity = kJadwalSholatModel.toEntity();
 
   setUp(() {
-    mockUsecase = MockRemoteUsecase();
+    mockUsecase = MockGetJadwalSholatUseCase();
   });
 
   test('initial state is JadwalSholatState.initial()', () {
@@ -26,7 +26,7 @@ void main() {
     'emits [loading, success] when usecase returns Right(JadwalSholatEntity)',
     setUp: () {
       when(
-        () => mockUsecase.getJadwalSholat(
+        () => mockUsecase.call(
           latitude: any(named: 'latitude'),
           longitude: any(named: 'longitude'),
           date: any(named: 'date'),
@@ -49,7 +49,7 @@ void main() {
     'emits [loading, error(timeout)] when usecase returns Left(ConnectionFailure)',
     setUp: () {
       when(
-        () => mockUsecase.getJadwalSholat(
+        () => mockUsecase.call(
           latitude: any(named: 'latitude'),
           longitude: any(named: 'longitude'),
           date: any(named: 'date'),
@@ -72,7 +72,7 @@ void main() {
     'forwards latitude, longitude, date to usecase exactly',
     setUp: () {
       when(
-        () => mockUsecase.getJadwalSholat(
+        () => mockUsecase.call(
           latitude: any(named: 'latitude'),
           longitude: any(named: 'longitude'),
           date: any(named: 'date'),
@@ -87,7 +87,7 @@ void main() {
     ),
     verify: (_) {
       verify(
-        () => mockUsecase.getJadwalSholat(
+        () => mockUsecase.call(
           latitude: -7.25,
           longitude: 112.75,
           date: '2024-06-20',
@@ -111,7 +111,7 @@ void main() {
             '2024-${(i % 12 + 1).toString().padLeft(2, '0')}-${(i % 28 + 1).toString().padLeft(2, '0')}';
 
         when(
-          () => mockUsecase.getJadwalSholat(
+          () => mockUsecase.call(
             latitude: lat,
             longitude: lng,
             date: date,
@@ -131,7 +131,7 @@ void main() {
           JadwalSholatState.success(entity),
         ]);
         verify(
-          () => mockUsecase.getJadwalSholat(
+          () => mockUsecase.call(
             latitude: lat,
             longitude: lng,
             date: date,

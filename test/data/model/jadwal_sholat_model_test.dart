@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/data/model/jadwal_sholat_model.dart';
-import 'package:quran_app/domain/entity/jadwal_sholat_entity.dart';
+import 'package:quran_app/features/jadwal_sholat/data/models/jadwal_sholat_model.dart';
+import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
 
 import '../../fixtures/jadwal_sholat_fixture.dart';
 import '../../helpers/generators.dart';

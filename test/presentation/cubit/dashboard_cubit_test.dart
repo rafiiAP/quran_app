@@ -1,8 +1,10 @@
+import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/di/injection.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/presentation/controller/dashboard/dashboard_cubit/dashboard_cubit.dart';
-import 'package:quran_app/presentation/controller/dashboard/dashboard_cubit/dashboard_state.dart';
+import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
+import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_state.dart';
 
 import '../../mocks.dart';
 
@@ -10,11 +12,14 @@ void main() {
   late MockLocalStorageService mockStorageService;
 
   setUp(() {
+    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockStorageService = MockLocalStorageService();
     when(
       () => mockStorageService.setBool(key: 'cacheStarted', value: true),
     ).thenAnswer((_) async {});
   });
+
+  tearDown(() => locator.reset());
 
   // Requirements: 3.1
   test(

@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:quran_app/data/model/bookmark_model.dart';
-import 'package:quran_app/data/model/detail_model.dart';
-import 'package:quran_app/data/model/jadwal_sholat_model.dart';
-import 'package:quran_app/data/model/surah_model.dart';
+import 'package:quran_app/features/detail_surah/data/models/detail_model.dart';
+import 'package:quran_app/features/jadwal_sholat/data/models/jadwal_sholat_model.dart';
+import 'package:quran_app/features/surah/data/models/surah_model.dart';
 
 final Random _rng = Random(42); // seed untuk reprodusibilitas
 

@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/data/model/bookmark_model.dart';
-import 'package:quran_app/presentation/controller/dashboard/bookmark_cubit/bookmark_cubit.dart';
+import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
 
 import '../../mocks.dart';
 import '../../fixtures/bookmark_fixture.dart';

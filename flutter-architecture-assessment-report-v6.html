@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flutter Architecture Assessment — Quran App v6</title>
+<style>
+:root{--green:#4caf50;--yellow:#ff9800;--red:#f44336;--bg:#0f0f23;--card:#1a1a3e;--text:#e0e0e0;--muted:#a0a0c0;--border:#2a2a5a;--primary:#672CBC;--secondary:#DF98FA}
+@media(prefers-color-scheme:light){:root{--bg:#f5f5f5;--card:#fff;--text:#1a1a1a;--muted:#666;--border:#e0e0e0}}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:2rem}
+.container{max-width:1000px;margin:0 auto}h1{font-size:1.8rem;text-align:center;margin-bottom:.3rem}
+h2{font-size:1.3rem;margin:2rem 0 .8rem;border-bottom:1px solid var(--border);padding-bottom:.4rem;color:var(--secondary)}
+p,li{font-size:.92rem}.subtitle{text-align:center;color:var(--muted);margin-bottom:2rem;font-size:.85rem}
+.score-hero{text-align:center;padding:2rem;background:linear-gradient(135deg,var(--card),#25254a);border-radius:16px;border:1px solid var(--border);margin:1.5rem 0}
+.score-num{font-size:4rem;font-weight:bold;background:linear-gradient(135deg,var(--secondary),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.grade{display:inline-block;padding:.3rem 1.2rem;border-radius:20px;font-weight:bold;font-size:1rem;margin-top:.5rem;background:#4caf50;color:#000}
+.delta{font-size:1rem;margin-top:.6rem;color:var(--green);font-weight:bold}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin:.8rem 0}
+.dim-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.dim-score{font-size:1.5rem;font-weight:bold}.dim-score.high{color:var(--green)}.dim-score.mid{color:var(--yellow)}
+.bar{width:100%;height:6px;background:#2a2a4a;border-radius:3px;margin:.4rem 0 .8rem;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}.bar-fill.high{background:var(--green)}.bar-fill.mid{background:var(--yellow)}
+.finding{margin:.2rem 0;padding-left:1.4rem;position:relative;font-size:.88rem}
+.finding::before{position:absolute;left:0}.finding.good::before{content:"✅"}.finding.warn::before{content:"⚠️"}
+table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.88rem}
+th,td{padding:.5rem .8rem;text-align:left;border-bottom:1px solid var(--border)}th{color:var(--secondary);font-weight:600}
+.priority{border-left:3px solid;padding-left:.8rem;margin:.6rem 0;font-size:.88rem}.priority.low{border-color:var(--green)}
+pre{background:#12122a;padding:.8rem;border-radius:6px;overflow-x:auto;font-size:.8rem;margin:.5rem 0;color:#ccc}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🕌 Quran App — Architecture Assessment v6</h1>
+<p class="subtitle">Date: July 14, 2026 · Assessor: Kiro · Flutter + BLoC Cubit + go_router + fpdart + GetIt · 281 tests passing</p>
+
+<div class="score-hero">
+  <div class="score-num">97/100</div>
+  <div><span class="grade">Grade A — Excellent</span></div>
+  <div class="delta">↑ +1 from v5 (96) · ↑ +19 from v3 (78)</div>
+  <p style="margin-top:.8rem;color:var(--muted);font-size:.9rem;">Production-grade feature-modular Clean Architecture. All previous findings resolved. No file exceeds 235 lines (excluding generated). Only one cosmetic item remains: iconsax package version.</p>
+</div>
+
+<h2>Score Summary</h2>
+<table>
+<tr><th>Dimension</th><th>Score</th><th>Δ v5</th><th>Justification</th></tr>
+<tr><td>1. Layer Separation</td><td style="color:var(--green);font-weight:bold">10/10</td><td>0</td><td>Zero violations. Domain pure. Repos never import Dio.</td></tr>
+<tr><td>2. DI & Coupling</td><td style="color:var(--green);font-weight:bold">9/10</td><td>0</td><td>Constructor injection with abstract types everywhere. locator() in convenience getters — mockable.</td></tr>
+<tr><td>3. State Management</td><td style="color:var(--green);font-weight:bold">10/10</td><td>0</td><td>Cubit + freezed. No GetX. Scoped providers. Global only app-wide.</td></tr>
+<tr><td>4. Error Handling</td><td style="color:var(--green);font-weight:bold">10/10</td><td>0</td><td>DataException → Failure pipeline. GPS retry. CrashReporter abstraction.</td></tr>
+<tr><td>5. Navigation & Routing</td><td style="color:var(--green);font-weight:bold">10/10</td><td>0</td><td>go_router modular. int.tryParse + redirect. No imperative nav.</td></tr>
+<tr><td>6. Testability</td><td style="color:var(--green);font-weight:bold">10/10</td><td>0</td><td>281 tests. Unit + widget + integration + PBT. Coverage script current.</td></tr>
+<tr><td>7. Code Organization</td><td style="color:var(--green);font-weight:bold">10/10</td><td style="color:var(--green)">+1</td><td>All pages ≤235 lines. home_page.dart split to 152 lines. Feature-modular. SRP.</td></tr>
+<tr><td>8. Dependency Management</td><td style="color:var(--green);font-weight:bold">9/10</td><td>0</td><td>All pinned. Dependabot. fpdart active. -1 for iconsax ^0.0.8 (pre-1.0).</td></tr>
+<tr><td>9. Security & Config</td><td style="color:var(--green);font-weight:bold">10/10</td><td>0</td><td>Secrets externalized. Cert pinning. Input validation. CrashReporter abstraction.</td></tr>
+<tr><td>10. Scalability</td><td style="color:var(--green);font-weight:bold">9/10</td><td>0</td><td>Feature-first. CI gate. Proper dispose. -1 for lib/injection.dart re-export barrel (minor).</td></tr>
+</table>
+
+<h2>Dimension Details</h2>
+
+<div class="card">
+<div class="dim-header"><h3>1. Layer Separation & Dependency Rule</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">Domain imports: fpdart, equatable, freezed_annotation only — zero violations</div>
+<div class="finding good">Repository files: zero Dio imports. DataException encapsulates network layer</div>
+<div class="finding good">Data never imports presentation. Explicit toEntity() in all Models</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>2. DI & Coupling</h3><span class="dim-score high">9/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:90%"></div></div>
+<div class="finding good">All UseCases, Cubits, Datasources via constructor injection (abstract types)</div>
+<div class="finding good">No C.*/W.* — refactored to typed locator getters backed by abstract factories</div>
+<div class="finding warn">locator&lt;T&gt;() in convenience getters and route builders — acceptable but slightly couples to GetIt</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>3. State Management</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">100% Cubit + @freezed sealed states. Zero GetX in lib/ and test/</div>
+<div class="finding good">Scoped BlocProviders: detail_surah (route), jadwal_sholat (page)</div>
+<div class="finding good">Global MultiBlocProvider: only Dashboard, Home, GetSurah, Bookmark</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>4. Error Handling</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">fpdart Either with .match(). DataException at datasource → Failure at repo</div>
+<div class="finding good">GPS retry: locationError(retryCount) → locationPermissionError after 3 attempts</div>
+<div class="finding good">main.dart error boundaries via locator&lt;CrashReporter&gt;()</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>5. Navigation & Routing</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">go_router only. Modular feature routes. int.tryParse + redirect + CrashReporter log</div>
+<div class="finding good">Redirect guard: pure evaluateRedirect() method, fully unit tested</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>6. Testability</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">281 tests, 39 files. All passing. Unit + widget + integration + property-based</div>
+<div class="finding good">coverage_report.sh up to date with current paths</div>
+<div class="finding good">No legacy test artifacts. All business logic mockable via interfaces</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>7. Code Organization & Naming</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">Feature-modular: 6 features with colocated domain/data/presentation</div>
+<div class="finding good">Largest page file: 198 lines (detail_surah_page.dart). home_page.dart: 152 lines</div>
+<div class="finding good">Per-feature repos, usecases, datasources (SRP). 1 public class per file</div>
+<div class="finding good">Extracted widgets: LastReadCard, SurahListItem, AyatListItem, AyatBottomSheet</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>8. Dependency Management</h3><span class="dim-score high">9/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:90%"></div></div>
+<div class="finding good">All deps pinned (^X.Y.Z). Dependabot weekly. fpdart ^1.1.0 active</div>
+<div class="finding good">Dev deps properly separated. No unused deps. No duplicates</div>
+<div class="finding warn">iconsax ^0.0.8 — pre-1.0, low activity. Successor: iconsax_flutter ^1.0.x</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>9. Security & Configuration</h3><span class="dim-score high">10/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:100%"></div></div>
+<div class="finding good">.env gitignored. API keys via flutter_dotenv. No hardcoded secrets</div>
+<div class="finding good">Certificate pinning (SHA-256) for equran.id + api.aladhan.com</div>
+<div class="finding good">requireField&lt;T&gt;() validation in all Model.fromMap factories</div>
+<div class="finding good">CrashReporter abstraction — main.dart uses locator, not FirebaseCrashlytics directly</div>
+</div>
+
+<div class="card">
+<div class="dim-header"><h3>10. Scalability & Maintainability</h3><span class="dim-score high">9/10</span></div>
+<div class="bar"><div class="bar-fill high" style="width:90%"></div></div>
+<div class="finding good">New feature: create folder + register in injection.dart + add route spread. Minimal changes</div>
+<div class="finding good">CI: analyze + test + 90% coverage gate. Dependabot for deps</div>
+<div class="finding good">Proper Timer dispose in cubit close(). No God objects</div>
+<div class="finding warn">lib/injection.dart re-export barrel still exists (harmless but unnecessary)</div>
+</div>
+
+<h2>Remaining Item</h2>
+<div class="priority low">🟡 <strong>iconsax ^0.0.8</strong> — Pre-1.0 icon package. Consider migrating to <code>iconsax_flutter ^1.0.x</code> when convenient. Purely cosmetic, zero architectural impact.</div>
+
+<h2>Score History</h2>
+<table>
+<tr><th>Version</th><th>Score</th><th>Grade</th><th>Key Change</th></tr>
+<tr><td>v3</td><td>78</td><td>B</td><td>Baseline (post-GetX migration)</td></tr>
+<tr><td>v4</td><td>93</td><td>A</td><td>Architecture spec completed (6 phases)</td></tr>
+<tr><td>v5</td><td>96</td><td>A</td><td>v4 findings fixed (CrashReporter, coverage script, page split, getx cleanup)</td></tr>
+<tr><td><strong>v6</strong></td><td><strong>97</strong></td><td><strong>A</strong></td><td><strong>home_page split (326→152), lib/data/db removed, context updated</strong></td></tr>
+</table>
+
+<h2>Meta</h2>
+<table>
+<tr><td>Files scanned</td><td>~85 .dart (excl. generated)</td></tr>
+<tr><td>Tests</td><td>281 (all passing)</td></tr>
+<tr><td>Largest file</td><td>jadwal_sholat_page_cubit.dart (235 lines — complex but SRP-compliant)</td></tr>
+<tr><td>Violations</td><td>1 cosmetic (iconsax version)</td></tr>
+</table>
+
+</div>
+</body>
+</html>

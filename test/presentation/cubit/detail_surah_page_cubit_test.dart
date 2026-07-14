@@ -1,8 +1,10 @@
+import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/di/injection.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/domain/entity/detail_entity.dart';
-import 'package:quran_app/presentation/controller/detail_surah/detail_surah_page_cubit/detail_surah_page_cubit.dart';
+import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
+import 'package:quran_app/features/detail_surah/presentation/cubits/detail_surah_page_cubit/detail_surah_page_cubit.dart';
 
 import '../../helpers/generators.dart';
 import '../../mocks.dart';
@@ -12,6 +14,7 @@ void main() {
   late MockDatabaseHelper mockDatabaseHelper;
 
   setUp(() {
+    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockStorageService = MockLocalStorageService();
     mockDatabaseHelper = MockDatabaseHelper();
 
@@ -29,6 +32,8 @@ void main() {
       ),
     ).thenAnswer((_) async {});
   });
+
+  tearDown(() => locator.reset());
 
   // ---------------------------------------------------------------------------
   // Unit tests (task 8.3)

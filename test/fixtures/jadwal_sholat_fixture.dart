@@ -1,4 +1,4 @@
-import 'package:quran_app/data/model/jadwal_sholat_model.dart';
+import 'package:quran_app/features/jadwal_sholat/data/models/jadwal_sholat_model.dart';
 
 const Map<String, dynamic> kJadwalSholatMap = {
   'Fajr': '04:30',

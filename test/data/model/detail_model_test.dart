@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/data/model/detail_model.dart';
-import 'package:quran_app/domain/entity/detail_entity.dart';
+import 'package:quran_app/features/detail_surah/data/models/detail_model.dart';
+import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
 
 import '../../helpers/generators.dart';
 

@@ -1,5 +1,5 @@
-import 'package:quran_app/data/model/surah_model.dart';
-import 'package:quran_app/domain/entity/surah_entity.dart';
+import 'package:quran_app/features/surah/data/models/surah_model.dart';
+import 'package:quran_app/features/surah/domain/entities/surah_entity.dart';
 
 const Map<String, dynamic> kSurahMap = {
   'nomor': 1,

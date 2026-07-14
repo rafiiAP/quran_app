@@ -1,20 +1,43 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/data/datasources/crash_reporter.dart';
-import 'package:quran_app/data/datasources/http_client.dart';
-import 'package:quran_app/data/datasources/local_storage_service.dart';
-import 'package:quran_app/data/datasources/notification_service.dart';
-import 'package:quran_app/domain/repositories/remote_repository.dart';
-import 'package:quran_app/domain/use_case/remote_usecase.dart';
-import 'package:quran_app/data/datasources/remote_datasource/remote_datasource.dart';
-import 'package:quran_app/data/db/database_helper.dart';
+import 'package:quran_app/core/services/crash_reporter.dart';
+import 'package:quran_app/core/services/datetime_service.dart';
+import 'package:quran_app/core/services/location_service.dart';
+import 'package:quran_app/core/services/logger_service.dart';
+import 'package:quran_app/core/services/permission_service.dart';
+import 'package:quran_app/core/services/showcase_service.dart';
+import 'package:quran_app/core/network/http_client.dart';
+import 'package:quran_app/core/storage/local_storage_service.dart';
+import 'package:quran_app/core/services/notification_service.dart';
+import 'package:quran_app/features/detail_surah/domain/repositories/detail_surah_repository.dart';
+import 'package:quran_app/features/surah/domain/repositories/surah_repository.dart';
+import 'package:quran_app/features/jadwal_sholat/domain/repositories/jadwal_sholat_repository.dart';
+import 'package:quran_app/features/surah/domain/usecases/get_surah_usecase.dart';
+import 'package:quran_app/features/detail_surah/domain/usecases/get_detail_surah_usecase.dart';
+import 'package:quran_app/features/jadwal_sholat/domain/usecases/get_jadwal_sholat_usecase.dart';
+import 'package:quran_app/features/surah/data/datasources/surah_datasource.dart';
+import 'package:quran_app/features/jadwal_sholat/data/datasources/jadwal_sholat_datasource.dart';
+import 'package:quran_app/core/storage/database_helper.dart';
 
 // Domain layer
-class MockRemoteRepository extends Mock implements RemoteRepository {}
+class MockSurahRepository extends Mock implements SurahRepository {}
 
-class MockRemoteUsecase extends Mock implements RemoteUsecase {}
+class MockDetailSurahRepository extends Mock implements DetailSurahRepository {}
+
+class MockJadwalSholatRepository extends Mock
+    implements JadwalSholatRepository {}
+
+class MockGetSurahUseCase extends Mock implements GetSurahUseCase {}
+
+class MockGetDetailSurahUseCase extends Mock implements GetDetailSurahUseCase {}
+
+class MockGetJadwalSholatUseCase extends Mock
+    implements GetJadwalSholatUseCase {}
 
 // Data layer
-class MockRemoteDatasource extends Mock implements RemoteDatasource {}
+class MockSurahDatasource extends Mock implements SurahDatasource {}
+
+class MockJadwalSholatDatasource extends Mock
+    implements JadwalSholatDatasource {}
 
 class MockDatabaseHelper extends Mock implements DatabaseHelper {}
 
@@ -28,3 +51,15 @@ class MockLocalStorageService extends Mock implements LocalStorageService {}
 
 // Notifications
 class MockNotificationService extends Mock implements NotificationService {}
+
+// Services (extracted from MainFunction)
+class MockLoggerService extends Mock implements LoggerService {}
+
+class MockDatetimeService extends Mock implements DatetimeService {}
+
+class MockPermissionService extends Mock implements PermissionService {}
+
+class MockShowcaseService extends Mock implements ShowcaseService {}
+
+// Location
+class MockLocationService extends Mock implements LocationService {}
