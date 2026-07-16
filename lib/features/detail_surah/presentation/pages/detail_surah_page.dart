@@ -39,6 +39,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
   final GlobalKey _btnShareKey = GlobalKey();
 
   bool _hasScrolled = false;
+  bool _hasShownShowcase = false;
 
   @override
   void initState() {
@@ -56,6 +57,21 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
     if (_itemScrollController.isAttached) {
       _itemScrollController.jumpTo(index: targetIndex);
     }
+  }
+
+  void _triggerShowcase(BuildContext showcaseContext) {
+    if (_hasShownShowcase) return;
+    _hasShownShowcase = true;
+    // Showcase is triggered once after the success state is reached.
+    // Using addPostFrameCallback ensures the showcase widgets are mounted.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      locator<ShowcaseService>().showCase(
+        context: showcaseContext,
+        keys: [_menuKey],
+        cacheKey: config.cacheShowCaseDetail,
+      );
+    });
   }
 
   void _onTapAyat(
@@ -98,6 +114,8 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
                       _scrollToIndex(widget.indexTandai);
                     });
                   }
+                  // Trigger showcase once after first successful load
+                  _triggerShowcase(showcaseContext);
                 },
                 orElse: () {},
               );
@@ -137,12 +155,6 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
                   ),
                 ),
                 success: (detail) {
-                  locator<ShowcaseService>().showCase(
-                    context: showcaseContext,
-                    keys: [_menuKey],
-                    cacheKey: config.cacheShowCaseDetail,
-                  );
-
                   final int tempIndex =
                       widget.indexTandai != null ? widget.indexTandai! - 1 : 0;
 

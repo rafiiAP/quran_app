@@ -22,6 +22,7 @@ void showAyatBottomSheet({
   required GlobalKey btnShareKey,
 }) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
+  final showcaseService = locator<ShowcaseService>();
   showModalBottomSheet<void>(
     context: context,
     backgroundColor: isDark ? colorConfig.bgBottom : colorConfig.white,
@@ -34,11 +35,16 @@ void showAyatBottomSheet({
     builder: (bottomSheetContext) {
       return ShowCaseWidget(
         builder: (showcaseContext) {
-          locator<ShowcaseService>().showCase(
-            context: showcaseContext,
-            keys: [btnTandaiKey, btnBookmarkKey, btnShareKey],
-            cacheKey: config.cacheShowCaseBottomDetail,
-          );
+          // Trigger showcase via post-frame to avoid calling
+          // showcaseService inside the synchronous build phase.
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!showcaseContext.mounted) return;
+            showcaseService.showCase(
+              context: showcaseContext,
+              keys: [btnTandaiKey, btnBookmarkKey, btnShareKey],
+              cacheKey: config.cacheShowCaseBottomDetail,
+            );
+          });
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

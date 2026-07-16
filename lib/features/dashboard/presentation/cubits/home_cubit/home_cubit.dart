@@ -72,7 +72,9 @@ class HomeCubit extends Cubit<HomeState> {
               indexTandai: nomorAyat,
             ),
           );
-          _loadLastRead();
+          // NOTE: _loadLastRead() is intentionally NOT called here.
+          // The caller (HomePage listener) awaits navigation via .then()
+          // and calls refreshLastRead() explicitly after returning.
         } else {
           emit(const HomeState.showMessage('Belum ada bacaan terakhir'));
           _loadLastRead();
@@ -89,6 +91,8 @@ class HomeCubit extends Cubit<HomeState> {
         indexTandai: null,
       ),
     );
-    _loadLastRead();
+    // NOTE: _loadLastRead() is intentionally NOT called here.
+    // The caller (HomePage listener) awaits navigation via .then()
+    // and calls refreshLastRead() explicitly after returning.
   }
 }

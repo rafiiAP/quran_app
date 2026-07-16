@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:quran_app/data/model/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/data/models/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
 import 'package:quran_app/features/detail_surah/data/models/detail_model.dart';
 import 'package:quran_app/features/jadwal_sholat/data/models/jadwal_sholat_model.dart';
 import 'package:quran_app/features/surah/data/models/surah_model.dart';
@@ -81,6 +82,21 @@ BookmarkModel generateRandomBookmarkModel() {
 
 List<BookmarkModel> generateRandomBookmarkList(int size) {
   return List.generate(size, (_) => generateRandomBookmarkModel());
+}
+
+BookmarkEntity generateRandomBookmarkEntity() {
+  return BookmarkEntity(
+    nomorSurah: _randomInt(min: 1, max: 114),
+    namaLatin: _randomString(10),
+    nomorAyat: _randomInt(min: 1, max: 286),
+    teksArab: _randomString(20),
+    teksIndonesia: _randomString(30),
+    teksLatin: _randomString(25),
+  );
+}
+
+List<BookmarkEntity> generateRandomBookmarkEntityList(int size) {
+  return List.generate(size, (_) => generateRandomBookmarkEntity());
 }
 
 JadwalSholatModel generateRandomJadwalSholatModel() {

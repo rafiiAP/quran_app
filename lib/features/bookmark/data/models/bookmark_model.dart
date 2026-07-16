@@ -1,5 +1,10 @@
+import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
+
+/// Data model for bookmark persistence (SQLite).
+///
+/// Handles serialization to/from [Map] for database operations
+/// and conversion to the domain [BookmarkEntity].
 class BookmarkModel {
-  /// Constructor utama dengan required parameters
   const BookmarkModel({
     this.id,
     required this.nomorSurah,
@@ -10,7 +15,7 @@ class BookmarkModel {
     required this.teksLatin,
   });
 
-  /// Factory method untuk konversi dari Map ke BookmarkModel
+  /// Creates a [BookmarkModel] from a database row map.
   factory BookmarkModel.fromMap(final Map<String, dynamic> map) {
     return BookmarkModel(
       id: map['id'] as int?,
@@ -23,8 +28,7 @@ class BookmarkModel {
     );
   }
 
-  final int?
-      id; // Optional karena ID biasanya otomatis di-generate oleh database
+  final int? id;
   final int nomorSurah;
   final String namaLatin;
   final int nomorAyat;
@@ -32,7 +36,7 @@ class BookmarkModel {
   final String teksIndonesia;
   final String teksLatin;
 
-  /// Konversi dari objek ke Map (untuk database)
+  /// Converts to a map suitable for database insertion.
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -43,5 +47,18 @@ class BookmarkModel {
       'teks_indonesia': teksIndonesia,
       'teks_latin': teksLatin,
     };
+  }
+
+  /// Converts to the domain [BookmarkEntity].
+  BookmarkEntity toEntity() {
+    return BookmarkEntity(
+      id: id,
+      nomorSurah: nomorSurah,
+      namaLatin: namaLatin,
+      nomorAyat: nomorAyat,
+      teksArab: teksArab,
+      teksIndonesia: teksIndonesia,
+      teksLatin: teksLatin,
+    );
   }
 }

@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'package:path/path.dart';
-import 'package:quran_app/data/model/bookmark_model.dart';
-import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:sqflite/sqflite.dart';
 
 DatabaseHelper get databaseHelper => locator<DatabaseHelper>();
 
+/// Low-level SQLite database helper.
+///
+/// Provides generic CRUD operations on the bookmark table.
+/// Does NOT depend on any feature-layer entities or models — all data
+/// is exchanged as raw [Map<String, dynamic>] to keep core decoupled.
 class DatabaseHelper {
   static Database? _db;
 
@@ -26,7 +29,6 @@ class DatabaseHelper {
   }
 
   void _createDb(final Database db, final int version) async {
-    // Create bookmark table
     await db.execute('''
       CREATE TABLE bookmark(
         nomor_surah INTEGER,
@@ -39,57 +41,35 @@ class DatabaseHelper {
     ''');
   }
 
-  // Insert data into tables
-  // Returns true if inserted (new), false if already exists (duplicate)
-  Future<bool> insertOrUpdateBookmark(
-    final AyatDetailEntity ayatDetailEntity,
-    final DetailEntity detailEntity,
-  ) async {
+  /// Inserts a bookmark row if it doesn't already exist.
+  ///
+  /// Returns `true` if inserted (new), `false` if already exists (duplicate).
+  /// The [data] map must contain keys matching the bookmark table columns.
+  Future<bool> insertBookmark(Map<String, dynamic> data) async {
     final Database dbClient = await db;
 
-    // Cek apakah data dengan nama_latin tertentu sudah ada
     final List<Map<dynamic, dynamic>> existingData = await dbClient.query(
       'bookmark',
       where: 'teks_indonesia = ?',
-      whereArgs: <Object>[ayatDetailEntity.teksIndonesia],
+      whereArgs: <Object>[data['teks_indonesia'] as Object],
     );
 
     if (existingData.isEmpty) {
-      // Jika tidak ada data, lakukan insert
-      await dbClient.insert(
-        'bookmark',
-        <String, Object?>{
-          'nomor_surah': detailEntity.nomor,
-          'nama_latin': detailEntity.namaLatin,
-          'nomor_ayat': ayatDetailEntity.nomorAyat,
-          'teks_arab': ayatDetailEntity.teksArab,
-          'teks_indonesia': ayatDetailEntity.teksIndonesia,
-          'teks_latin': ayatDetailEntity.teksLatin,
-        },
-      );
+      await dbClient.insert('bookmark', data);
       return true;
     }
     return false;
   }
 
-  // Get all data from tables
-  Future<List<BookmarkModel>> getAllBookmarks() async {
+  /// Returns all bookmark rows as a list of maps.
+  Future<List<Map<String, dynamic>>> getAllBookmarks() async {
     final Database dbClient = await db;
-
-    // Ambil semua data dari tabel 'bookmark'
-    final List<Map<String, dynamic>> maps = await dbClient.query('bookmark');
-
-    // Konversi List<Map<String, dynamic>> menjadi List<BookmarkModel>
-    return List<BookmarkModel>.generate(
-      maps.length,
-      (final int index) => BookmarkModel.fromMap(maps[index]),
-    );
+    return dbClient.query('bookmark');
   }
 
+  /// Deletes the bookmark row matching [teksIndonesia].
   Future<void> deleteBookmark(final String teksIndonesia) async {
     final Database dbClient = await db;
-
-    // Hapus data berdasarkan nama_latin
     await dbClient.delete(
       'bookmark',
       where: 'teks_indonesia = ?',
@@ -97,7 +77,7 @@ class DatabaseHelper {
     );
   }
 
-  // Close database
+  /// Closes the database connection.
   void close() async {
     final Database dbClient = await db;
     await dbClient.close();

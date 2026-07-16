@@ -2,6 +2,10 @@
 ///
 /// Implementation: [FlutterNotificationService].
 abstract class NotificationService {
+  /// Initializes the notification plugin and timezone data.
+  /// Must be called once during app startup before scheduling notifications.
+  Future<void> initLocalNotif();
+
   /// Schedules a daily repeating notification at [hour]:[minute].
   ///
   /// [id] must be unique per prayer. If the time has already passed today

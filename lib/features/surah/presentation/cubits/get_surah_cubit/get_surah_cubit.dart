@@ -12,7 +12,7 @@ class GetSurahCubit extends Cubit<GetSurahState> {
   GetSurahCubit({required this.usecase}) : super(const GetSurahState.initial());
   final GetSurahUseCase usecase;
 
-  void getPosts() async {
+  Future<void> getPosts() async {
     // Skip jika data sudah ada — mencegah re-fetch saat tab navigation
     if (state is _Success) return;
 

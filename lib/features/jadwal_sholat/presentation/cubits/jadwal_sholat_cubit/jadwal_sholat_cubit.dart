@@ -14,7 +14,7 @@ class JadwalSholatCubit extends Cubit<JadwalSholatState> {
 
   final GetJadwalSholatUseCase usecase;
 
-  void getPosts({
+  Future<void> getPosts({
     final double latitude = 0.0,
     final double longitude = 0.0,
     final String date = '',

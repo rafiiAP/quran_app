@@ -310,44 +310,6 @@ void main() {
     });
   });
 
-  group('JadwalSholatDioEntity & JadwalSholatDataEntity', () {
-    const timings = JadwalSholatEntity(
-      fajr: '04:30',
-      sunrise: '05:51',
-      dhuhr: '11:53',
-      asr: '15:14',
-      sunset: '17:55',
-      maghrib: '17:55',
-      isha: '19:08',
-      imsak: '04:20',
-      midnight: '23:53',
-      firstthird: '21:51',
-      lastthird: '01:54',
-    );
-
-    test('JadwalSholatDataEntity equality and props', () {
-      const data1 = JadwalSholatDataEntity(timings: timings);
-      const data2 = JadwalSholatDataEntity(timings: timings);
-      expect(data1, equals(data2));
-      expect(data1.props, [timings]);
-    });
-
-    test('JadwalSholatDioEntity equality and props', () {
-      const data = JadwalSholatDataEntity(timings: timings);
-      const dio1 = JadwalSholatDioEntity(code: 200, status: 'OK', data: data);
-      const dio2 = JadwalSholatDioEntity(code: 200, status: 'OK', data: data);
-      expect(dio1, equals(dio2));
-      expect(dio1.props, [200, 'OK', data]);
-    });
-
-    test('JadwalSholatDioEntity with different code should not be equal', () {
-      const data = JadwalSholatDataEntity(timings: timings);
-      const dio1 = JadwalSholatDioEntity(code: 200, status: 'OK', data: data);
-      const dio2 = JadwalSholatDioEntity(code: 404, status: 'OK', data: data);
-      expect(dio1, isNot(equals(dio2)));
-    });
-  });
-
   group('Property Tests', () {
     test('Property 1: Equatable Equality pada SurahEntity', () {
       // Feature: unit-testing, Property 1: SurahEntity equatable equality

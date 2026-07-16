@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/core/widgets/app_button.dart';
@@ -6,8 +7,7 @@ import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/constants/image.dart';
-import 'package:quran_app/core/storage/local_storage_service.dart';
-import 'package:quran_app/core/di/injection.dart';
+import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
 
 class StartedPage extends StatelessWidget {
   const StartedPage({super.key});
@@ -72,10 +72,10 @@ class StartedPage extends StatelessWidget {
                       ),
                       backgroundColor: colorConfig.white,
                       onPressed: () {
-                        locator<LocalStorageService>().setBool(
-                          key: config.cacheStarted,
-                          value: true,
-                        );
+                        // DashboardCubit._init() already persists cacheStarted = true
+                        // when the DashboardCubit is first created. We only need to
+                        // navigate here; no direct locator<> call needed.
+                        context.read<DashboardCubit>().markStarted();
                         context.go(AppConfig.routeHome);
                       },
                       child: appText.textBody(

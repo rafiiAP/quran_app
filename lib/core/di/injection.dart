@@ -1,28 +1,32 @@
 import 'package:get_it/get_it.dart';
-import 'package:quran_app/core/style.dart';
-import 'package:quran_app/core/widgets/app_text.dart';
-import 'package:quran_app/core/widgets/app_button.dart';
-import 'package:quran_app/core/widgets/app_input.dart';
-import 'package:quran_app/core/widgets/app_bottomsheet.dart';
-import 'package:quran_app/core/widgets/app_shimmer.dart';
-import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/constants/image.dart';
+import 'package:quran_app/core/network/http_client.dart';
+import 'package:quran_app/core/network/main_http_client.dart';
+import 'package:quran_app/core/router/app_router.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
 import 'package:quran_app/core/services/datetime_service.dart';
 import 'package:quran_app/core/services/firebase_crash_reporter.dart';
 import 'package:quran_app/core/services/flutter_notification_service.dart';
 import 'package:quran_app/core/services/location_service.dart';
 import 'package:quran_app/core/services/logger_service.dart';
+import 'package:quran_app/core/services/notification_service.dart';
 import 'package:quran_app/core/services/permission_service.dart';
 import 'package:quran_app/core/services/showcase_service.dart';
-import 'package:quran_app/core/network/main_http_client.dart';
-import 'package:quran_app/core/storage/shared_preferences_storage_service.dart';
-import 'package:quran_app/core/network/http_client.dart';
-import 'package:quran_app/core/storage/local_storage_service.dart';
-import 'package:quran_app/core/services/notification_service.dart';
 import 'package:quran_app/core/storage/database_helper.dart';
+import 'package:quran_app/core/storage/local_storage_service.dart';
+import 'package:quran_app/core/storage/shared_preferences_storage_service.dart';
+import 'package:quran_app/core/style.dart';
+import 'package:quran_app/core/widgets/app_bottomsheet.dart';
+import 'package:quran_app/core/widgets/app_button.dart';
+import 'package:quran_app/core/widgets/app_input.dart';
+import 'package:quran_app/core/widgets/app_padding.dart';
+import 'package:quran_app/core/widgets/app_shimmer.dart';
+import 'package:quran_app/core/widgets/app_text.dart';
+import 'package:quran_app/features/bookmark/data/repositories/bookmark_repository_impl.dart';
+import 'package:quran_app/features/bookmark/domain/repositories/bookmark_repository.dart';
+import 'package:quran_app/features/detail_surah/data/datasources/detail_surah_datasource.dart';
 import 'package:quran_app/features/detail_surah/data/repositories/detail_surah_repository_impl.dart';
 import 'package:quran_app/features/detail_surah/domain/repositories/detail_surah_repository.dart';
 import 'package:quran_app/features/detail_surah/domain/usecases/get_detail_surah_usecase.dart';
@@ -34,7 +38,6 @@ import 'package:quran_app/features/surah/data/datasources/surah_datasource.dart'
 import 'package:quran_app/features/surah/data/repositories/surah_repository_impl.dart';
 import 'package:quran_app/features/surah/domain/repositories/surah_repository.dart';
 import 'package:quran_app/features/surah/domain/usecases/get_surah_usecase.dart';
-import 'package:quran_app/core/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt locator = GetIt.instance;
@@ -102,10 +105,20 @@ Future<void> setup() async {
   locator.registerLazySingleton<JadwalSholatRepository>(
     () => JadwalSholatRepositoryImpl(datasource: locator()),
   );
+  locator.registerLazySingleton<BookmarkRepository>(
+    () => BookmarkRepositoryImpl(databaseHelper: locator()),
+  );
 
   // per-feature datasources
   locator.registerLazySingleton<SurahDatasource>(
     () => SurahDatasourceImpl(
+      httpClient: locator(),
+      crashReporter: locator(),
+      baseUrl: locator<AppConfig>().cUrlSurah,
+    ),
+  );
+  locator.registerLazySingleton<DetailSurahDatasource>(
+    () => DetailSurahDatasourceImpl(
       httpClient: locator(),
       crashReporter: locator(),
       baseUrl: locator<AppConfig>().cUrlSurah,

@@ -1,33 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-class JadwalSholatDioEntity extends Equatable {
-  const JadwalSholatDioEntity({
-    // coverage:ignore-line
-    required this.code,
-    required this.status,
-    required this.data,
-  });
-
-  final int code;
-  final String status;
-  final JadwalSholatDataEntity data;
-
-  @override
-  List<Object?> get props => <Object?>[code, status, data];
-}
-
-class JadwalSholatDataEntity extends Equatable {
-  const JadwalSholatDataEntity({
-    // coverage:ignore-line
-    required this.timings,
-  });
-
-  final JadwalSholatEntity timings;
-
-  @override
-  List<Object?> get props => <Object?>[timings];
-}
-
 class JadwalSholatEntity extends Equatable {
   const JadwalSholatEntity({
     required this.fajr,

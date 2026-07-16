@@ -1,4 +1,5 @@
-import 'package:quran_app/data/model/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/data/models/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
 
 const Map<String, dynamic> kBookmarkMap = {
   'id': null,
@@ -11,3 +12,12 @@ const Map<String, dynamic> kBookmarkMap = {
 };
 
 final BookmarkModel kBookmarkModel = BookmarkModel.fromMap(kBookmarkMap);
+
+const BookmarkEntity kBookmarkEntity = BookmarkEntity(
+  nomorSurah: 1,
+  namaLatin: 'Al-Fatihah',
+  nomorAyat: 1,
+  teksArab: 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ',
+  teksIndonesia: 'Dengan nama Allah Yang Maha Pengasih, Maha Penyayang',
+  teksLatin: 'Bismillāhir-raḥmānir-raḥīm(i).',
+);

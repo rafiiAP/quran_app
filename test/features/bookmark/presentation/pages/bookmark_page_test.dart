@@ -8,25 +8,25 @@ import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_text.dart';
-import 'package:quran_app/data/model/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
 import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
 import 'package:quran_app/features/bookmark/presentation/pages/bookmark_page.dart';
 
 class MockBookmarkCubit extends MockCubit<BookmarkState>
     implements BookmarkCubit {}
 
-class _FakeBookmarkModel extends Fake implements BookmarkModel {}
+class _FakeBookmarkEntity extends Fake implements BookmarkEntity {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(_FakeBookmarkModel());
+    registerFallbackValue(_FakeBookmarkEntity());
   });
 
   late MockBookmarkCubit mockBookmarkCubit;
   final locator = GetIt.instance;
 
   final testBookmarks = [
-    const BookmarkModel(
+    const BookmarkEntity(
       nomorSurah: 1,
       namaLatin: 'Al-Fatihah',
       nomorAyat: 1,
@@ -34,7 +34,7 @@ void main() {
       teksIndonesia: 'Dengan nama Allah Yang Maha Pengasih, Maha Penyayang',
       teksLatin: 'Bismillāhir-raḥmānir-raḥīm(i).',
     ),
-    const BookmarkModel(
+    const BookmarkEntity(
       nomorSurah: 2,
       namaLatin: 'Al-Baqarah',
       nomorAyat: 255,

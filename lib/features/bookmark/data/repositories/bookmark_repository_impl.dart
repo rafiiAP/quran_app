@@ -1,0 +1,68 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/core/storage/database_helper.dart';
+import 'package:quran_app/features/bookmark/data/models/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
+import 'package:quran_app/features/bookmark/domain/repositories/bookmark_repository.dart';
+import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
+
+/// [BookmarkRepository] implementation backed by [DatabaseHelper].
+///
+/// Maps between domain entities and raw database maps, keeping the
+/// core storage layer decoupled from feature-specific types.
+class BookmarkRepositoryImpl implements BookmarkRepository {
+  const BookmarkRepositoryImpl({required DatabaseHelper databaseHelper})
+      : _databaseHelper = databaseHelper;
+
+  final DatabaseHelper _databaseHelper;
+
+  @override
+  Future<Either<Failure, bool>> insertOrUpdateBookmark(
+    final AyatDetailEntity ayat,
+    final DetailEntity detail,
+  ) async {
+    try {
+      final Map<String, dynamic> data = <String, dynamic>{
+        'nomor_surah': detail.nomor,
+        'nama_latin': detail.namaLatin,
+        'nomor_ayat': ayat.nomorAyat,
+        'teks_arab': ayat.teksArab,
+        'teks_indonesia': ayat.teksIndonesia,
+        'teks_latin': ayat.teksLatin,
+      };
+      final bool isNew = await _databaseHelper.insertBookmark(data);
+      return Right(isNew);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BookmarkEntity>>> getAllBookmarks() async {
+    try {
+      final List<Map<String, dynamic>> maps =
+          await _databaseHelper.getAllBookmarks();
+      final List<BookmarkEntity> entities = maps
+          .map(
+            (final Map<String, dynamic> map) =>
+                BookmarkModel.fromMap(map).toEntity(),
+          )
+          .toList();
+      return Right(entities);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteBookmark(
+    final String teksIndonesia,
+  ) async {
+    try {
+      await _databaseHelper.deleteBookmark(teksIndonesia);
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+}

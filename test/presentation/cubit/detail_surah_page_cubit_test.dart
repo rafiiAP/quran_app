@@ -2,6 +2,7 @@ import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
 import 'package:quran_app/features/detail_surah/presentation/cubits/detail_surah_page_cubit/detail_surah_page_cubit.dart';
@@ -11,12 +12,12 @@ import '../../mocks.dart';
 
 void main() {
   late MockLocalStorageService mockStorageService;
-  late MockDatabaseHelper mockDatabaseHelper;
+  late MockBookmarkRepository mockBookmarkRepository;
 
   setUp(() {
     locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockStorageService = MockLocalStorageService();
-    mockDatabaseHelper = MockDatabaseHelper();
+    mockBookmarkRepository = MockBookmarkRepository();
 
     // Default stubs so constructor doesn't throw
     when(
@@ -45,7 +46,7 @@ void main() {
       'emits [actionCompleted, idle] and writes to storage',
       build: () => DetailSurahPageCubit(
         storageService: mockStorageService,
-        databaseHelper: mockDatabaseHelper,
+        bookmarkRepository: mockBookmarkRepository,
       ),
       act: (cubit) => cubit.markAsLastRead(
         namaLatin: 'Al-Fatihah',
@@ -105,12 +106,13 @@ void main() {
     blocTest<DetailSurahPageCubit, DetailSurahPageState>(
       'emits actionCompleted("Berhasil disimpan ke bookmark") when insertOrUpdateBookmark returns true',
       setUp: () {
-        when(() => mockDatabaseHelper.insertOrUpdateBookmark(kAyat, kDetail))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockBookmarkRepository.insertOrUpdateBookmark(kAyat, kDetail),
+        ).thenAnswer((_) async => const Right(true));
       },
       build: () => DetailSurahPageCubit(
         storageService: mockStorageService,
-        databaseHelper: mockDatabaseHelper,
+        bookmarkRepository: mockBookmarkRepository,
       ),
       act: (cubit) => cubit.saveBookmark(ayat: kAyat, detail: kDetail),
       expect: () => [
@@ -124,12 +126,13 @@ void main() {
     blocTest<DetailSurahPageCubit, DetailSurahPageState>(
       'emits actionCompleted("Data sudah ada") when insertOrUpdateBookmark returns false',
       setUp: () {
-        when(() => mockDatabaseHelper.insertOrUpdateBookmark(kAyat, kDetail))
-            .thenAnswer((_) async => false);
+        when(
+          () => mockBookmarkRepository.insertOrUpdateBookmark(kAyat, kDetail),
+        ).thenAnswer((_) async => const Right(false));
       },
       build: () => DetailSurahPageCubit(
         storageService: mockStorageService,
-        databaseHelper: mockDatabaseHelper,
+        bookmarkRepository: mockBookmarkRepository,
       ),
       act: (cubit) => cubit.saveBookmark(ayat: kAyat, detail: kDetail),
       expect: () => [
@@ -144,7 +147,7 @@ void main() {
     test('returns correct format string for specific ayat and detail', () {
       final cubit = DetailSurahPageCubit(
         storageService: mockStorageService,
-        databaseHelper: mockDatabaseHelper,
+        bookmarkRepository: mockBookmarkRepository,
       );
 
       const ayat = AyatDetailEntity(
@@ -190,7 +193,7 @@ void main() {
     () {
       final cubit = DetailSurahPageCubit(
         storageService: mockStorageService,
-        databaseHelper: mockDatabaseHelper,
+        bookmarkRepository: mockBookmarkRepository,
       );
 
       for (int i = 0; i < 100; i++) {
@@ -289,7 +292,7 @@ void main() {
 
         final cubit = DetailSurahPageCubit(
           storageService: storageMock,
-          databaseHelper: mockDatabaseHelper,
+          bookmarkRepository: mockBookmarkRepository,
         );
 
         await cubit.markAsLastRead(

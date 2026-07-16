@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/data/model/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/data/models/bookmark_model.dart';
 
 import '../../fixtures/bookmark_fixture.dart';
 

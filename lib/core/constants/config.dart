@@ -4,24 +4,24 @@ AppConfig get config => locator<AppConfig>();
 
 class AppConfig {
   //---------API URLs-------------//
-  String cUrlSurah = 'https://equran.id/api/v2/surat';
-  String cUrlJadwalSholat = 'https://api.aladhan.com/v1/timings';
+  final String cUrlSurah = 'https://equran.id/api/v2/surat';
+  final String cUrlJadwalSholat = 'https://api.aladhan.com/v1/timings';
 
-  String cAppName = 'Component App';
-  String cAppVersion = '1.0.0';
+  final String cAppName = 'Component App';
+  final String cAppVersion = '1.0.0';
 
-  bool lShowLog = true;
+  final bool lShowLog = true;
 
-  int nAppVersion = 1;
+  final int nAppVersion = 1;
 
   //---------cache keys-------------//
-  String cacheNomorSurah = 'cacheNomorSurah';
-  String cacheNomorAyat = 'cacheNomorAyat';
-  String cacheNamaLatin = 'cacheNamaLatin';
-  String cacheStarted = 'cacheStarted';
-  String cacheShowCase = 'cacheShowCase';
-  String cacheShowCaseDetail = 'cacheShowCaseDetail';
-  String cacheShowCaseBottomDetail = 'cacheShowCaseBottomDetail';
+  final String cacheNomorSurah = 'cacheNomorSurah';
+  final String cacheNomorAyat = 'cacheNomorAyat';
+  final String cacheNamaLatin = 'cacheNamaLatin';
+  final String cacheStarted = 'cacheStarted';
+  final String cacheShowCase = 'cacheShowCase';
+  final String cacheShowCaseDetail = 'cacheShowCaseDetail';
+  final String cacheShowCaseBottomDetail = 'cacheShowCaseBottomDetail';
 
   /// Returns the alarm storage key for a given prayer title.
   String alarmKey(String title) => 'alarm_$title';

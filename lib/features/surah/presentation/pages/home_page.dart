@@ -30,6 +30,11 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<GetSurahCubit>().getPosts();
+        locator<ShowcaseService>().showCase(
+          context: context,
+          cacheKey: config.cacheShowCase,
+          keys: [helpKey, tandaiKey],
+        );
       }
     });
   }
@@ -102,16 +107,6 @@ class _HomePageState extends State<HomePage> {
                       _buildSurahList(context),
                     ],
                   ),
-                ),
-                Builder(
-                  builder: (innerContext) {
-                    locator<ShowcaseService>().showCase(
-                      context: innerContext,
-                      cacheKey: config.cacheShowCase,
-                      keys: [helpKey, tandaiKey],
-                    );
-                    return const SizedBox.shrink();
-                  },
                 ),
               ],
             ),

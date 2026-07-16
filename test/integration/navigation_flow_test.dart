@@ -22,7 +22,6 @@ import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
-import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_state.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/home_cubit/home_cubit.dart';
 import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
 import 'package:quran_app/features/detail_surah/domain/usecases/get_detail_surah_usecase.dart';

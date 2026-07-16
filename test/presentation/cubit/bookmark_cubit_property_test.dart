@@ -3,18 +3,39 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quran_app/data/model/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
 import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
 
 import '../../mocks.dart';
-import '../../helpers/generators.dart';
+
+BookmarkEntity _generateRandomBookmarkEntity(Random rng, int i) {
+  const chars = 'abcdefghijklmnopqrstuvwxyz';
+  String randomString([int length = 10]) {
+    return List.generate(length, (_) => chars[rng.nextInt(chars.length)])
+        .join();
+  }
+
+  return BookmarkEntity(
+    nomorSurah: (i % 114) + 1,
+    namaLatin: randomString(10),
+    nomorAyat: (i % 286) + 1,
+    teksArab: randomString(20),
+    teksIndonesia: randomString(30),
+    teksLatin: randomString(25),
+  );
+}
+
+List<BookmarkEntity> _generateRandomBookmarkEntityList(Random rng, int size) {
+  return List.generate(size, (i) => _generateRandomBookmarkEntity(rng, i));
+}
 
 void main() {
-  late MockDatabaseHelper mockDb;
+  late MockBookmarkRepository mockBookmarkRepository;
 
   setUp(() {
-    mockDb = MockDatabaseHelper();
+    mockBookmarkRepository = MockBookmarkRepository();
   });
 
   group('Property Tests — BookmarkCubit', () {
@@ -25,47 +46,38 @@ void main() {
       final rng = Random(42);
 
       for (int i = 0; i < 100; i++) {
-        final int n = rng.nextInt(10) + 1; // 1..10
-        final List<BookmarkModel> initialList = generateRandomBookmarkList(n);
+        final int n = rng.nextInt(10) + 1;
+        final List<BookmarkEntity> initialList =
+            _generateRandomBookmarkEntityList(rng, n);
 
-        // Pick a random item to delete
         final int targetIndex = rng.nextInt(n);
-        final BookmarkModel targetItem = initialList[targetIndex];
+        final BookmarkEntity targetItem = initialList[targetIndex];
 
-        // After deletion, the remaining list is everything except the target
-        final List<BookmarkModel> listAfterDeletion = List<BookmarkModel>.from(
+        final List<BookmarkEntity> listAfterDeletion =
+            List<BookmarkEntity>.from(
           initialList.where(
             (b) => b.teksIndonesia != targetItem.teksIndonesia,
           ),
         );
 
-        // Mock: first getAllBookmarks call (from constructor) returns initial list,
-        // deleteBookmark is a no-op, second getAllBookmarks call (after delete)
-        // returns the reduced list.
         int getAllCallCount = 0;
-        when(() => mockDb.getAllBookmarks()).thenAnswer((_) async {
+        when(() => mockBookmarkRepository.getAllBookmarks())
+            .thenAnswer((_) async {
           getAllCallCount++;
-          // First call is from the constructor's loadBookmarks(),
-          // second call is from deleteBookmark() → loadBookmarks().
-          if (getAllCallCount == 1) return initialList;
-          return listAfterDeletion;
+          if (getAllCallCount == 1) return Right(initialList);
+          return Right(listAfterDeletion);
         });
-        when(() => mockDb.deleteBookmark(any())).thenAnswer((_) async {});
+        when(() => mockBookmarkRepository.deleteBookmark(any()))
+            .thenAnswer((_) async => const Right(null));
 
-        final cubit = BookmarkCubit(databaseHelper: mockDb);
-        // Wait for constructor's loadBookmarks() to complete
+        final cubit = BookmarkCubit(bookmarkRepository: mockBookmarkRepository);
         await Future<void>.delayed(Duration.zero);
 
-        // Perform delete
         await cubit.deleteBookmark(targetItem);
+        // Wait for async loadBookmarks() to complete
+        await Future<void>.delayed(Duration.zero);
 
-        // Final state must be loaded with exactly N-1 items
         final state = cubit.state;
-        expect(
-          state,
-          isA<BookmarkState>(),
-          reason: 'state should be a BookmarkState',
-        );
         state.maybeWhen(
           loaded: (bookmarks) {
             expect(
@@ -75,17 +87,17 @@ void main() {
                   'loaded state must have ${listAfterDeletion.length} items',
             );
           },
-          orElse: () => fail(
-            'Expected BookmarkState.loaded but got $state',
-          ),
+          orElse: () => fail('Expected BookmarkState.loaded but got $state'),
         );
 
-        // Verify deleteBookmark was called with the correct teksIndonesia
-        verify(() => mockDb.deleteBookmark(targetItem.teksIndonesia)).called(1);
+        verify(
+          () => mockBookmarkRepository.deleteBookmark(
+            targetItem.teksIndonesia,
+          ),
+        ).called(1);
 
         await cubit.close();
-        // Reset mock state between iterations
-        reset(mockDb);
+        reset(mockBookmarkRepository);
       }
     });
 
@@ -94,14 +106,15 @@ void main() {
         'Property 8: BookmarkCubit Copy Format Completeness — '
         'formatCopyText() output must contain namaLatin, nomorSurah, '
         'teksArab, teksIndonesia', () async {
-      // We need at least one stub so the constructor's loadBookmarks() works
-      when(() => mockDb.getAllBookmarks()).thenAnswer((_) async => []);
+      when(() => mockBookmarkRepository.getAllBookmarks())
+          .thenAnswer((_) async => const Right(<BookmarkEntity>[]));
 
-      final cubit = BookmarkCubit(databaseHelper: mockDb);
+      final cubit = BookmarkCubit(bookmarkRepository: mockBookmarkRepository);
       await Future<void>.delayed(Duration.zero);
 
+      final rng = Random(42);
       for (int i = 0; i < 100; i++) {
-        final BookmarkModel bookmark = generateRandomBookmarkModel();
+        final BookmarkEntity bookmark = _generateRandomBookmarkEntity(rng, i);
 
         final String result = cubit.formatCopyText(bookmark);
 

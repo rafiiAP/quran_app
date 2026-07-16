@@ -3,7 +3,6 @@ import 'package:quran_app/core/di/injection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
-import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_state.dart';
 
 import '../../mocks.dart';
 

@@ -16,6 +16,7 @@ class FlutterNotificationService implements NotificationService {
       FlutterLocalNotificationsPlugin();
 
   /// Initializes the local notification plugin and timezone data.
+  @override
   Future<void> initLocalNotif() async {
     if (Platform.isIOS) {
       await _requestIOSNotificationPermission();

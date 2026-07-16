@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/constants/image.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
-import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_state.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class DashboardPage extends StatelessWidget {

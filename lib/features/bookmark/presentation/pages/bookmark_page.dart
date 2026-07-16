@@ -6,7 +6,7 @@ import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
-import 'package:quran_app/data/model/bookmark_model.dart';
+import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
 import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
 
 class BookmarkPage extends StatefulWidget {
@@ -29,6 +29,11 @@ class _BookmarkPageState extends State<BookmarkPage> {
       listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
+          error: (message) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message)),
+            );
+          },
           navigateToDetail: (nomorSurah, nomorAyat) {
             context.push('/detail-surah/$nomorSurah?ayat=$nomorAyat').then((_) {
               if (context.mounted) {
@@ -80,7 +85,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 padding: const EdgeInsets.all(16),
                 itemCount: bookmarks.length,
                 itemBuilder: (context, index) {
-                  final BookmarkModel bookmark = bookmarks[index];
+                  final BookmarkEntity bookmark = bookmarks[index];
                   return InkWell(
                     onTap: () {
                       context.read<BookmarkCubit>().navigateToDetail(bookmark);

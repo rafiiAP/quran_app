@@ -20,7 +20,8 @@ mixin _$BookmarkState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookmarkModel> bookmarks) loaded,
+    required TResult Function(List<BookmarkEntity> bookmarks) loaded,
+    required TResult Function(String message) error,
     required TResult Function(int nomorSurah, int nomorAyat) navigateToDetail,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +29,8 @@ mixin _$BookmarkState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult? Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult? Function(String message)? error,
     TResult? Function(int nomorSurah, int nomorAyat)? navigateToDetail,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +38,8 @@ mixin _$BookmarkState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult Function(String message)? error,
     TResult Function(int nomorSurah, int nomorAyat)? navigateToDetail,
     required TResult orElse(),
   }) =>
@@ -46,6 +49,7 @@ mixin _$BookmarkState {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
     required TResult Function(_NavigateToDetail value) navigateToDetail,
   }) =>
       throw _privateConstructorUsedError;
@@ -54,6 +58,7 @@ mixin _$BookmarkState {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
     TResult? Function(_NavigateToDetail value)? navigateToDetail,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,6 +67,7 @@ mixin _$BookmarkState {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
     TResult Function(_NavigateToDetail value)? navigateToDetail,
     required TResult orElse(),
   }) =>
@@ -132,7 +138,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookmarkModel> bookmarks) loaded,
+    required TResult Function(List<BookmarkEntity> bookmarks) loaded,
+    required TResult Function(String message) error,
     required TResult Function(int nomorSurah, int nomorAyat) navigateToDetail,
   }) {
     return initial();
@@ -143,7 +150,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult? Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult? Function(String message)? error,
     TResult? Function(int nomorSurah, int nomorAyat)? navigateToDetail,
   }) {
     return initial?.call();
@@ -154,7 +162,8 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult Function(String message)? error,
     TResult Function(int nomorSurah, int nomorAyat)? navigateToDetail,
     required TResult orElse(),
   }) {
@@ -170,6 +179,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
     required TResult Function(_NavigateToDetail value) navigateToDetail,
   }) {
     return initial(this);
@@ -181,6 +191,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
     TResult? Function(_NavigateToDetail value)? navigateToDetail,
   }) {
     return initial?.call(this);
@@ -192,6 +203,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
     TResult Function(_NavigateToDetail value)? navigateToDetail,
     required TResult orElse(),
   }) {
@@ -249,7 +261,8 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookmarkModel> bookmarks) loaded,
+    required TResult Function(List<BookmarkEntity> bookmarks) loaded,
+    required TResult Function(String message) error,
     required TResult Function(int nomorSurah, int nomorAyat) navigateToDetail,
   }) {
     return loading();
@@ -260,7 +273,8 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult? Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult? Function(String message)? error,
     TResult? Function(int nomorSurah, int nomorAyat)? navigateToDetail,
   }) {
     return loading?.call();
@@ -271,7 +285,8 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult Function(String message)? error,
     TResult Function(int nomorSurah, int nomorAyat)? navigateToDetail,
     required TResult orElse(),
   }) {
@@ -287,6 +302,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
     required TResult Function(_NavigateToDetail value) navigateToDetail,
   }) {
     return loading(this);
@@ -298,6 +314,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
     TResult? Function(_NavigateToDetail value)? navigateToDetail,
   }) {
     return loading?.call(this);
@@ -309,6 +326,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
     TResult Function(_NavigateToDetail value)? navigateToDetail,
     required TResult orElse(),
   }) {
@@ -329,7 +347,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<BookmarkModel> bookmarks});
+  $Res call({List<BookmarkEntity> bookmarks});
 }
 
 /// @nodoc
@@ -351,7 +369,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
       bookmarks: null == bookmarks
           ? _value._bookmarks
           : bookmarks // ignore: cast_nullable_to_non_nullable
-              as List<BookmarkModel>,
+              as List<BookmarkEntity>,
     ));
   }
 }
@@ -359,12 +377,12 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl({required final List<BookmarkModel> bookmarks})
+  const _$LoadedImpl({required final List<BookmarkEntity> bookmarks})
       : _bookmarks = bookmarks;
 
-  final List<BookmarkModel> _bookmarks;
+  final List<BookmarkEntity> _bookmarks;
   @override
-  List<BookmarkModel> get bookmarks {
+  List<BookmarkEntity> get bookmarks {
     if (_bookmarks is EqualUnmodifiableListView) return _bookmarks;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_bookmarks);
@@ -401,7 +419,8 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookmarkModel> bookmarks) loaded,
+    required TResult Function(List<BookmarkEntity> bookmarks) loaded,
+    required TResult Function(String message) error,
     required TResult Function(int nomorSurah, int nomorAyat) navigateToDetail,
   }) {
     return loaded(bookmarks);
@@ -412,7 +431,8 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult? Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult? Function(String message)? error,
     TResult? Function(int nomorSurah, int nomorAyat)? navigateToDetail,
   }) {
     return loaded?.call(bookmarks);
@@ -423,7 +443,8 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult Function(String message)? error,
     TResult Function(int nomorSurah, int nomorAyat)? navigateToDetail,
     required TResult orElse(),
   }) {
@@ -439,6 +460,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
     required TResult Function(_NavigateToDetail value) navigateToDetail,
   }) {
     return loaded(this);
@@ -450,6 +472,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
     TResult? Function(_NavigateToDetail value)? navigateToDetail,
   }) {
     return loaded?.call(this);
@@ -461,6 +484,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
     TResult Function(_NavigateToDetail value)? navigateToDetail,
     required TResult orElse(),
   }) {
@@ -472,15 +496,173 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements BookmarkState {
-  const factory _Loaded({required final List<BookmarkModel> bookmarks}) =
+  const factory _Loaded({required final List<BookmarkEntity> bookmarks}) =
       _$LoadedImpl;
 
-  List<BookmarkModel> get bookmarks;
+  List<BookmarkEntity> get bookmarks;
 
   /// Create a copy of BookmarkState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ErrorImplCopyWith<$Res> {
+  factory _$$ErrorImplCopyWith(
+          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
+      __$$ErrorImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String message});
+}
+
+/// @nodoc
+class __$$ErrorImplCopyWithImpl<$Res>
+    extends _$BookmarkStateCopyWithImpl<$Res, _$ErrorImpl>
+    implements _$$ErrorImplCopyWith<$Res> {
+  __$$ErrorImplCopyWithImpl(
+      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of BookmarkState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$ErrorImpl(
+      null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ErrorImpl implements _Error {
+  const _$ErrorImpl(this.message);
+
+  @override
+  final String message;
+
+  @override
+  String toString() {
+    return 'BookmarkState.error(message: $message)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ErrorImpl &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+
+  /// Create a copy of BookmarkState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<BookmarkEntity> bookmarks) loaded,
+    required TResult Function(String message) error,
+    required TResult Function(int nomorSurah, int nomorAyat) navigateToDetail,
+  }) {
+    return error(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult? Function(String message)? error,
+    TResult? Function(int nomorSurah, int nomorAyat)? navigateToDetail,
+  }) {
+    return error?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult Function(String message)? error,
+    TResult Function(int nomorSurah, int nomorAyat)? navigateToDetail,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+    required TResult Function(_NavigateToDetail value) navigateToDetail,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_NavigateToDetail value)? navigateToDetail,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    TResult Function(_NavigateToDetail value)? navigateToDetail,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Error implements BookmarkState {
+  const factory _Error(final String message) = _$ErrorImpl;
+
+  String get message;
+
+  /// Create a copy of BookmarkState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -566,7 +748,8 @@ class _$NavigateToDetailImpl implements _NavigateToDetail {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookmarkModel> bookmarks) loaded,
+    required TResult Function(List<BookmarkEntity> bookmarks) loaded,
+    required TResult Function(String message) error,
     required TResult Function(int nomorSurah, int nomorAyat) navigateToDetail,
   }) {
     return navigateToDetail(nomorSurah, nomorAyat);
@@ -577,7 +760,8 @@ class _$NavigateToDetailImpl implements _NavigateToDetail {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult? Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult? Function(String message)? error,
     TResult? Function(int nomorSurah, int nomorAyat)? navigateToDetail,
   }) {
     return navigateToDetail?.call(nomorSurah, nomorAyat);
@@ -588,7 +772,8 @@ class _$NavigateToDetailImpl implements _NavigateToDetail {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookmarkModel> bookmarks)? loaded,
+    TResult Function(List<BookmarkEntity> bookmarks)? loaded,
+    TResult Function(String message)? error,
     TResult Function(int nomorSurah, int nomorAyat)? navigateToDetail,
     required TResult orElse(),
   }) {
@@ -604,6 +789,7 @@ class _$NavigateToDetailImpl implements _NavigateToDetail {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
     required TResult Function(_NavigateToDetail value) navigateToDetail,
   }) {
     return navigateToDetail(this);
@@ -615,6 +801,7 @@ class _$NavigateToDetailImpl implements _NavigateToDetail {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
     TResult? Function(_NavigateToDetail value)? navigateToDetail,
   }) {
     return navigateToDetail?.call(this);
@@ -626,6 +813,7 @@ class _$NavigateToDetailImpl implements _NavigateToDetail {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
     TResult Function(_NavigateToDetail value)? navigateToDetail,
     required TResult orElse(),
   }) {

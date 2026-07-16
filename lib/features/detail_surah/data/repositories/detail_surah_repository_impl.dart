@@ -1,14 +1,14 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:quran_app/core/error/exceptions.dart';
 import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/features/detail_surah/data/datasources/detail_surah_datasource.dart';
 import 'package:quran_app/features/detail_surah/data/models/detail_model.dart';
 import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
 import 'package:quran_app/features/detail_surah/domain/repositories/detail_surah_repository.dart';
-import 'package:quran_app/features/surah/data/datasources/surah_datasource.dart';
 
 class DetailSurahRepositoryImpl implements DetailSurahRepository {
   const DetailSurahRepositoryImpl({required this.datasource});
-  final SurahDatasource datasource;
+  final DetailSurahDatasource datasource;
 
   @override
   Future<Either<Failure, DetailEntity>> getDetailSurah({
