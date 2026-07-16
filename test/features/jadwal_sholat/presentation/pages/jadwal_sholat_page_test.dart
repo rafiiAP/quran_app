@@ -11,7 +11,7 @@ import 'package:quran_app/core/widgets/app_bottomsheet.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_text.dart';
-import 'package:quran_app/data/model/set_notif_model.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/models/set_notif_model.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_page_cubit/jadwal_sholat_page_cubit.dart';

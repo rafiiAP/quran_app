@@ -10,6 +10,9 @@ import 'package:quran_app/core/services/showcase_service.dart';
 import 'package:quran_app/core/storage/database_helper.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
 import 'package:quran_app/features/bookmark/domain/repositories/bookmark_repository.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
 import 'package:quran_app/features/detail_surah/domain/repositories/detail_surah_repository.dart';
 import 'package:quran_app/features/detail_surah/domain/usecases/get_detail_surah_usecase.dart';
 import 'package:quran_app/features/jadwal_sholat/data/datasources/jadwal_sholat_datasource.dart';
@@ -66,3 +69,10 @@ class MockShowcaseService extends Mock implements ShowcaseService {}
 
 // Location
 class MockLocationService extends Mock implements LocationService {}
+
+// Bookmark use cases
+class MockGetBookmarksUseCase extends Mock implements GetBookmarksUseCase {}
+
+class MockSaveBookmarkUseCase extends Mock implements SaveBookmarkUseCase {}
+
+class MockDeleteBookmarkUseCase extends Mock implements DeleteBookmarkUseCase {}

@@ -26,6 +26,9 @@ import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/features/bookmark/data/repositories/bookmark_repository_impl.dart';
 import 'package:quran_app/features/bookmark/domain/repositories/bookmark_repository.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
 import 'package:quran_app/features/detail_surah/data/datasources/detail_surah_datasource.dart';
 import 'package:quran_app/features/detail_surah/data/repositories/detail_surah_repository_impl.dart';
 import 'package:quran_app/features/detail_surah/domain/repositories/detail_surah_repository.dart';
@@ -93,6 +96,15 @@ Future<void> setup() async {
   );
   locator.registerLazySingleton<GetJadwalSholatUseCase>(
     () => GetJadwalSholatUseCase(locator()),
+  );
+  locator.registerLazySingleton<GetBookmarksUseCase>(
+    () => GetBookmarksUseCase(locator()),
+  );
+  locator.registerLazySingleton<SaveBookmarkUseCase>(
+    () => SaveBookmarkUseCase(locator()),
+  );
+  locator.registerLazySingleton<DeleteBookmarkUseCase>(
+    () => DeleteBookmarkUseCase(locator()),
   );
 
   // per-feature repositories

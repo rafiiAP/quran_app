@@ -9,24 +9,31 @@ import '../../mocks.dart';
 import '../../fixtures/bookmark_fixture.dart';
 
 void main() {
-  late MockBookmarkRepository mockBookmarkRepository;
+  late MockGetBookmarksUseCase mockGetBookmarksUseCase;
+  late MockDeleteBookmarkUseCase mockDeleteBookmarkUseCase;
 
   setUp(() {
-    mockBookmarkRepository = MockBookmarkRepository();
+    mockGetBookmarksUseCase = MockGetBookmarksUseCase();
+    mockDeleteBookmarkUseCase = MockDeleteBookmarkUseCase();
     // Default: constructor's loadBookmarks() returns kBookmarkEntity
-    when(() => mockBookmarkRepository.getAllBookmarks())
+    when(() => mockGetBookmarksUseCase())
         .thenAnswer((_) async => const Right([kBookmarkEntity]));
   });
+
+  BookmarkCubit buildCubit() => BookmarkCubit(
+        getBookmarksUseCase: mockGetBookmarksUseCase,
+        deleteBookmarkUseCase: mockDeleteBookmarkUseCase,
+      );
 
   // Requirements: 5.1 — BookmarkCubit loads bookmarks on construction and exposes them
   group('loadBookmarks', () {
     blocTest<BookmarkCubit, BookmarkState>(
       'emits [loading, loaded] with bookmarks from database',
       setUp: () {
-        when(() => mockBookmarkRepository.getAllBookmarks())
+        when(() => mockGetBookmarksUseCase())
             .thenAnswer((_) async => const Right([kBookmarkEntity]));
       },
-      build: () => BookmarkCubit(bookmarkRepository: mockBookmarkRepository),
+      build: buildCubit,
       act: (cubit) => cubit.loadBookmarks(),
       skip: 2,
       verify: (cubit) {
@@ -44,14 +51,13 @@ void main() {
       'emits [loading, loaded([])] when database returns empty list',
       setUp: () {
         int callCount = 0;
-        when(() => mockBookmarkRepository.getAllBookmarks())
-            .thenAnswer((_) async {
+        when(() => mockGetBookmarksUseCase()).thenAnswer((_) async {
           callCount++;
           if (callCount <= 1) return const Right([kBookmarkEntity]);
           return const Right(<BookmarkEntity>[]);
         });
       },
-      build: () => BookmarkCubit(bookmarkRepository: mockBookmarkRepository),
+      build: buildCubit,
       act: (cubit) => cubit.loadBookmarks(),
       skip: 2,
       verify: (cubit) {
@@ -64,10 +70,10 @@ void main() {
 
     test('constructor automatically calls loadBookmarks and emits loaded state',
         () async {
-      when(() => mockBookmarkRepository.getAllBookmarks())
+      when(() => mockGetBookmarksUseCase())
           .thenAnswer((_) async => const Right([kBookmarkEntity]));
 
-      final cubit = BookmarkCubit(bookmarkRepository: mockBookmarkRepository);
+      final cubit = buildCubit();
       await Future<void>.delayed(Duration.zero);
 
       cubit.state.maybeWhen(
@@ -85,22 +91,21 @@ void main() {
   // Requirements: 5.2 — deleteBookmark removes the item and reloads the list
   group('deleteBookmark', () {
     blocTest<BookmarkCubit, BookmarkState>(
-      'calls repo.deleteBookmark then reloads — final state is loaded without deleted item',
+      'calls deleteBookmarkUseCase then reloads — final state is loaded without deleted item',
       setUp: () {
         when(
-          () => mockBookmarkRepository.deleteBookmark(
-            kBookmarkEntity.teksIndonesia,
+          () => mockDeleteBookmarkUseCase(
+            teksIndonesia: kBookmarkEntity.teksIndonesia,
           ),
         ).thenAnswer((_) async => const Right(null));
         int callCount = 0;
-        when(() => mockBookmarkRepository.getAllBookmarks())
-            .thenAnswer((_) async {
+        when(() => mockGetBookmarksUseCase()).thenAnswer((_) async {
           callCount++;
           if (callCount <= 1) return const Right([kBookmarkEntity]);
           return const Right(<BookmarkEntity>[]);
         });
       },
-      build: () => BookmarkCubit(bookmarkRepository: mockBookmarkRepository),
+      build: buildCubit,
       act: (cubit) => cubit.deleteBookmark(kBookmarkEntity),
       skip: 2,
       verify: (cubit) {
@@ -109,8 +114,8 @@ void main() {
           orElse: () => fail('Expected loaded state'),
         );
         verify(
-          () => mockBookmarkRepository.deleteBookmark(
-            kBookmarkEntity.teksIndonesia,
+          () => mockDeleteBookmarkUseCase(
+            teksIndonesia: kBookmarkEntity.teksIndonesia,
           ),
         ).called(1);
       },
@@ -122,7 +127,7 @@ void main() {
     test(
         'returns "namaLatin : nomorSurah\\nteksArab\\nteksIndonesia" for kBookmarkEntity',
         () {
-      final cubit = BookmarkCubit(bookmarkRepository: mockBookmarkRepository);
+      final cubit = buildCubit();
 
       final result = cubit.formatCopyText(kBookmarkEntity);
 
@@ -134,7 +139,7 @@ void main() {
     });
 
     test('format string has exactly two newlines separating three parts', () {
-      final cubit = BookmarkCubit(bookmarkRepository: mockBookmarkRepository);
+      final cubit = buildCubit();
 
       final result = cubit.formatCopyText(kBookmarkEntity);
       final parts = result.split('\n');
@@ -154,10 +159,10 @@ void main() {
     blocTest<BookmarkCubit, BookmarkState>(
       'emits [navigateToDetail, loading, loaded] after constructor states',
       setUp: () {
-        when(() => mockBookmarkRepository.getAllBookmarks())
+        when(() => mockGetBookmarksUseCase())
             .thenAnswer((_) async => const Right([kBookmarkEntity]));
       },
-      build: () => BookmarkCubit(bookmarkRepository: mockBookmarkRepository),
+      build: buildCubit,
       act: (cubit) => cubit.navigateToDetail(kBookmarkEntity),
       expect: () => [
         BookmarkState.navigateToDetail(

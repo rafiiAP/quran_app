@@ -1,0 +1,13 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/features/bookmark/domain/repositories/bookmark_repository.dart';
+
+/// Use case for deleting a bookmark by its Indonesian text identifier.
+class DeleteBookmarkUseCase {
+  const DeleteBookmarkUseCase(this._repository);
+  final BookmarkRepository _repository;
+
+  Future<Either<Failure, void>> call({required String teksIndonesia}) {
+    return _repository.deleteBookmark(teksIndonesia);
+  }
+}

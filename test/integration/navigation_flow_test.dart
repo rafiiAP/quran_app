@@ -21,6 +21,7 @@ import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/home_cubit/home_cubit.dart';
 import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
@@ -56,6 +57,8 @@ class MockDatabaseHelper extends Mock implements DatabaseHelper {}
 class MockGetDetailSurahUseCase extends Mock implements GetDetailSurahUseCase {}
 
 class MockGetSurahUseCase extends Mock implements GetSurahUseCase {}
+
+class MockSaveBookmarkUseCase extends Mock implements SaveBookmarkUseCase {}
 
 class MockAppBottomsheetFactory extends Mock implements AppBottomsheetFactory {}
 
@@ -284,6 +287,9 @@ void main() {
     mockDashboardCubit = MockDashboardCubit();
     mockBookmarkCubit = MockBookmarkCubit();
     mockSearchCubit = MockSearchCubit();
+
+    // Stub async cubit methods called by widget initState
+    when(() => mockGetSurahCubit.getPosts()).thenAnswer((_) async {});
     mockLocalStorageService = MockLocalStorageService();
     mockCrashReporter = MockCrashReporter();
     mockShowcaseService = MockShowcaseService();
@@ -369,6 +375,11 @@ void main() {
     locator.registerLazySingleton<AppColorConfig>(AppColorConfig.new);
     locator.registerLazySingleton<AppConfig>(AppConfig.new);
     locator.registerLazySingleton<MyImage>(MyImage.new);
+
+    // Bookmark use case for detail page
+    locator.registerLazySingleton<SaveBookmarkUseCase>(
+      () => MockSaveBookmarkUseCase(),
+    );
 
     // Create AppRouter with mock storage service (cacheStarted=true → stays on /home)
     appRouter = AppRouter(storageService: mockLocalStorageService);

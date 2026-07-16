@@ -4,7 +4,7 @@ import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/constants/image.dart';
-import 'package:quran_app/data/model/set_notif_model.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/models/set_notif_model.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
 import 'package:showcaseview/showcaseview.dart';
 

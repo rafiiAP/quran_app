@@ -6,7 +6,7 @@ import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/services/location_service.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
 import 'package:quran_app/core/services/notification_service.dart';
-import 'package:quran_app/data/model/set_notif_model.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/models/set_notif_model.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/helpers/prayer_time_helpers.dart';
 

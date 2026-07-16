@@ -32,10 +32,12 @@ List<BookmarkEntity> _generateRandomBookmarkEntityList(Random rng, int size) {
 }
 
 void main() {
-  late MockBookmarkRepository mockBookmarkRepository;
+  late MockGetBookmarksUseCase mockGetBookmarksUseCase;
+  late MockDeleteBookmarkUseCase mockDeleteBookmarkUseCase;
 
   setUp(() {
-    mockBookmarkRepository = MockBookmarkRepository();
+    mockGetBookmarksUseCase = MockGetBookmarksUseCase();
+    mockDeleteBookmarkUseCase = MockDeleteBookmarkUseCase();
   });
 
   group('Property Tests — BookmarkCubit', () {
@@ -61,16 +63,21 @@ void main() {
         );
 
         int getAllCallCount = 0;
-        when(() => mockBookmarkRepository.getAllBookmarks())
-            .thenAnswer((_) async {
+        when(() => mockGetBookmarksUseCase()).thenAnswer((_) async {
           getAllCallCount++;
           if (getAllCallCount == 1) return Right(initialList);
           return Right(listAfterDeletion);
         });
-        when(() => mockBookmarkRepository.deleteBookmark(any()))
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => mockDeleteBookmarkUseCase(
+            teksIndonesia: any(named: 'teksIndonesia'),
+          ),
+        ).thenAnswer((_) async => const Right(null));
 
-        final cubit = BookmarkCubit(bookmarkRepository: mockBookmarkRepository);
+        final cubit = BookmarkCubit(
+          getBookmarksUseCase: mockGetBookmarksUseCase,
+          deleteBookmarkUseCase: mockDeleteBookmarkUseCase,
+        );
         await Future<void>.delayed(Duration.zero);
 
         await cubit.deleteBookmark(targetItem);
@@ -91,13 +98,14 @@ void main() {
         );
 
         verify(
-          () => mockBookmarkRepository.deleteBookmark(
-            targetItem.teksIndonesia,
+          () => mockDeleteBookmarkUseCase(
+            teksIndonesia: targetItem.teksIndonesia,
           ),
         ).called(1);
 
         await cubit.close();
-        reset(mockBookmarkRepository);
+        reset(mockGetBookmarksUseCase);
+        reset(mockDeleteBookmarkUseCase);
       }
     });
 
@@ -106,10 +114,13 @@ void main() {
         'Property 8: BookmarkCubit Copy Format Completeness — '
         'formatCopyText() output must contain namaLatin, nomorSurah, '
         'teksArab, teksIndonesia', () async {
-      when(() => mockBookmarkRepository.getAllBookmarks())
+      when(() => mockGetBookmarksUseCase())
           .thenAnswer((_) async => const Right(<BookmarkEntity>[]));
 
-      final cubit = BookmarkCubit(bookmarkRepository: mockBookmarkRepository);
+      final cubit = BookmarkCubit(
+        getBookmarksUseCase: mockGetBookmarksUseCase,
+        deleteBookmarkUseCase: mockDeleteBookmarkUseCase,
+      );
       await Future<void>.delayed(Duration.zero);
 
       final rng = Random(42);

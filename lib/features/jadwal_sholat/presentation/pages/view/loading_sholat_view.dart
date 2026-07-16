@@ -5,7 +5,7 @@ import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/constants/image.dart';
-import 'package:quran_app/data/model/set_notif_model.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/models/set_notif_model.dart';
 
 class LoadingSholatView extends StatelessWidget {
   const LoadingSholatView({super.key, required this.jadwalList});
@@ -88,9 +88,15 @@ class LoadingSholatView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        appShimmer.shimmer(width: screenWidth * 0.7, height: 15,),
+                        appShimmer.shimmer(
+                          width: screenWidth * 0.7,
+                          height: 15,
+                        ),
                         appPadding.paddingheight5(),
-                        appShimmer.shimmer(width: screenWidth * 0.3, height: 15,),
+                        appShimmer.shimmer(
+                          width: screenWidth * 0.3,
+                          height: 15,
+                        ),
                       ],
                     ),
                   ),
@@ -116,7 +122,10 @@ class LoadingSholatView extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                         const Spacer(),
-                        appShimmer.shimmer(width: screenWidth * 0.1, height: 15,),
+                        appShimmer.shimmer(
+                          width: screenWidth * 0.1,
+                          height: 15,
+                        ),
                         appPadding.paddingWidtht5(),
                         IconButton(
                           onPressed: () {},

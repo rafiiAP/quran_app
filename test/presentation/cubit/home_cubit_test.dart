@@ -151,10 +151,13 @@ void main() {
     );
   });
 
-  // Requirements: 4.3 — toLastRead with nomorSurah > 0 emits navigateToDetail then reloads loaded
+  // Requirements: 4.3 — toLastRead with nomorSurah > 0 emits navigateToDetail
+  // Note: _loadLastRead() is intentionally NOT called after emitting
+  // navigateToDetail — the caller (HomePage) must call refreshLastRead()
+  // after navigation completes.
   group('toLastRead — nomorSurah > 0', () {
     blocTest<HomeCubit, HomeState>(
-      'emits [navigateToDetail, loaded] when nomorSurah > 0',
+      'emits [navigateToDetail] when nomorSurah > 0',
       setUp: () => stubStorageDefaults(
         namaLatin: 'Al-Fatihah',
         nomorSurah: 1,
@@ -164,12 +167,6 @@ void main() {
       act: (cubit) => cubit.toLastRead(),
       expect: () => [
         const HomeState.navigateToDetail(nomorSurah: 1, indexTandai: 5),
-        const HomeState.loaded(
-          namaLatin: 'Al-Fatihah',
-          nomorSurah: 1,
-          nomorAyat: 5,
-          surahList: [],
-        ),
       ],
     );
   });

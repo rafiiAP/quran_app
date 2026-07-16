@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:quran_app/data/model/set_notif_model.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/models/set_notif_model.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
 
 /// Pure helper functions for prayer time calculations.

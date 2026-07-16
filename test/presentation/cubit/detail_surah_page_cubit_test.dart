@@ -12,12 +12,12 @@ import '../../mocks.dart';
 
 void main() {
   late MockLocalStorageService mockStorageService;
-  late MockBookmarkRepository mockBookmarkRepository;
+  late MockSaveBookmarkUseCase mockSaveBookmarkUseCase;
 
   setUp(() {
     locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockStorageService = MockLocalStorageService();
-    mockBookmarkRepository = MockBookmarkRepository();
+    mockSaveBookmarkUseCase = MockSaveBookmarkUseCase();
 
     // Default stubs so constructor doesn't throw
     when(
@@ -46,7 +46,7 @@ void main() {
       'emits [actionCompleted, idle] and writes to storage',
       build: () => DetailSurahPageCubit(
         storageService: mockStorageService,
-        bookmarkRepository: mockBookmarkRepository,
+        saveBookmarkUseCase: mockSaveBookmarkUseCase,
       ),
       act: (cubit) => cubit.markAsLastRead(
         namaLatin: 'Al-Fatihah',
@@ -107,12 +107,12 @@ void main() {
       'emits actionCompleted("Berhasil disimpan ke bookmark") when insertOrUpdateBookmark returns true',
       setUp: () {
         when(
-          () => mockBookmarkRepository.insertOrUpdateBookmark(kAyat, kDetail),
+          () => mockSaveBookmarkUseCase(ayat: kAyat, detail: kDetail),
         ).thenAnswer((_) async => const Right(true));
       },
       build: () => DetailSurahPageCubit(
         storageService: mockStorageService,
-        bookmarkRepository: mockBookmarkRepository,
+        saveBookmarkUseCase: mockSaveBookmarkUseCase,
       ),
       act: (cubit) => cubit.saveBookmark(ayat: kAyat, detail: kDetail),
       expect: () => [
@@ -127,12 +127,12 @@ void main() {
       'emits actionCompleted("Data sudah ada") when insertOrUpdateBookmark returns false',
       setUp: () {
         when(
-          () => mockBookmarkRepository.insertOrUpdateBookmark(kAyat, kDetail),
+          () => mockSaveBookmarkUseCase(ayat: kAyat, detail: kDetail),
         ).thenAnswer((_) async => const Right(false));
       },
       build: () => DetailSurahPageCubit(
         storageService: mockStorageService,
-        bookmarkRepository: mockBookmarkRepository,
+        saveBookmarkUseCase: mockSaveBookmarkUseCase,
       ),
       act: (cubit) => cubit.saveBookmark(ayat: kAyat, detail: kDetail),
       expect: () => [
@@ -147,7 +147,7 @@ void main() {
     test('returns correct format string for specific ayat and detail', () {
       final cubit = DetailSurahPageCubit(
         storageService: mockStorageService,
-        bookmarkRepository: mockBookmarkRepository,
+        saveBookmarkUseCase: mockSaveBookmarkUseCase,
       );
 
       const ayat = AyatDetailEntity(
@@ -193,7 +193,7 @@ void main() {
     () {
       final cubit = DetailSurahPageCubit(
         storageService: mockStorageService,
-        bookmarkRepository: mockBookmarkRepository,
+        saveBookmarkUseCase: mockSaveBookmarkUseCase,
       );
 
       for (int i = 0; i < 100; i++) {
@@ -292,7 +292,7 @@ void main() {
 
         final cubit = DetailSurahPageCubit(
           storageService: storageMock,
-          bookmarkRepository: mockBookmarkRepository,
+          saveBookmarkUseCase: mockSaveBookmarkUseCase,
         );
 
         await cubit.markAsLastRead(
