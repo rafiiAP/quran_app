@@ -10,11 +10,20 @@ import '../../../../mocks.dart';
 
 void main() {
   late MockSurahDatasource mockDatasource;
+  late MockSurahLocalDatasource mockLocalDatasource;
   late SurahRepositoryImpl repository;
 
   setUp(() {
     mockDatasource = MockSurahDatasource();
-    repository = SurahRepositoryImpl(datasource: mockDatasource);
+    mockLocalDatasource = MockSurahLocalDatasource();
+    repository = SurahRepositoryImpl(
+      datasource: mockDatasource,
+      localDatasource: mockLocalDatasource,
+    );
+
+    // Default: cache miss, so remote is always called
+    when(() => mockLocalDatasource.getCachedSurah()).thenReturn(null);
+    when(() => mockLocalDatasource.cacheSurah(any())).thenAnswer((_) async {});
   });
 
   group('SurahRepositoryImpl.getSurah', () {

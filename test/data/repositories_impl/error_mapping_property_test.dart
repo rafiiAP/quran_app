@@ -24,7 +24,15 @@ void main() {
   setUp(() {
     mockSurahDatasource = MockSurahDatasource();
     mockJadwalSholatDatasource = MockJadwalSholatDatasource();
-    surahRepository = SurahRepositoryImpl(datasource: mockSurahDatasource);
+
+    final mockLocalDatasource = MockSurahLocalDatasource();
+    when(() => mockLocalDatasource.getCachedSurah()).thenReturn(null);
+    when(() => mockLocalDatasource.cacheSurah(any())).thenAnswer((_) async {});
+
+    surahRepository = SurahRepositoryImpl(
+      datasource: mockSurahDatasource,
+      localDatasource: mockLocalDatasource,
+    );
     jadwalSholatRepository =
         JadwalSholatRepositoryImpl(datasource: mockJadwalSholatDatasource);
   });

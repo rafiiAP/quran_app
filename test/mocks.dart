@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:quran_app/core/cache/cache_service.dart';
 import 'package:quran_app/core/network/http_client.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
 import 'package:quran_app/core/services/datetime_service.dart';
@@ -13,12 +14,14 @@ import 'package:quran_app/features/bookmark/domain/repositories/bookmark_reposit
 import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
+import 'package:quran_app/features/detail_surah/data/datasources/detail_surah_local_datasource.dart';
 import 'package:quran_app/features/detail_surah/domain/repositories/detail_surah_repository.dart';
 import 'package:quran_app/features/detail_surah/domain/usecases/get_detail_surah_usecase.dart';
 import 'package:quran_app/features/jadwal_sholat/data/datasources/jadwal_sholat_datasource.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/repositories/jadwal_sholat_repository.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/usecases/get_jadwal_sholat_usecase.dart';
 import 'package:quran_app/features/surah/data/datasources/surah_datasource.dart';
+import 'package:quran_app/features/surah/data/datasources/surah_local_datasource.dart';
 import 'package:quran_app/features/surah/domain/repositories/surah_repository.dart';
 import 'package:quran_app/features/surah/domain/usecases/get_surah_usecase.dart';
 
@@ -76,3 +79,11 @@ class MockGetBookmarksUseCase extends Mock implements GetBookmarksUseCase {}
 class MockSaveBookmarkUseCase extends Mock implements SaveBookmarkUseCase {}
 
 class MockDeleteBookmarkUseCase extends Mock implements DeleteBookmarkUseCase {}
+
+// Cache
+class MockCacheService extends Mock implements CacheService {}
+
+class MockSurahLocalDatasource extends Mock implements SurahLocalDatasource {}
+
+class MockDetailSurahLocalDatasource extends Mock
+    implements DetailSurahLocalDatasource {}

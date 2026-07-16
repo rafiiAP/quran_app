@@ -1,4 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:quran_app/core/cache/cache_service.dart';
+import 'package:quran_app/core/cache/shared_preferences_cache_service.dart';
 import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/constants/image.dart';
@@ -30,6 +32,7 @@ import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usec
 import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
 import 'package:quran_app/features/detail_surah/data/datasources/detail_surah_datasource.dart';
+import 'package:quran_app/features/detail_surah/data/datasources/detail_surah_local_datasource.dart';
 import 'package:quran_app/features/detail_surah/data/repositories/detail_surah_repository_impl.dart';
 import 'package:quran_app/features/detail_surah/domain/repositories/detail_surah_repository.dart';
 import 'package:quran_app/features/detail_surah/domain/usecases/get_detail_surah_usecase.dart';
@@ -38,6 +41,7 @@ import 'package:quran_app/features/jadwal_sholat/data/repositories/jadwal_sholat
 import 'package:quran_app/features/jadwal_sholat/domain/repositories/jadwal_sholat_repository.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/usecases/get_jadwal_sholat_usecase.dart';
 import 'package:quran_app/features/surah/data/datasources/surah_datasource.dart';
+import 'package:quran_app/features/surah/data/datasources/surah_local_datasource.dart';
 import 'package:quran_app/features/surah/data/repositories/surah_repository_impl.dart';
 import 'package:quran_app/features/surah/domain/repositories/surah_repository.dart';
 import 'package:quran_app/features/surah/domain/usecases/get_surah_usecase.dart';
@@ -50,6 +54,11 @@ Future<void> setup() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   locator.registerLazySingleton<LocalStorageService>(
     () => SharedPreferencesStorageService(prefs: prefs),
+  );
+
+  // cache service — shares SharedPreferences instance
+  locator.registerLazySingleton<CacheService>(
+    () => SharedPreferencesCacheService(prefs: prefs),
   );
 
   // logger service
@@ -109,10 +118,16 @@ Future<void> setup() async {
 
   // per-feature repositories
   locator.registerLazySingleton<SurahRepository>(
-    () => SurahRepositoryImpl(datasource: locator()),
+    () => SurahRepositoryImpl(
+      datasource: locator(),
+      localDatasource: locator(),
+    ),
   );
   locator.registerLazySingleton<DetailSurahRepository>(
-    () => DetailSurahRepositoryImpl(datasource: locator()),
+    () => DetailSurahRepositoryImpl(
+      datasource: locator(),
+      localDatasource: locator(),
+    ),
   );
   locator.registerLazySingleton<JadwalSholatRepository>(
     () => JadwalSholatRepositoryImpl(datasource: locator()),
@@ -121,7 +136,7 @@ Future<void> setup() async {
     () => BookmarkRepositoryImpl(databaseHelper: locator()),
   );
 
-  // per-feature datasources
+  // per-feature datasources (remote)
   locator.registerLazySingleton<SurahDatasource>(
     () => SurahDatasourceImpl(
       httpClient: locator(),
@@ -142,6 +157,14 @@ Future<void> setup() async {
       crashReporter: locator(),
       baseUrl: locator<AppConfig>().cUrlJadwalSholat,
     ),
+  );
+
+  // per-feature datasources (local/cache)
+  locator.registerLazySingleton<SurahLocalDatasource>(
+    () => SurahLocalDatasourceImpl(cacheService: locator()),
+  );
+  locator.registerLazySingleton<DetailSurahLocalDatasource>(
+    () => DetailSurahLocalDatasourceImpl(cacheService: locator()),
   );
 
   // http client
