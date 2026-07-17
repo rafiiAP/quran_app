@@ -5,6 +5,7 @@ import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
+import 'package:quran_app/core/utils/input_validator.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
 import 'package:quran_app/features/detail_surah/domain/usecases/get_detail_surah_usecase.dart';
 import 'package:quran_app/features/detail_surah/presentation/cubits/detail_surah_cubit/detail_surah_cubit.dart';
@@ -28,7 +29,7 @@ List<RouteBase> get detailSurahRoutes => [
         path: '/detail-surah/:nomor',
         redirect: (context, state) {
           final nomor = int.tryParse(state.pathParameters['nomor'] ?? '');
-          if (nomor == null) {
+          if (!InputValidator.isValidSurahNumber(nomor)) {
             locator<CrashReporter>().recordError(
               FormatException(
                 'Invalid nomor: ${state.pathParameters['nomor']}',
@@ -41,7 +42,7 @@ List<RouteBase> get detailSurahRoutes => [
         },
         builder: (context, state) {
           final nomor = int.tryParse(state.pathParameters['nomor'] ?? '');
-          if (nomor == null) {
+          if (!InputValidator.isValidSurahNumber(nomor)) {
             // Unreachable after redirect; safety fallback.
             return const SizedBox.shrink();
           }
@@ -61,7 +62,7 @@ List<RouteBase> get detailSurahRoutes => [
                 ),
               ),
             ],
-            child: DetailSurahPage(nomor: nomor, indexTandai: indexTandai),
+            child: DetailSurahPage(nomor: nomor!, indexTandai: indexTandai),
           );
         },
       ),

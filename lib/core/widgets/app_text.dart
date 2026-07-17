@@ -6,6 +6,18 @@ import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/di/injection.dart';
 
 /// Convenience getter for the [AppTextFactory] singleton.
+///
+/// **Architectural note**: Widget utility factories (appText, appButton,
+/// appPadding, etc.) use top-level DI getters intentionally. This pattern is
+/// chosen because:
+/// 1. These are stateless leaf utilities with no business logic.
+/// 2. They are backed by abstract interfaces registered in GetIt.
+/// 3. They are fully mockable in widget tests (see test factories).
+/// 4. Constructor-injecting them into every widget would add verbosity
+///    with no testability or decoupling benefit.
+///
+/// This is distinct from services/repositories which are always
+/// constructor-injected for explicit dependency graphs.
 AppTextFactory get appText => locator<AppTextFactory>();
 
 /// Abstract interface for text widget utilities.

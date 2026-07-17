@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:quran_app/core/utils/input_validator.dart';
 import 'package:quran_app/features/surah/domain/entities/surah_entity.dart';
 
 part 'search_state.dart';
@@ -12,14 +13,16 @@ class SearchCubit extends Cubit<SearchState> {
     required List<SurahEntity> surahList,
     required String query,
   }) {
-    if (query.isEmpty) {
+    final String sanitized = InputValidator.sanitizeQuery(query);
+
+    if (sanitized.isEmpty) {
       emit(const SearchState.results(results: []));
       return;
     }
     final List<SurahEntity> filtered = surahList
         .where(
           (final SurahEntity e) =>
-              e.namaLatin.toLowerCase().contains(query.toLowerCase()),
+              e.namaLatin.toLowerCase().contains(sanitized.toLowerCase()),
         )
         .toList();
     emit(SearchState.results(results: filtered));
