@@ -15,7 +15,7 @@ void main() {
   setUp(() {
     mockGetBookmarksUseCase = MockGetBookmarksUseCase();
     mockDeleteBookmarkUseCase = MockDeleteBookmarkUseCase();
-    // Default: constructor's loadBookmarks() returns kBookmarkEntity
+    // Default stub for loadBookmarks
     when(() => mockGetBookmarksUseCase())
         .thenAnswer((_) async => const Right([kBookmarkEntity]));
   });
@@ -25,7 +25,7 @@ void main() {
         deleteBookmarkUseCase: mockDeleteBookmarkUseCase,
       );
 
-  // Requirements: 5.1 — BookmarkCubit loads bookmarks on construction and exposes them
+  // Requirements: 5.1 — BookmarkCubit loads bookmarks and exposes them
   group('loadBookmarks', () {
     blocTest<BookmarkCubit, BookmarkState>(
       'emits [loading, loaded] with bookmarks from database',
@@ -35,7 +35,6 @@ void main() {
       },
       build: buildCubit,
       act: (cubit) => cubit.loadBookmarks(),
-      skip: 2,
       verify: (cubit) {
         cubit.state.maybeWhen(
           loaded: (bookmarks) {
@@ -50,16 +49,11 @@ void main() {
     blocTest<BookmarkCubit, BookmarkState>(
       'emits [loading, loaded([])] when database returns empty list',
       setUp: () {
-        int callCount = 0;
-        when(() => mockGetBookmarksUseCase()).thenAnswer((_) async {
-          callCount++;
-          if (callCount <= 1) return const Right([kBookmarkEntity]);
-          return const Right(<BookmarkEntity>[]);
-        });
+        when(() => mockGetBookmarksUseCase())
+            .thenAnswer((_) async => const Right(<BookmarkEntity>[]));
       },
       build: buildCubit,
       act: (cubit) => cubit.loadBookmarks(),
-      skip: 2,
       verify: (cubit) {
         cubit.state.maybeWhen(
           loaded: (bookmarks) => expect(bookmarks.length, 0),
@@ -68,23 +62,17 @@ void main() {
       },
     );
 
-    test('constructor automatically calls loadBookmarks and emits loaded state',
-        () async {
-      when(() => mockGetBookmarksUseCase())
-          .thenAnswer((_) async => const Right([kBookmarkEntity]));
-
+    test(
+        'initial state is BookmarkState.initial before loadBookmarks is called',
+        () {
       final cubit = buildCubit();
-      await Future<void>.delayed(Duration.zero);
 
       cubit.state.maybeWhen(
-        loaded: (bookmarks) {
-          expect(bookmarks.length, 1);
-          expect(bookmarks.first, kBookmarkEntity);
-        },
-        orElse: () => fail('Expected loaded state'),
+        initial: () => expect(true, isTrue),
+        orElse: () => fail('Expected initial state'),
       );
 
-      await cubit.close();
+      cubit.close();
     });
   });
 
@@ -98,16 +86,11 @@ void main() {
             teksIndonesia: kBookmarkEntity.teksIndonesia,
           ),
         ).thenAnswer((_) async => const Right(null));
-        int callCount = 0;
-        when(() => mockGetBookmarksUseCase()).thenAnswer((_) async {
-          callCount++;
-          if (callCount <= 1) return const Right([kBookmarkEntity]);
-          return const Right(<BookmarkEntity>[]);
-        });
+        when(() => mockGetBookmarksUseCase())
+            .thenAnswer((_) async => const Right(<BookmarkEntity>[]));
       },
       build: buildCubit,
       act: (cubit) => cubit.deleteBookmark(kBookmarkEntity),
-      skip: 2,
       verify: (cubit) {
         cubit.state.maybeWhen(
           loaded: (bookmarks) => expect(bookmarks.length, 0),
@@ -157,7 +140,7 @@ void main() {
   // Requirements: 5.4 — navigateToDetail emits navigation state then reloads
   group('navigateToDetail', () {
     blocTest<BookmarkCubit, BookmarkState>(
-      'emits [navigateToDetail, loading, loaded] after constructor states',
+      'emits [navigateToDetail, loading, loaded] when navigateToDetail is called',
       setUp: () {
         when(() => mockGetBookmarksUseCase())
             .thenAnswer((_) async => const Right([kBookmarkEntity]));

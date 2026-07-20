@@ -7,20 +7,37 @@ import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/services/showcase_service.dart';
+import 'package:quran_app/features/surah/domain/usecases/get_surah_usecase.dart';
 import 'package:quran_app/features/surah/presentation/cubits/get_surah_cubit/get_surah_cubit.dart';
 import 'package:quran_app/features/surah/presentation/pages/widgets/last_read_card.dart';
 import 'package:quran_app/features/surah/presentation/pages/widgets/surah_list_item.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/home_cubit/home_cubit.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key, this.getSurahCubit});
+
+  /// Optional cubit for testing. If null, creates one from the service locator.
+  final GetSurahCubit? getSurahCubit;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<GetSurahCubit>(
+      create: (_) =>
+          getSurahCubit ?? GetSurahCubit(usecase: locator<GetSurahUseCase>()),
+      child: const _HomePageBody(),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageBody extends StatefulWidget {
+  const _HomePageBody();
+
+  @override
+  State<_HomePageBody> createState() => _HomePageBodyState();
+}
+
+class _HomePageBodyState extends State<_HomePageBody> {
   final GlobalKey tandaiKey = GlobalKey();
   final GlobalKey helpKey = GlobalKey();
 

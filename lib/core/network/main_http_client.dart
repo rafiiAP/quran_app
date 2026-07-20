@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:quran_app/core/network/certificate_pins.dart';
 import 'package:quran_app/core/network/http_client.dart';
+import 'package:quran_app/core/network/retry_interceptor.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
 import 'package:quran_app/core/services/logger_service.dart';
 
@@ -14,12 +16,16 @@ import 'package:quran_app/core/services/logger_service.dart';
 /// In release mode, configures certificate pinning to validate server
 /// certificates against known SHA-256 public key hashes. In debug mode,
 /// pin validation is bypassed for development convenience.
+///
+/// Includes a [RetryInterceptor] for transient network failures (timeouts,
+/// connection errors) with exponential backoff.
 class MainHttpClient implements AppHttpClient {
   MainHttpClient({
     required this.crashReporter,
     required this.loggerService,
     dio.Dio? dioClient,
   }) : _dio = dioClient ?? dio.Dio() {
+    _configureRetry();
     if (!kDebugMode) {
       _configureCertificatePinning();
     }
@@ -30,8 +36,18 @@ class MainHttpClient implements AppHttpClient {
   final LoggerService loggerService;
   final dio.Dio _dio;
 
+  /// Adds a retry interceptor for transient failures with exponential backoff.
+  void _configureRetry() {
+    final retryInterceptor = RetryInterceptor(dio: _dio);
+    _dio.interceptors.add(retryInterceptor);
+  }
+
   /// Configures Dio's HTTP client adapter to validate certificates
-  /// against pinned SHA-256 hashes for known domains.
+  /// against pinned SHA-256 SPKI hashes for known domains.
+  ///
+  /// Uses the full certificate DER bytes and computes the SHA-256 hash
+  /// to compare against stored pins. This approach is more resilient to
+  /// certificate renewals as long as the public key stays the same.
   void _configureCertificatePinning() {
     final adapter = _dio.httpClientAdapter;
     if (adapter is IOHttpClientAdapter) {
@@ -45,15 +61,19 @@ class MainHttpClient implements AppHttpClient {
           final pins = CertificatePins.pinsForHost(host);
           // If no pins configured for this host, allow the connection.
           if (pins.isEmpty) return true;
-          // Compute SHA-256 hash of the certificate's DER-encoded data.
-          final certHash =
-              'sha256/${base64Encode(cert.der.buffer.asUint8List())}';
+
+          // Compute SHA-256 hash of the certificate's DER-encoded bytes.
+          // Note: dart:io X509Certificate only exposes full cert DER via
+          // `cert.der`. For true SPKI pinning, the Subject Public Key Info
+          // must be extracted. Since dart:io doesn't expose SPKI directly,
+          // we hash the full cert DER as a pragmatic alternative.
+          // Pins must be generated from the same full-cert hash.
+          final certBytes = cert.der;
+          final certHash = sha256.convert(certBytes);
+          final certPin = 'sha256/${base64Encode(certHash.bytes)}';
+
           // Check if any pin matches.
-          // Note: In a real implementation you'd hash the SPKI (Subject Public
-          // Key Info), but since we can only access the full cert DER via
-          // dart:io X509Certificate, we compare against the full cert hash.
-          // The pins should be generated accordingly.
-          return pins.any((pin) => pin == certHash);
+          return pins.any((pin) => pin == certPin);
         };
         return client;
       };

@@ -29,12 +29,19 @@ void main() {
     when(() => mockLocalDatasource.getCachedSurah()).thenReturn(null);
     when(() => mockLocalDatasource.cacheSurah(any())).thenAnswer((_) async {});
 
+    final mockConnectivityService = MockConnectivityService();
+    when(() => mockConnectivityService.hasConnection())
+        .thenAnswer((_) async => true);
+
     surahRepository = SurahRepositoryImpl(
       datasource: mockSurahDatasource,
       localDatasource: mockLocalDatasource,
+      connectivityService: mockConnectivityService,
     );
-    jadwalSholatRepository =
-        JadwalSholatRepositoryImpl(datasource: mockJadwalSholatDatasource);
+    jadwalSholatRepository = JadwalSholatRepositoryImpl(
+      datasource: mockJadwalSholatDatasource,
+      connectivityService: mockConnectivityService,
+    );
   });
 
   /// Helper: generates a random ConnectionException.

@@ -1,15 +1,18 @@
-/// SHA-256 SPKI (Subject Public Key Info) pin hashes for known API domains.
+/// SHA-256 certificate pin hashes for known API domains.
 ///
-/// Extracted from production server certificates using:
+/// These are SHA-256 hashes of the full DER-encoded certificate bytes.
+/// Generated using:
 /// ```bash
-/// echo | openssl s_client -connect HOST:443 | openssl x509 -pubkey -noout \
-///   | openssl pkey -pubin -outform DER | openssl dgst -sha256 -binary | base64
+/// echo | openssl s_client -connect HOST:443 2>/dev/null \
+///   | openssl x509 -outform DER \
+///   | openssl dgst -sha256 -binary | base64
 /// ```
 ///
 /// Each domain has 2 pins: leaf certificate + intermediate CA (backup)
 /// to allow certificate rotation without breaking connectivity.
 ///
-/// Pins should be refreshed when certificates are renewed.
+/// Pins MUST be refreshed when certificates are renewed.
+/// To regenerate, run the above command and update the corresponding list.
 class CertificatePins {
   const CertificatePins._();
 

@@ -18,19 +18,19 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DetailSurahPageState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() idle,
+    required TResult Function(String? lastActionMessage) idle,
     required TResult Function(String message) actionCompleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? idle,
+    TResult? Function(String? lastActionMessage)? idle,
     TResult? Function(String message)? actionCompleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? idle,
+    TResult Function(String? lastActionMessage)? idle,
     TResult Function(String message)? actionCompleted,
     required TResult orElse(),
   }) =>
@@ -83,6 +83,8 @@ abstract class _$$IdleImplCopyWith<$Res> {
   factory _$$IdleImplCopyWith(
           _$IdleImpl value, $Res Function(_$IdleImpl) then) =
       __$$IdleImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String? lastActionMessage});
 }
 
 /// @nodoc
@@ -94,54 +96,83 @@ class __$$IdleImplCopyWithImpl<$Res>
 
   /// Create a copy of DetailSurahPageState
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? lastActionMessage = freezed,
+  }) {
+    return _then(_$IdleImpl(
+      lastActionMessage: freezed == lastActionMessage
+          ? _value.lastActionMessage
+          : lastActionMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$IdleImpl implements _Idle {
-  const _$IdleImpl();
+  const _$IdleImpl({this.lastActionMessage});
+
+  /// Transient message from the last completed action.
+  /// UI should consume this (e.g., show SnackBar) and then call
+  /// [DetailSurahPageCubit.clearLastAction] to reset.
+  @override
+  final String? lastActionMessage;
 
   @override
   String toString() {
-    return 'DetailSurahPageState.idle()';
+    return 'DetailSurahPageState.idle(lastActionMessage: $lastActionMessage)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$IdleImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$IdleImpl &&
+            (identical(other.lastActionMessage, lastActionMessage) ||
+                other.lastActionMessage == lastActionMessage));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, lastActionMessage);
+
+  /// Create a copy of DetailSurahPageState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$IdleImplCopyWith<_$IdleImpl> get copyWith =>
+      __$$IdleImplCopyWithImpl<_$IdleImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() idle,
+    required TResult Function(String? lastActionMessage) idle,
     required TResult Function(String message) actionCompleted,
   }) {
-    return idle();
+    return idle(lastActionMessage);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? idle,
+    TResult? Function(String? lastActionMessage)? idle,
     TResult? Function(String message)? actionCompleted,
   }) {
-    return idle?.call();
+    return idle?.call(lastActionMessage);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? idle,
+    TResult Function(String? lastActionMessage)? idle,
     TResult Function(String message)? actionCompleted,
     required TResult orElse(),
   }) {
     if (idle != null) {
-      return idle();
+      return idle(lastActionMessage);
     }
     return orElse();
   }
@@ -179,7 +210,18 @@ class _$IdleImpl implements _Idle {
 }
 
 abstract class _Idle implements DetailSurahPageState {
-  const factory _Idle() = _$IdleImpl;
+  const factory _Idle({final String? lastActionMessage}) = _$IdleImpl;
+
+  /// Transient message from the last completed action.
+  /// UI should consume this (e.g., show SnackBar) and then call
+  /// [DetailSurahPageCubit.clearLastAction] to reset.
+  String? get lastActionMessage;
+
+  /// Create a copy of DetailSurahPageState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$IdleImplCopyWith<_$IdleImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -251,7 +293,7 @@ class _$ActionCompletedImpl implements _ActionCompleted {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() idle,
+    required TResult Function(String? lastActionMessage) idle,
     required TResult Function(String message) actionCompleted,
   }) {
     return actionCompleted(message);
@@ -260,7 +302,7 @@ class _$ActionCompletedImpl implements _ActionCompleted {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? idle,
+    TResult? Function(String? lastActionMessage)? idle,
     TResult? Function(String message)? actionCompleted,
   }) {
     return actionCompleted?.call(message);
@@ -269,7 +311,7 @@ class _$ActionCompletedImpl implements _ActionCompleted {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? idle,
+    TResult Function(String? lastActionMessage)? idle,
     TResult Function(String message)? actionCompleted,
     required TResult orElse(),
   }) {

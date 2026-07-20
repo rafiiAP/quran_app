@@ -4,39 +4,50 @@ import 'package:permission_handler/permission_handler.dart';
 ///
 /// Can be mocked independently in unit tests.
 abstract class PermissionService {
-  /// Requests all required permissions (notification + location).
-  /// Returns true if all were granted.
-  Future<bool> requestAllPermissions();
+  /// Requests only the permissions that haven't been granted yet.
+  /// Returns true if all required permissions are granted.
+  Future<bool> requestRequiredPermissions();
 
-  /// Requests only notification permission. Returns true if granted.
+  /// Requests only notification permission if not yet granted.
+  /// Returns true if granted.
   Future<bool> requestNotificationPermission();
 
-  /// Requests only location permission. Returns true if granted.
+  /// Requests only location permission if not yet granted.
+  /// Returns true if granted.
   Future<bool> requestLocationPermission();
 }
 
 /// Implementation using the `permission_handler` package.
+///
+/// Only prompts users for permissions they haven't already granted,
+/// avoiding unnecessary permission dialogs on every app launch.
 class PermissionServiceImpl implements PermissionService {
   @override
-  Future<bool> requestAllPermissions() async {
-    final Map<Permission, PermissionStatus> statuses = await <Permission>[
-      Permission.notification,
-      Permission.location,
-    ].request();
-
-    return statuses.values
-        .every((final PermissionStatus status) => status.isGranted);
+  Future<bool> requestRequiredPermissions() async {
+    final results = await Future.wait([
+      requestNotificationPermission(),
+      requestLocationPermission(),
+    ]);
+    return results.every((final bool granted) => granted);
   }
 
   @override
   Future<bool> requestNotificationPermission() async {
-    final status = await Permission.notification.request();
-    return status.isGranted;
+    final status = await Permission.notification.status;
+    if (status.isGranted) return true;
+    if (status.isPermanentlyDenied) return false;
+
+    final result = await Permission.notification.request();
+    return result.isGranted;
   }
 
   @override
   Future<bool> requestLocationPermission() async {
-    final status = await Permission.location.request();
-    return status.isGranted;
+    final status = await Permission.location.status;
+    if (status.isGranted) return true;
+    if (status.isPermanentlyDenied) return false;
+
+    final result = await Permission.location.request();
+    return result.isGranted;
   }
 }

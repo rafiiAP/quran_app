@@ -33,7 +33,7 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
       final bool isNew = await _databaseHelper.insertBookmark(data);
       return Right(isNew);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(DatabaseFailure(e.toString()));
     }
   }
 
@@ -50,7 +50,7 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
           .toList();
       return Right(entities);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(DatabaseFailure(e.toString()));
     }
   }
 
@@ -62,7 +62,7 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
       await _databaseHelper.deleteBookmark(teksIndonesia);
       return const Right(null);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(DatabaseFailure(e.toString()));
     }
   }
 }

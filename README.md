@@ -3,11 +3,10 @@
 Qur'an App
 
 ## FLutter 
-3.32.0
+3.35.0
 
 ## Statemanagement
 
-- GetX
 - BLOC-Cubit
 
 <table>

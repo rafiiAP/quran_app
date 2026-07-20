@@ -10,11 +10,20 @@ import '../../../../mocks.dart';
 
 void main() {
   late MockJadwalSholatDatasource mockDatasource;
+  late MockConnectivityService mockConnectivityService;
   late JadwalSholatRepositoryImpl repository;
 
   setUp(() {
     mockDatasource = MockJadwalSholatDatasource();
-    repository = JadwalSholatRepositoryImpl(datasource: mockDatasource);
+    mockConnectivityService = MockConnectivityService();
+    repository = JadwalSholatRepositoryImpl(
+      datasource: mockDatasource,
+      connectivityService: mockConnectivityService,
+    );
+
+    // Default: online
+    when(() => mockConnectivityService.hasConnection())
+        .thenAnswer((_) async => true);
   });
 
   const tLatitude = -6.2;
@@ -182,6 +191,30 @@ void main() {
       expect(entity.midnight, '00:00');
       expect(entity.firstthird, '22:00');
       expect(entity.lastthird, '02:00');
+    });
+
+    test('returns Left(ConnectionFailure) immediately when device is offline',
+        () async {
+      when(() => mockConnectivityService.hasConnection())
+          .thenAnswer((_) async => false);
+
+      final result = await repository.getJadwalSholat(
+        latitude: tLatitude,
+        longitude: tLongitude,
+        date: tDate,
+      );
+
+      expect(result.isLeft(), isTrue);
+      final failure = result.match((f) => f, (_) => null);
+      expect(failure, isA<ConnectionFailure>());
+      expect(failure!.message, contains('koneksi internet'));
+      verifyNever(
+        () => mockDatasource.getJadwalSholat(
+          latitude: any(named: 'latitude'),
+          longitude: any(named: 'longitude'),
+          date: any(named: 'date'),
+        ),
+      );
     });
   });
 }

@@ -11,19 +11,24 @@ import '../../../../mocks.dart';
 void main() {
   late MockSurahDatasource mockDatasource;
   late MockSurahLocalDatasource mockLocalDatasource;
+  late MockConnectivityService mockConnectivityService;
   late SurahRepositoryImpl repository;
 
   setUp(() {
     mockDatasource = MockSurahDatasource();
     mockLocalDatasource = MockSurahLocalDatasource();
+    mockConnectivityService = MockConnectivityService();
     repository = SurahRepositoryImpl(
       datasource: mockDatasource,
       localDatasource: mockLocalDatasource,
+      connectivityService: mockConnectivityService,
     );
 
-    // Default: cache miss, so remote is always called
+    // Default: cache miss, online, so remote is always called
     when(() => mockLocalDatasource.getCachedSurah()).thenReturn(null);
     when(() => mockLocalDatasource.cacheSurah(any())).thenAnswer((_) async {});
+    when(() => mockConnectivityService.hasConnection())
+        .thenAnswer((_) async => true);
   });
 
   group('SurahRepositoryImpl.getSurah', () {
@@ -88,6 +93,21 @@ void main() {
       final failure = result.match((f) => f, (_) => null);
       expect(failure, isA<ServerFailure>());
       expect(failure!.message, contains('Unknown'));
+    });
+
+    test(
+        'returns Left(ConnectionFailure) immediately when device is offline '
+        'and cache is empty', () async {
+      when(() => mockConnectivityService.hasConnection())
+          .thenAnswer((_) async => false);
+
+      final result = await repository.getSurah();
+
+      expect(result.isLeft(), isTrue);
+      final failure = result.match((f) => f, (_) => null);
+      expect(failure, isA<ConnectionFailure>());
+      expect(failure!.message, contains('koneksi internet'));
+      verifyNever(() => mockDatasource.getSurah());
     });
   });
 }

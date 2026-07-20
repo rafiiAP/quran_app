@@ -6,17 +6,40 @@ import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
+import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
 import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
 
-class BookmarkPage extends StatefulWidget {
-  const BookmarkPage({super.key});
+class BookmarkPage extends StatelessWidget {
+  const BookmarkPage({super.key, this.bookmarkCubit});
+
+  /// Optional cubit for testing. If null, creates one from the service locator.
+  final BookmarkCubit? bookmarkCubit;
 
   @override
-  State<BookmarkPage> createState() => _BookmarkPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<BookmarkCubit>(
+      create: (_) =>
+          bookmarkCubit ??
+          BookmarkCubit(
+            getBookmarksUseCase: locator<GetBookmarksUseCase>(),
+            deleteBookmarkUseCase: locator<DeleteBookmarkUseCase>(),
+          ),
+      child: const _BookmarkPageBody(),
+    );
+  }
 }
 
-class _BookmarkPageState extends State<BookmarkPage> {
+class _BookmarkPageBody extends StatefulWidget {
+  const _BookmarkPageBody();
+
+  @override
+  State<_BookmarkPageBody> createState() => _BookmarkPageBodyState();
+}
+
+class _BookmarkPageBodyState extends State<_BookmarkPageBody> {
   @override
   void initState() {
     super.initState();

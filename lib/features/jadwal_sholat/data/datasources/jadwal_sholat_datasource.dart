@@ -1,5 +1,4 @@
-import 'package:dio/dio.dart';
-import 'package:quran_app/core/error/exceptions.dart';
+import 'package:quran_app/core/network/api_call_handler.dart';
 import 'package:quran_app/core/network/http_client.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
 import 'package:quran_app/features/jadwal_sholat/data/models/jadwal_sholat_model.dart';
@@ -33,20 +32,15 @@ class JadwalSholatDatasourceImpl implements JadwalSholatDatasource {
     required final double longitude,
     required final String date,
   }) async {
-    try {
-      final String response = await _httpClient.get(
-        url: '$_baseUrl/$date?latitude=$latitude&longitude=$longitude',
-        requestName: 'getJadwalSholat',
-      );
-      return JadwalSholatDioModel.fromJson(response).data.timings;
-    } on DioException catch (e, stackTrace) {
-      await _crashReporter.recordError(e, stackTrace);
-      throw ConnectionException(
-        e.message ?? 'Gagal terhubung ke server.',
-      );
-    } catch (e, stackTrace) {
-      await _crashReporter.recordError(e, stackTrace);
-      throw ServerException(e.toString());
-    }
+    return apiCall(
+      crashReporter: _crashReporter,
+      call: () async {
+        final String response = await _httpClient.get(
+          url: '$_baseUrl/$date?latitude=$latitude&longitude=$longitude',
+          requestName: 'getJadwalSholat',
+        );
+        return JadwalSholatDioModel.fromJson(response).data.timings;
+      },
+    );
   }
 }

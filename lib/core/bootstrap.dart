@@ -59,9 +59,9 @@ class AppBootstrap {
 
   /// Initializes runtime services: permissions, notifications, database.
   static Future<void> _initServices() async {
-    await locator<PermissionService>().requestAllPermissions();
+    await locator<PermissionService>().requestRequiredPermissions();
     await locator<NotificationService>().initLocalNotif();
-    await databaseHelper.db;
+    await locator<DatabaseHelper>().db;
   }
 
   /// Configures system UI overlays (status bar, navigation bar).

@@ -98,6 +98,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(message)),
             );
+            context.read<DetailSurahPageCubit>().clearLastAction();
           },
           orElse: () {},
         );

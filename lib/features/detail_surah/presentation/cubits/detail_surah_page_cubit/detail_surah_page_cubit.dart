@@ -20,6 +20,12 @@ class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
   })  : _saveBookmarkUseCase = saveBookmarkUseCase,
         super(const DetailSurahPageState.idle());
 
+  /// Clears the transient action message. Call from the UI after consuming
+  /// the [lastActionMessage] (e.g., after showing a SnackBar).
+  void clearLastAction() {
+    emit(const DetailSurahPageState.idle());
+  }
+
   Future<void> markAsLastRead({
     required String namaLatin,
     required int nomorSurah,
@@ -36,7 +42,6 @@ class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
         message: 'Berhasil ditandai sebagai bacaan terakhir',
       ),
     );
-    emit(const DetailSurahPageState.idle());
   }
 
   Future<void> saveBookmark({
@@ -55,7 +60,6 @@ class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
         ),
       ),
     );
-    emit(const DetailSurahPageState.idle());
   }
 
   String formatCopyText({

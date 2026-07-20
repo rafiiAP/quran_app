@@ -57,7 +57,6 @@ void main() {
         const DetailSurahPageState.actionCompleted(
           message: 'Berhasil ditandai sebagai bacaan terakhir',
         ),
-        const DetailSurahPageState.idle(),
       ],
       verify: (_) {
         verify(
@@ -119,7 +118,6 @@ void main() {
         const DetailSurahPageState.actionCompleted(
           message: 'Berhasil disimpan ke bookmark',
         ),
-        const DetailSurahPageState.idle(),
       ],
     );
 
@@ -137,7 +135,6 @@ void main() {
       act: (cubit) => cubit.saveBookmark(ayat: kAyat, detail: kDetail),
       expect: () => [
         const DetailSurahPageState.actionCompleted(message: 'Data sudah ada'),
-        const DetailSurahPageState.idle(),
       ],
     );
   });

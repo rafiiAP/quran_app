@@ -1,6 +1,7 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/core/cache/cache_service.dart';
 import 'package:quran_app/core/network/http_client.dart';
+import 'package:quran_app/core/services/connectivity_service.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
 import 'package:quran_app/core/services/datetime_service.dart';
 import 'package:quran_app/core/services/location_service.dart';
@@ -87,3 +88,6 @@ class MockSurahLocalDatasource extends Mock implements SurahLocalDatasource {}
 
 class MockDetailSurahLocalDatasource extends Mock
     implements DetailSurahLocalDatasource {}
+
+// Connectivity
+class MockConnectivityService extends Mock implements ConnectivityService {}

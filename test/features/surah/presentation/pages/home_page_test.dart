@@ -180,12 +180,9 @@ void main() {
   Widget buildWidget() {
     return MaterialApp(
       home: ShowCaseWidget(
-        builder: (context) => MultiBlocProvider(
-          providers: [
-            BlocProvider<GetSurahCubit>.value(value: mockGetSurahCubit),
-            BlocProvider<HomeCubit>.value(value: mockHomeCubit),
-          ],
-          child: const HomePage(),
+        builder: (context) => BlocProvider<HomeCubit>.value(
+          value: mockHomeCubit,
+          child: HomePage(getSurahCubit: mockGetSurahCubit),
         ),
       ),
     );

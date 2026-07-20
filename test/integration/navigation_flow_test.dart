@@ -21,6 +21,8 @@ import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/widgets/app_shimmer.dart';
 import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
+import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/home_cubit/home_cubit.dart';
@@ -59,6 +61,10 @@ class MockGetDetailSurahUseCase extends Mock implements GetDetailSurahUseCase {}
 class MockGetSurahUseCase extends Mock implements GetSurahUseCase {}
 
 class MockSaveBookmarkUseCase extends Mock implements SaveBookmarkUseCase {}
+
+class MockGetBookmarksUseCase extends Mock implements GetBookmarksUseCase {}
+
+class MockDeleteBookmarkUseCase extends Mock implements DeleteBookmarkUseCase {}
 
 class MockAppBottomsheetFactory extends Mock implements AppBottomsheetFactory {}
 
@@ -298,6 +304,10 @@ void main() {
     mockGetSurahUseCase = MockGetSurahUseCase();
     mockAppBottomsheetFactory = MockAppBottomsheetFactory();
 
+    // Stub GetSurahUseCase — return test surah list for HomePage
+    when(() => mockGetSurahUseCase.call())
+        .thenAnswer((_) async => Right(testSurahList));
+
     // Stub LocalStorageService — onboarded, so redirect guard allows /home
     when(
       () => mockLocalStorageService.getBool(
@@ -381,6 +391,14 @@ void main() {
       () => MockSaveBookmarkUseCase(),
     );
 
+    // Bookmark use cases for BookmarkPage
+    locator.registerLazySingleton<GetBookmarksUseCase>(
+      () => MockGetBookmarksUseCase(),
+    );
+    locator.registerLazySingleton<DeleteBookmarkUseCase>(
+      () => MockDeleteBookmarkUseCase(),
+    );
+
     // Create AppRouter with mock storage service (cacheStarted=true → stays on /home)
     appRouter = AppRouter(storageService: mockLocalStorageService);
   });
@@ -394,8 +412,6 @@ void main() {
       providers: [
         BlocProvider<DashboardCubit>.value(value: mockDashboardCubit),
         BlocProvider<HomeCubit>.value(value: mockHomeCubit),
-        BlocProvider<GetSurahCubit>.value(value: mockGetSurahCubit),
-        BlocProvider<BookmarkCubit>.value(value: mockBookmarkCubit),
         BlocProvider<SearchCubit>.value(value: mockSearchCubit),
       ],
       child: MaterialApp.router(

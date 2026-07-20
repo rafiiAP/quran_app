@@ -1,5 +1,4 @@
-import 'package:dio/dio.dart';
-import 'package:quran_app/core/error/exceptions.dart';
+import 'package:quran_app/core/network/api_call_handler.dart';
 import 'package:quran_app/core/network/http_client.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
 import 'package:quran_app/features/detail_surah/data/models/detail_model.dart';
@@ -25,20 +24,15 @@ class DetailSurahDatasourceImpl implements DetailSurahDatasource {
 
   @override
   Future<DetailModel> getDetailSurah({required final int nomor}) async {
-    try {
-      final String response = await _httpClient.get(
-        url: '$_baseUrl/$nomor',
-        requestName: 'getDetailSurah',
-      );
-      return ResponseDetailModel.fromJson(response).data;
-    } on DioException catch (e, stackTrace) {
-      await _crashReporter.recordError(e, stackTrace);
-      throw ConnectionException(
-        e.message ?? 'Gagal terhubung ke server.',
-      );
-    } catch (e, stackTrace) {
-      await _crashReporter.recordError(e, stackTrace);
-      throw ServerException(e.toString());
-    }
+    return apiCall(
+      crashReporter: _crashReporter,
+      call: () async {
+        final String response = await _httpClient.get(
+          url: '$_baseUrl/$nomor',
+          requestName: 'getDetailSurah',
+        );
+        return ResponseDetailModel.fromJson(response).data;
+      },
+    );
   }
 }

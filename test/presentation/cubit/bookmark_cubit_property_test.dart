@@ -78,6 +78,8 @@ void main() {
           getBookmarksUseCase: mockGetBookmarksUseCase,
           deleteBookmarkUseCase: mockDeleteBookmarkUseCase,
         );
+        // Explicitly load bookmarks (no longer auto-loads in constructor)
+        await cubit.loadBookmarks();
         await Future<void>.delayed(Duration.zero);
 
         await cubit.deleteBookmark(targetItem);
@@ -121,7 +123,6 @@ void main() {
         getBookmarksUseCase: mockGetBookmarksUseCase,
         deleteBookmarkUseCase: mockDeleteBookmarkUseCase,
       );
-      await Future<void>.delayed(Duration.zero);
 
       final rng = Random(42);
       for (int i = 0; i < 100; i++) {

@@ -18,9 +18,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
     required DeleteBookmarkUseCase deleteBookmarkUseCase,
   })  : _getBookmarksUseCase = getBookmarksUseCase,
         _deleteBookmarkUseCase = deleteBookmarkUseCase,
-        super(const BookmarkState.initial()) {
-    loadBookmarks();
-  }
+        super(const BookmarkState.initial());
 
   Future<void> loadBookmarks() async {
     emit(const BookmarkState.loading());
