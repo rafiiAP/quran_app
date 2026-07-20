@@ -34,8 +34,8 @@ class AppBootstrap {
 
   /// Registers all DI singletons, loads env, initializes Firebase.
   static Future<void> _initDependencies() async {
-    await di.setup();
     await dotenv.load(fileName: '.env');
+    await di.setup();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );

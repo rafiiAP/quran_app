@@ -83,7 +83,7 @@ void main() {
     });
   });
 
-  group('SurahaDioModel', () {
+  group('SurahResponse', () {
     test('fromJson() parses API JSON wrapper correctly', () {
       // Validates: Requirements 4.5
       final jsonMap = {
@@ -120,7 +120,7 @@ void main() {
       };
       final jsonStr = json.encode(jsonMap);
 
-      final result = SurahaDioModel.fromJson(jsonStr);
+      final result = SurahResponse.fromJson(jsonStr);
 
       expect(result.code, 200);
       expect(result.message, 'success');
@@ -184,9 +184,8 @@ void main() {
       expect(reparsed, equals(kSurahModel));
     });
 
-    test('SurahaDioModel.toMap() returns map with keys code, message, data',
-        () {
-      const dioModel = SurahaDioModel(
+    test('SurahResponse.toMap() returns map with keys code, message, data', () {
+      const dioModel = SurahResponse(
         code: 200,
         message: 'success',
         data: [kSurahModel],
@@ -202,9 +201,9 @@ void main() {
     });
 
     test(
-        'SurahaDioModel.toJson() returns valid JSON string, can be decoded back',
+        'SurahResponse.toJson() returns valid JSON string, can be decoded back',
         () {
-      const dioModel = SurahaDioModel(
+      const dioModel = SurahResponse(
         code: 200,
         message: 'success',
         data: [kSurahModel],
@@ -220,14 +219,14 @@ void main() {
     });
 
     test(
-        'SurahaDioModel equality (props) — two identical instances must be equal',
+        'SurahResponse equality (props) — two identical instances must be equal',
         () {
-      const model1 = SurahaDioModel(
+      const model1 = SurahResponse(
         code: 200,
         message: 'success',
         data: [kSurahModel],
       );
-      const model2 = SurahaDioModel(
+      const model2 = SurahResponse(
         code: 200,
         message: 'success',
         data: [kSurahModel],

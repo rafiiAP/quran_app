@@ -4,17 +4,22 @@ import 'package:equatable/equatable.dart';
 import 'package:quran_app/core/utils/model_validators.dart';
 import 'package:quran_app/features/surah/domain/entities/surah_entity.dart';
 
-class SurahaDioModel extends Equatable {
-  const SurahaDioModel({
+/// Response envelope for the surah list API.
+///
+/// Wraps the raw JSON response containing `code`, `message`, and `data[]`.
+/// Previously named `SurahaDioModel` — renamed for consistency with other
+/// response models (e.g. `ResponseDetailModel`).
+class SurahResponse extends Equatable {
+  const SurahResponse({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory SurahaDioModel.fromJson(final String str) =>
-      SurahaDioModel.fromMap(json.decode(str) as Map<String, dynamic>);
+  factory SurahResponse.fromJson(final String str) =>
+      SurahResponse.fromMap(json.decode(str) as Map<String, dynamic>);
 
-  factory SurahaDioModel.fromMap(final Map<String, dynamic> json) {
+  factory SurahResponse.fromMap(final Map<String, dynamic> json) {
     requireField<int>(json, 'code');
     requireField<String>(json, 'message');
     requireField<List<dynamic>>(json, 'data');
@@ -28,7 +33,7 @@ class SurahaDioModel extends Equatable {
       }
     }
 
-    return SurahaDioModel(
+    return SurahResponse(
       code: json['code'] as int,
       message: json['message'] as String,
       data: dataList
@@ -139,3 +144,7 @@ class SurahModel extends Equatable {
         audioFull,
       ];
 }
+
+/// Backward-compatible alias. Prefer [SurahResponse] for new code.
+@Deprecated('Renamed to SurahResponse for naming consistency')
+typedef SurahaDioModel = SurahResponse;

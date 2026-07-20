@@ -10,6 +10,13 @@ abstract class CacheService {
   /// Stores a JSON string [value] under [key].
   Future<void> put(String key, String value);
 
+  /// Stores a JSON string [value] under [key] with a time-to-live [ttl].
+  ///
+  /// After [ttl] has elapsed, [get] should return null for this entry.
+  /// Implementations may use lazy expiration (check on read) rather than
+  /// background cleanup.
+  Future<void> putWithTtl(String key, String value, Duration ttl);
+
   /// Removes the cached entry for [key].
   Future<void> remove(String key);
 

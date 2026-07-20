@@ -99,7 +99,7 @@ void main() {
     };
   }
 
-  /// Creates a valid SurahaDioModel map.
+  /// Creates a valid SurahResponse map.
   Map<String, dynamic> generateValidSurahaDioMap(Random rng) {
     return <String, dynamic>{
       'code': 200,
@@ -349,7 +349,7 @@ void main() {
     });
 
     test(
-        'SurahaDioModel.fromMap throws FormatException for 100 random invalid inputs',
+        'SurahResponse.fromMap throws FormatException for 100 random invalid inputs',
         () {
       // **Validates: Requirements 7.1, 7.2, 7.5**
       final fieldNames = surahaDioFields.keys.toList();
@@ -370,7 +370,7 @@ void main() {
         }
 
         expect(
-          () => SurahaDioModel.fromMap(validMap),
+          () => SurahResponse.fromMap(validMap),
           throwsA(
             isA<FormatException>().having(
               (e) => e.message,

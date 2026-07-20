@@ -20,12 +20,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: <BlocProvider>[
         BlocProvider<DashboardCubit>(
-          create: (final BuildContext context) =>
-              DashboardCubit(storageService: locator()),
+          create: (final BuildContext context) => locator<DashboardCubit>(),
         ),
         BlocProvider<HomeCubit>(
-          create: (final BuildContext context) =>
-              HomeCubit(storageService: locator()),
+          create: (final BuildContext context) => locator<HomeCubit>(),
         ),
       ],
       child: MaterialApp.router(

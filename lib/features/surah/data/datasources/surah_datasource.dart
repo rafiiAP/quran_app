@@ -31,7 +31,7 @@ class SurahDatasourceImpl implements SurahDatasource {
           url: _baseUrl,
           requestName: 'getSurah',
         );
-        return SurahaDioModel.fromJson(response).data;
+        return SurahResponse.fromJson(response).data;
       },
     );
   }

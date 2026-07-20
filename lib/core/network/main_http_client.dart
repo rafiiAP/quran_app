@@ -128,4 +128,36 @@ class MainHttpClient implements AppHttpClient {
     }
     return jsonEncode(cResponse);
   }
+
+  @override
+  Future<String> post({
+    required final String url,
+    required final String requestName,
+    required final Map<String, dynamic> body,
+  }) async {
+    dynamic cResponse;
+    try {
+      loggerService.log('$requestName POST: $url');
+      loggerService.log('$requestName body: $body');
+      final dio.Response<dynamic> response = await _dio.post(url, data: body);
+      cResponse = response.data;
+      loggerService.log('$requestName response : $cResponse');
+    } on dio.DioException catch (e) {
+      loggerService.log('--${e.response}\n-${e.message}');
+      if (e.error is HandshakeException ||
+          e.type == dio.DioExceptionType.connectionError) {
+        final errorMsg = e.error;
+        if (errorMsg is HandshakeException) {
+          throw dio.DioException(
+            requestOptions: e.requestOptions,
+            error: e.error,
+            type: dio.DioExceptionType.connectionError,
+            message: 'Certificate mismatch for $url',
+          );
+        }
+      }
+      rethrow;
+    }
+    return jsonEncode(cResponse);
+  }
 }
