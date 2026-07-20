@@ -3,6 +3,7 @@ import 'package:quran_app/core/cache/cache_service.dart';
 import 'package:quran_app/core/network/http_client.dart';
 import 'package:quran_app/core/services/connectivity_service.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
+import 'package:quran_app/core/usecases/save_bookmark_action.dart';
 import 'package:quran_app/features/jadwal_sholat/data/datasources/jadwal_sholat_local_datasource.dart';
 import 'package:quran_app/core/services/datetime_service.dart';
 import 'package:quran_app/core/services/location_service.dart';
@@ -12,6 +13,7 @@ import 'package:quran_app/core/services/permission_service.dart';
 import 'package:quran_app/core/services/showcase_service.dart';
 import 'package:quran_app/core/storage/database_helper.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
+import 'package:quran_app/features/bookmark/data/datasources/bookmark_local_datasource.dart';
 import 'package:quran_app/features/bookmark/domain/repositories/bookmark_repository.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
@@ -80,7 +82,13 @@ class MockGetBookmarksUseCase extends Mock implements GetBookmarksUseCase {}
 
 class MockSaveBookmarkUseCase extends Mock implements SaveBookmarkUseCase {}
 
+class MockSaveBookmarkAction extends Mock implements SaveBookmarkAction {}
+
 class MockDeleteBookmarkUseCase extends Mock implements DeleteBookmarkUseCase {}
+
+// Bookmark datasource
+class MockBookmarkLocalDatasource extends Mock
+    implements BookmarkLocalDatasource {}
 
 // Cache
 class MockCacheService extends Mock implements CacheService {}

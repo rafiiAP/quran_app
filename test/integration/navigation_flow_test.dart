@@ -24,6 +24,7 @@ import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/b
 import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
+import 'package:quran_app/core/usecases/save_bookmark_action.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/home_cubit/home_cubit.dart';
 import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
@@ -389,6 +390,9 @@ void main() {
     // Bookmark use case for detail page
     locator.registerLazySingleton<SaveBookmarkUseCase>(
       () => MockSaveBookmarkUseCase(),
+    );
+    locator.registerLazySingleton<SaveBookmarkAction>(
+      () => locator<SaveBookmarkUseCase>(),
     );
 
     // Bookmark use cases for BookmarkPage

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -8,10 +10,10 @@ import 'package:quran_app/features/surah/data/models/surah_model.dart';
 import '../../mocks.dart';
 
 // ---------------------------------------------------------------------------
-// Minimal JSON fixtures
+// Minimal JSON fixtures (decoded to Map for the new AppHttpClient contract)
 // ---------------------------------------------------------------------------
 
-const _kSurahJson = '''
+final Map<String, dynamic> _kSurahMap = json.decode('''
 {
   "code": 200,
   "message": "OK",
@@ -28,9 +30,9 @@ const _kSurahJson = '''
     }
   ]
 }
-''';
+''') as Map<String, dynamic>;
 
-const _kJadwalJson = '''
+final Map<String, dynamic> _kJadwalMap = json.decode('''
 {
   "code": 200,
   "status": "OK",
@@ -50,7 +52,7 @@ const _kJadwalJson = '''
     }
   }
 }
-''';
+''') as Map<String, dynamic>;
 
 // ---------------------------------------------------------------------------
 // Tests — SurahDatasourceImpl
@@ -81,7 +83,7 @@ void main() {
             url: any(named: 'url'),
             requestName: any(named: 'requestName'),
           ),
-        ).thenAnswer((_) async => _kSurahJson);
+        ).thenAnswer((_) async => _kSurahMap);
 
         final result = await datasource.getSurah();
 
@@ -97,7 +99,7 @@ void main() {
             url: any(named: 'url'),
             requestName: any(named: 'requestName'),
           ),
-        ).thenAnswer((_) async => _kSurahJson);
+        ).thenAnswer((_) async => _kSurahMap);
 
         await datasource.getSurah();
 
@@ -172,7 +174,7 @@ void main() {
           url: any(named: 'url'),
           requestName: any(named: 'requestName'),
         ),
-      ).thenAnswer((_) async => _kJadwalJson);
+      ).thenAnswer((_) async => _kJadwalMap);
 
       final result = await datasource.getJadwalSholat(
         latitude: -6.2,
@@ -190,7 +192,7 @@ void main() {
           url: any(named: 'url'),
           requestName: any(named: 'requestName'),
         ),
-      ).thenAnswer((_) async => _kJadwalJson);
+      ).thenAnswer((_) async => _kJadwalMap);
 
       await datasource.getJadwalSholat(
         latitude: -6.2,

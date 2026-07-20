@@ -4,6 +4,7 @@ import 'package:quran_app/core/di/injection_core.dart';
 import 'package:quran_app/core/di/injection_dashboard.dart';
 import 'package:quran_app/core/di/injection_detail_surah.dart';
 import 'package:quran_app/core/di/injection_jadwal_sholat.dart';
+import 'package:quran_app/core/di/injection_search.dart';
 import 'package:quran_app/core/di/injection_surah.dart';
 import 'package:quran_app/core/di/injection_widgets.dart';
 
@@ -18,6 +19,7 @@ GetIt locator = GetIt.instance;
 /// - [registerDetailSurahDependencies] — surah detail feature
 /// - [registerJadwalSholatDependencies] — prayer schedule feature
 /// - [registerBookmarkDependencies] — bookmark feature
+/// - [registerSearchDependencies] — search feature
 /// - [registerWidgetDependencies] — UI widget factories
 Future<void> setup() async {
   await registerCoreDependencies(locator);
@@ -26,5 +28,6 @@ Future<void> setup() async {
   registerDetailSurahDependencies(locator);
   registerJadwalSholatDependencies(locator);
   registerBookmarkDependencies(locator);
+  registerSearchDependencies(locator);
   registerWidgetDependencies(locator);
 }

@@ -1,11 +1,11 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/cache_keys.dart';
 import 'package:quran_app/core/error/failure.dart';
 import 'package:quran_app/core/models/bookmark_input.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
-import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
+import 'package:quran_app/core/usecases/save_bookmark_action.dart';
 import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
 
 part 'detail_surah_page_state.dart';
@@ -13,12 +13,12 @@ part 'detail_surah_page_cubit.freezed.dart';
 
 class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
   final LocalStorageService storageService;
-  final SaveBookmarkUseCase _saveBookmarkUseCase;
+  final SaveBookmarkAction _saveBookmarkAction;
 
   DetailSurahPageCubit({
     required this.storageService,
-    required SaveBookmarkUseCase saveBookmarkUseCase,
-  })  : _saveBookmarkUseCase = saveBookmarkUseCase,
+    required SaveBookmarkAction saveBookmarkUseCase,
+  })  : _saveBookmarkAction = saveBookmarkUseCase,
         super(const DetailSurahPageState.idle());
 
   /// Clears the transient action message. Call from the UI after consuming
@@ -33,11 +33,11 @@ class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
     required int nomorAyat,
   }) async {
     await storageService.setString(
-      key: config.cacheNamaLatin,
+      key: CacheKeys.namaLatin,
       value: namaLatin,
     );
-    await storageService.setInt(key: config.cacheNomorSurah, value: nomorSurah);
-    await storageService.setInt(key: config.cacheNomorAyat, value: nomorAyat);
+    await storageService.setInt(key: CacheKeys.nomorSurah, value: nomorSurah);
+    await storageService.setInt(key: CacheKeys.nomorAyat, value: nomorAyat);
     emit(
       const DetailSurahPageState.actionCompleted(
         message: 'Berhasil ditandai sebagai bacaan terakhir',
@@ -58,7 +58,7 @@ class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
       teksLatin: ayat.teksLatin,
     );
     final Either<Failure, bool> result =
-        await _saveBookmarkUseCase(input: input);
+        await _saveBookmarkAction(input: input);
     result.match(
       (final Failure l) => emit(
         DetailSurahPageState.actionCompleted(message: l.message),

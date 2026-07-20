@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quran_app/features/search/domain/usecases/search_surah_usecase.dart';
 import 'package:quran_app/features/surah/domain/entities/surah_entity.dart';
 import 'package:quran_app/features/search/presentation/cubits/search_cubit/search_cubit.dart';
 
@@ -12,13 +13,13 @@ void main() {
   group('SearchCubit — unit tests (blocTest)', () {
     blocTest<SearchCubit, SearchState>(
       'initial state is SearchState.initial()',
-      build: () => SearchCubit(),
+      build: () => SearchCubit(searchSurahUseCase: const SearchSurahUseCase()),
       verify: (cubit) => expect(cubit.state, const SearchState.initial()),
     );
 
     blocTest<SearchCubit, SearchState>(
       'onSearch with non-empty query filters by namaLatin (case-insensitive)',
-      build: () => SearchCubit(),
+      build: () => SearchCubit(searchSurahUseCase: const SearchSurahUseCase()),
       act: (cubit) => cubit.onSearch(
         surahList: [
           kSurahEntity, // namaLatin: 'Al-Fatihah'
@@ -42,7 +43,7 @@ void main() {
 
     blocTest<SearchCubit, SearchState>(
       'onSearch with empty query emits empty results',
-      build: () => SearchCubit(),
+      build: () => SearchCubit(searchSurahUseCase: const SearchSurahUseCase()),
       act: (cubit) => cubit.onSearch(
         surahList: [kSurahEntity],
         query: '',
@@ -54,7 +55,7 @@ void main() {
 
     blocTest<SearchCubit, SearchState>(
       'onSearch is case-insensitive — uppercase query matches lowercase namaLatin',
-      build: () => SearchCubit(),
+      build: () => SearchCubit(searchSurahUseCase: const SearchSurahUseCase()),
       act: (cubit) => cubit.onSearch(
         surahList: [kSurahEntity], // namaLatin: 'Al-Fatihah'
         query: 'AL-FATIHAH',
@@ -66,7 +67,7 @@ void main() {
 
     blocTest<SearchCubit, SearchState>(
       'onSearch with query matching no item emits empty results',
-      build: () => SearchCubit(),
+      build: () => SearchCubit(searchSurahUseCase: const SearchSurahUseCase()),
       act: (cubit) => cubit.onSearch(
         surahList: [kSurahEntity],
         query: 'zzznomatch',
@@ -78,7 +79,7 @@ void main() {
 
     blocTest<SearchCubit, SearchState>(
       'clearSearch emits empty results',
-      build: () => SearchCubit(),
+      build: () => SearchCubit(searchSurahUseCase: const SearchSurahUseCase()),
       seed: () => const SearchState.results(results: [kSurahEntity]),
       act: (cubit) => cubit.clearSearch(),
       expect: () => [
@@ -117,7 +118,8 @@ void main() {
 
           final String query = randomAlphaQuery(rng);
 
-          final cubit = SearchCubit();
+          final cubit =
+              SearchCubit(searchSurahUseCase: const SearchSurahUseCase());
           cubit.onSearch(surahList: surahList, query: query);
 
           final state = cubit.state;
@@ -155,7 +157,8 @@ void main() {
             (_) => generateRandomSurahModel().toEntity(),
           );
 
-          final cubit = SearchCubit();
+          final cubit =
+              SearchCubit(searchSurahUseCase: const SearchSurahUseCase());
           cubit.onSearch(surahList: surahList, query: '');
 
           final state = cubit.state;

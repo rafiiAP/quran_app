@@ -35,11 +35,13 @@ class JadwalSholatDatasourceImpl implements JadwalSholatDatasource {
     return apiCall(
       crashReporter: _crashReporter,
       call: () async {
-        final String response = await _httpClient.get(
+        final dynamic response = await _httpClient.get(
           url: '$_baseUrl/$date?latitude=$latitude&longitude=$longitude',
           requestName: 'getJadwalSholat',
         );
-        return JadwalSholatDioModel.fromJson(response).data.timings;
+        return JadwalSholatDioModel.fromMap(
+          response as Map<String, dynamic>,
+        ).data.timings;
       },
     );
   }

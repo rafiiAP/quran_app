@@ -1,35 +1,27 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:quran_app/core/error/failure.dart';
 import 'package:quran_app/core/models/bookmark_input.dart';
-import 'package:quran_app/core/storage/database_helper.dart';
+import 'package:quran_app/features/bookmark/data/datasources/bookmark_local_datasource.dart';
 import 'package:quran_app/features/bookmark/data/models/bookmark_model.dart';
 import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
 import 'package:quran_app/features/bookmark/domain/repositories/bookmark_repository.dart';
 
-/// [BookmarkRepository] implementation backed by [DatabaseHelper].
+/// [BookmarkRepository] implementation backed by [BookmarkLocalDatasource].
 ///
-/// Maps between domain entities and raw database maps, keeping the
-/// core storage layer decoupled from feature-specific types.
+/// Delegates raw persistence to the datasource layer, keeping the
+/// repository focused on error mapping and entity conversion.
 class BookmarkRepositoryImpl implements BookmarkRepository {
-  const BookmarkRepositoryImpl({required DatabaseHelper databaseHelper})
-      : _databaseHelper = databaseHelper;
+  const BookmarkRepositoryImpl({required BookmarkLocalDatasource datasource})
+      : _datasource = datasource;
 
-  final DatabaseHelper _databaseHelper;
+  final BookmarkLocalDatasource _datasource;
 
   @override
   Future<Either<Failure, bool>> insertOrUpdateBookmark(
     final BookmarkInput input,
   ) async {
     try {
-      final Map<String, dynamic> data = <String, dynamic>{
-        'nomor_surah': input.nomorSurah,
-        'nama_latin': input.namaLatin,
-        'nomor_ayat': input.nomorAyat,
-        'teks_arab': input.teksArab,
-        'teks_indonesia': input.teksIndonesia,
-        'teks_latin': input.teksLatin,
-      };
-      final bool isNew = await _databaseHelper.insertBookmark(data);
+      final bool isNew = await _datasource.insertBookmark(input);
       return Right(isNew);
     } catch (e) {
       return Left(DatabaseFailure(e.toString()));
@@ -40,7 +32,7 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
   Future<Either<Failure, List<BookmarkEntity>>> getAllBookmarks() async {
     try {
       final List<Map<String, dynamic>> maps =
-          await _databaseHelper.getAllBookmarks();
+          await _datasource.getAllBookmarks();
       final List<BookmarkEntity> entities = maps
           .map(
             (final Map<String, dynamic> map) =>
@@ -58,7 +50,7 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
     final String teksIndonesia,
   ) async {
     try {
-      await _databaseHelper.deleteBookmark(teksIndonesia);
+      await _datasource.deleteBookmark(teksIndonesia);
       return const Right(null);
     } catch (e) {
       return Left(DatabaseFailure(e.toString()));

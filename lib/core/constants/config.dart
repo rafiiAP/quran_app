@@ -8,13 +8,15 @@ AppConfig get config => locator<AppConfig>();
 
 /// App-wide configuration.
 ///
-/// Delegates to focused constant classes:
+/// **Deprecated facade.** New code should use the dedicated constant classes
+/// directly:
 /// - [ApiEndpoints] — API URLs
 /// - [CacheKeys] — local storage keys
 /// - [RouteNames] — GoRouter path constants
 ///
-/// This class provides instance-level access (via DI) for legacy compatibility.
-/// New code should prefer the dedicated constant classes directly.
+/// This class is retained only for backward-compatibility with existing code
+/// that accesses keys through `config.cacheXxx` instance members.
+@Deprecated('Use ApiEndpoints, CacheKeys, or RouteNames directly instead.')
 class AppConfig {
   //---------API URLs (delegated to ApiEndpoints)-------------//
   final String cUrlSurah = ApiEndpoints.surah;

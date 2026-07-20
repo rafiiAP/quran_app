@@ -27,11 +27,13 @@ class DetailSurahDatasourceImpl implements DetailSurahDatasource {
     return apiCall(
       crashReporter: _crashReporter,
       call: () async {
-        final String response = await _httpClient.get(
+        final dynamic response = await _httpClient.get(
           url: '$_baseUrl/$nomor',
           requestName: 'getDetailSurah',
         );
-        return ResponseDetailModel.fromJson(response).data;
+        return ResponseDetailModel.fromMap(
+          response as Map<String, dynamic>,
+        ).data;
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -8,10 +10,10 @@ import 'package:quran_app/features/jadwal_sholat/data/models/jadwal_sholat_model
 import '../../../../mocks.dart';
 
 // ---------------------------------------------------------------------------
-// JSON fixture
+// JSON fixture (decoded to Map for new AppHttpClient contract)
 // ---------------------------------------------------------------------------
 
-const _kJadwalJson = '''
+final Map<String, dynamic> _kJadwalMap = json.decode('''
 {
   "code": 200,
   "status": "OK",
@@ -31,7 +33,7 @@ const _kJadwalJson = '''
     }
   }
 }
-''';
+''') as Map<String, dynamic>;
 
 void main() {
   late MockAppHttpClient mockHttpClient;
@@ -61,7 +63,7 @@ void main() {
           url: any(named: 'url'),
           requestName: any(named: 'requestName'),
         ),
-      ).thenAnswer((_) async => _kJadwalJson);
+      ).thenAnswer((_) async => _kJadwalMap);
 
       final result = await datasource.getJadwalSholat(
         latitude: tLatitude,
@@ -85,7 +87,7 @@ void main() {
           url: any(named: 'url'),
           requestName: any(named: 'requestName'),
         ),
-      ).thenAnswer((_) async => _kJadwalJson);
+      ).thenAnswer((_) async => _kJadwalMap);
 
       await datasource.getJadwalSholat(
         latitude: tLatitude,

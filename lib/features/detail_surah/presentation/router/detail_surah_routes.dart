@@ -6,7 +6,7 @@ import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
 import 'package:quran_app/core/utils/input_validator.dart';
-import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
+import 'package:quran_app/core/usecases/save_bookmark_action.dart';
 import 'package:quran_app/features/detail_surah/domain/usecases/get_detail_surah_usecase.dart';
 import 'package:quran_app/features/detail_surah/presentation/cubits/detail_surah_cubit/detail_surah_cubit.dart';
 import 'package:quran_app/features/detail_surah/presentation/cubits/detail_surah_page_cubit/detail_surah_page_cubit.dart';
@@ -58,7 +58,7 @@ List<RouteBase> get detailSurahRoutes => [
               BlocProvider<DetailSurahPageCubit>(
                 create: (_) => DetailSurahPageCubit(
                   storageService: locator<LocalStorageService>(),
-                  saveBookmarkUseCase: locator<SaveBookmarkUseCase>(),
+                  saveBookmarkUseCase: locator<SaveBookmarkAction>(),
                 ),
               ),
             ],

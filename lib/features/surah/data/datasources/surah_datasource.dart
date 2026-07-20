@@ -27,11 +27,11 @@ class SurahDatasourceImpl implements SurahDatasource {
     return apiCall(
       crashReporter: _crashReporter,
       call: () async {
-        final String response = await _httpClient.get(
+        final dynamic response = await _httpClient.get(
           url: _baseUrl,
           requestName: 'getSurah',
         );
-        return SurahResponse.fromJson(response).data;
+        return SurahResponse.fromMap(response as Map<String, dynamic>).data;
       },
     );
   }

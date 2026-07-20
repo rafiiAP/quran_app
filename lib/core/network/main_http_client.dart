@@ -98,7 +98,7 @@ class MainHttpClient implements AppHttpClient {
   }
 
   @override
-  Future<String> get({
+  Future<dynamic> get({
     required final String url,
     required final String requestName,
   }) async {
@@ -126,11 +126,11 @@ class MainHttpClient implements AppHttpClient {
       }
       rethrow;
     }
-    return jsonEncode(cResponse);
+    return cResponse;
   }
 
   @override
-  Future<String> post({
+  Future<dynamic> post({
     required final String url,
     required final String requestName,
     required final Map<String, dynamic> body,
@@ -158,6 +158,6 @@ class MainHttpClient implements AppHttpClient {
       }
       rethrow;
     }
-    return jsonEncode(cResponse);
+    return cResponse;
   }
 }

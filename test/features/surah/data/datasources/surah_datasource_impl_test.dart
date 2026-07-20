@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -8,10 +10,10 @@ import 'package:quran_app/features/surah/data/models/surah_model.dart';
 import '../../../../mocks.dart';
 
 // ---------------------------------------------------------------------------
-// JSON fixtures
+// JSON fixtures (decoded to Map for new AppHttpClient contract)
 // ---------------------------------------------------------------------------
 
-const _kSurahJson = '''
+final Map<String, dynamic> _kSurahMap = json.decode('''
 {
   "code": 200,
   "message": "OK",
@@ -38,7 +40,7 @@ const _kSurahJson = '''
     }
   ]
 }
-''';
+''') as Map<String, dynamic>;
 
 void main() {
   late MockAppHttpClient mockHttpClient;
@@ -64,7 +66,7 @@ void main() {
           url: any(named: 'url'),
           requestName: any(named: 'requestName'),
         ),
-      ).thenAnswer((_) async => _kSurahJson);
+      ).thenAnswer((_) async => _kSurahMap);
 
       final result = await datasource.getSurah();
 
@@ -82,7 +84,7 @@ void main() {
           url: any(named: 'url'),
           requestName: any(named: 'requestName'),
         ),
-      ).thenAnswer((_) async => _kSurahJson);
+      ).thenAnswer((_) async => _kSurahMap);
 
       await datasource.getSurah();
 

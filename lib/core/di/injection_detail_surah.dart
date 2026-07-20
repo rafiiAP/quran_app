@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/api_endpoints.dart';
 import 'package:quran_app/features/detail_surah/data/datasources/detail_surah_datasource.dart';
 import 'package:quran_app/features/detail_surah/data/datasources/detail_surah_local_datasource.dart';
 import 'package:quran_app/features/detail_surah/data/repositories/detail_surah_repository_impl.dart';
@@ -24,7 +24,7 @@ void registerDetailSurahDependencies(GetIt locator) {
     () => DetailSurahDatasourceImpl(
       httpClient: locator(),
       crashReporter: locator(),
-      baseUrl: locator<AppConfig>().cUrlSurah,
+      baseUrl: ApiEndpoints.surah,
     ),
   );
 
