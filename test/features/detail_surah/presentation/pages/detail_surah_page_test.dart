@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/core/constants/color.dart';
-import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/navigator_key.dart';
 import 'package:quran_app/core/services/showcase_service.dart';
@@ -74,7 +73,6 @@ void main() {
 
     // Register real widget factories (they produce real widgets for the test)
     locator.registerLazySingleton<AppColorConfig>(AppColorConfig.new);
-    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     locator.registerLazySingleton<AppTextFactory>(AppTextFactoryImpl.new);
     locator.registerLazySingleton<AppButtonFactory>(AppButtonFactoryImpl.new);
     locator.registerLazySingleton<AppPaddingFactory>(AppPaddingFactoryImpl.new);

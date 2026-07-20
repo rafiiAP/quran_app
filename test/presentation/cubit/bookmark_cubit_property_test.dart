@@ -18,6 +18,7 @@ BookmarkEntity _generateRandomBookmarkEntity(Random rng, int i) {
   }
 
   return BookmarkEntity(
+    id: i + 1,
     nomorSurah: (i % 114) + 1,
     namaLatin: randomString(10),
     nomorAyat: (i % 286) + 1,
@@ -58,7 +59,7 @@ void main() {
         final List<BookmarkEntity> listAfterDeletion =
             List<BookmarkEntity>.from(
           initialList.where(
-            (b) => b.teksIndonesia != targetItem.teksIndonesia,
+            (b) => b.id != targetItem.id,
           ),
         );
 
@@ -70,7 +71,7 @@ void main() {
         });
         when(
           () => mockDeleteBookmarkUseCase(
-            teksIndonesia: any(named: 'teksIndonesia'),
+            id: any(named: 'id'),
           ),
         ).thenAnswer((_) async => const Right(null));
 
@@ -101,7 +102,7 @@ void main() {
 
         verify(
           () => mockDeleteBookmarkUseCase(
-            teksIndonesia: targetItem.teksIndonesia,
+            id: targetItem.id!,
           ),
         ).called(1);
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:quran_app/core/navigator_key.dart';
-import 'package:quran_app/core/constants/config.dart';
+
 import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/constants/enum.dart';
 import 'package:quran_app/core/di/injection.dart';
@@ -69,14 +69,14 @@ class AppBottomsheetFactoryImpl implements AppBottomsheetFactory {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   appTextFactory.textBody(
-                    text: title ?? config.cAppName,
+                    text: title ?? 'Quran App',
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                     color: isDark ? colorConfig.white : colorConfig.black,
                   ),
                   appTextFactory.textBody(
                     text:
-                        '${_datetimeNow()} VAP: ${config.cAppVersion} (${config.nAppVersion})',
+                        '${_datetimeNow()} VAP: ${'1.0.0'} (${1})',
                     color: isDark ? colorConfig.white : colorConfig.black,
                     fontSize: 14,
                   ),
@@ -106,13 +106,13 @@ class AppBottomsheetFactoryImpl implements AppBottomsheetFactory {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 appTextFactory.textBody(
-                  text: config.cAppName,
+                  text: 'Quran App',
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
                 appTextFactory.textBody(
                   text:
-                      'DT: ${_datetimeNow()} VAP: ${config.cAppVersion} (${config.nAppVersion})',
+                      'DT: ${_datetimeNow()} VAP: ${'1.0.0'} (${1})',
                   color: isDark ? colorConfig.white : colorConfig.black,
                   fontSize: 14,
                 ),

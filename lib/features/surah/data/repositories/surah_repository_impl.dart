@@ -16,19 +16,21 @@ import 'package:quran_app/features/surah/domain/repositories/surah_repository.da
 /// 4. If offline and no cache, return a user-friendly connection failure.
 class SurahRepositoryImpl implements SurahRepository {
   const SurahRepositoryImpl({
-    required this.datasource,
-    required this.localDatasource,
-    required this.connectivityService,
-  });
+    required SurahDatasource datasource,
+    required SurahLocalDatasource localDatasource,
+    required ConnectivityService connectivityService,
+  })  : _datasource = datasource,
+        _localDatasource = localDatasource,
+        _connectivityService = connectivityService;
 
-  final SurahDatasource datasource;
-  final SurahLocalDatasource localDatasource;
-  final ConnectivityService connectivityService;
+  final SurahDatasource _datasource;
+  final SurahLocalDatasource _localDatasource;
+  final ConnectivityService _connectivityService;
 
   @override
   Future<Either<Failure, List<SurahEntity>>> getSurah() async {
     // Try cache first
-    final List<SurahModel>? cached = localDatasource.getCachedSurah();
+    final List<SurahModel>? cached = _localDatasource.getCachedSurah();
     if (cached != null && cached.isNotEmpty) {
       return Right(
         cached.map((final SurahModel model) => model.toEntity()).toList(),
@@ -36,7 +38,7 @@ class SurahRepositoryImpl implements SurahRepository {
     }
 
     // Cache miss — check connectivity before attempting network call
-    final bool isConnected = await connectivityService.hasConnection();
+    final bool isConnected = await _connectivityService.hasConnection();
     if (!isConnected) {
       return const Left(
         ConnectionFailure('Tidak ada koneksi internet. Periksa jaringan Anda.'),
@@ -45,10 +47,10 @@ class SurahRepositoryImpl implements SurahRepository {
 
     // Fetch from remote
     try {
-      final List<SurahModel> result = await datasource.getSurah();
+      final List<SurahModel> result = await _datasource.getSurah();
 
       // Cache the result for next time
-      await localDatasource.cacheSurah(result);
+      await _localDatasource.cacheSurah(result);
 
       return Right(
         result.map((final SurahModel model) => model.toEntity()).toList(),

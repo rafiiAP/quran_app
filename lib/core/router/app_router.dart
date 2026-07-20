@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_app/core/navigator_key.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/cache_keys.dart';
+import 'package:quran_app/core/constants/route_names.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
 import 'package:quran_app/features/dashboard/presentation/router/dashboard_routes.dart';
 import 'package:quran_app/features/detail_surah/presentation/router/detail_surah_routes.dart';
@@ -18,7 +19,7 @@ class AppRouter {
 
   late final GoRouter router = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: AppConfig.routeHome,
+    initialLocation: RouteNames.home,
     redirect: _guardRedirect,
     routes: [
       ...onboardingRoutes,
@@ -45,13 +46,13 @@ class AppRouter {
   @visibleForTesting
   String? evaluateRedirect(String matchedLocation) {
     final bool hasOnboarded = storageService.getBool(
-      key: config.cacheStarted,
+      key: CacheKeys.started,
       defaultValue: false,
     );
-    final bool isOnStartedPage = matchedLocation == AppConfig.routeStarted;
+    final bool isOnStartedPage = matchedLocation == RouteNames.started;
 
-    if (!hasOnboarded && !isOnStartedPage) return AppConfig.routeStarted;
-    if (hasOnboarded && isOnStartedPage) return AppConfig.routeHome;
+    if (!hasOnboarded && !isOnStartedPage) return RouteNames.started;
+    if (hasOnboarded && isOnStartedPage) return RouteNames.home;
     return null;
   }
 }

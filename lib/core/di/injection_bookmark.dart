@@ -7,6 +7,7 @@ import 'package:quran_app/features/bookmark/domain/repositories/bookmark_reposit
 import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
+import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
 
 /// Registers bookmark feature dependencies.
 void registerBookmarkDependencies(GetIt locator) {
@@ -35,5 +36,13 @@ void registerBookmarkDependencies(GetIt locator) {
   // without importing from the bookmark feature.
   locator.registerLazySingleton<SaveBookmarkAction>(
     () => locator<SaveBookmarkUseCase>(),
+  );
+
+  // Cubit — registered as factory so each page gets a fresh instance
+  locator.registerFactory<BookmarkCubit>(
+    () => BookmarkCubit(
+      getBookmarksUseCase: locator(),
+      deleteBookmarkUseCase: locator(),
+    ),
   );
 }

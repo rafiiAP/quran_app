@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/cache_keys.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
 import 'package:quran_app/core/services/notification_service.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/models/set_notif_model.dart';
@@ -55,7 +55,7 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
     if (model.isAlarmSet) {
       await notificationService.cancelNotification(index);
       await storageService.setBool(
-        key: config.alarmKey(model.title),
+        key: CacheKeys.alarmKey(model.title),
         value: false,
       );
     } else {
@@ -67,7 +67,7 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
         body: model.body,
       );
       await storageService.setBool(
-        key: config.alarmKey(model.title),
+        key: CacheKeys.alarmKey(model.title),
         value: true,
       );
     }
@@ -95,7 +95,7 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
     final List<SetNotifModel> updatedList = jadwalList.map(
       (final SetNotifModel item) {
         final bool isAlarmSet = storageService.getBool(
-          key: config.alarmKey(item.title),
+          key: CacheKeys.alarmKey(item.title),
           defaultValue: false,
         );
         return item.copyWith(isAlarmSet: isAlarmSet);

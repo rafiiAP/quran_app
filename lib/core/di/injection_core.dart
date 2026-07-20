@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 import 'package:quran_app/core/cache/cache_service.dart';
 import 'package:quran_app/core/cache/shared_preferences_cache_service.dart';
 import 'package:quran_app/core/constants/color.dart';
-import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/constants/image.dart';
 import 'package:quran_app/core/network/http_client.dart';
 import 'package:quran_app/core/network/main_http_client.dart';
@@ -38,7 +37,7 @@ Future<void> registerCoreDependencies(GetIt locator) async {
 
   // logger service
   locator.registerLazySingleton<LoggerService>(
-    () => LoggerServiceImpl(appConfig: locator()),
+    () => const LoggerServiceImpl(),
   );
 
   // datetime service
@@ -92,9 +91,6 @@ Future<void> registerCoreDependencies(GetIt locator) async {
 
   // color
   locator.registerLazySingleton<AppColorConfig>(AppColorConfig.new);
-
-  // appconfig
-  locator.registerLazySingleton<AppConfig>(AppConfig.new);
 
   // image
   locator.registerLazySingleton<MyImage>(MyImage.new);

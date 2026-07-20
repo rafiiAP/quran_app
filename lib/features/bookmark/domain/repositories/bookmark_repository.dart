@@ -15,6 +15,6 @@ abstract class BookmarkRepository {
   /// Returns all saved bookmarks as domain entities.
   Future<Either<Failure, List<BookmarkEntity>>> getAllBookmarks();
 
-  /// Deletes the bookmark identified by [teksIndonesia].
-  Future<Either<Failure, void>> deleteBookmark(String teksIndonesia);
+  /// Deletes the bookmark identified by its database [id].
+  Future<Either<Failure, void>> deleteBookmark(int id);
 }

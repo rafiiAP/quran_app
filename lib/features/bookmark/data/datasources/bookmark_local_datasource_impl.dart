@@ -31,7 +31,7 @@ class BookmarkLocalDatasourceImpl implements BookmarkLocalDatasource {
   }
 
   @override
-  Future<void> deleteBookmark(String teksIndonesia) {
-    return _databaseHelper.deleteBookmark(teksIndonesia);
+  Future<void> deleteBookmark(int id) {
+    return _databaseHelper.deleteBookmarkById(id);
   }
 }

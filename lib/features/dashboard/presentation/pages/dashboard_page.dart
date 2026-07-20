@@ -1,4 +1,4 @@
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -28,13 +28,13 @@ class DashboardPage extends StatelessWidget {
                     context.read<DashboardCubit>().changeTab(index);
                     switch (index) {
                       case 0:
-                        context.go(AppConfig.routeHome);
+                        context.go(RouteNames.home);
                         break;
                       case 1:
-                        context.go(AppConfig.routeBookmark);
+                        context.go(RouteNames.bookmark);
                         break;
                       case 2:
-                        context.go(AppConfig.routeJadwalSholat);
+                        context.go(RouteNames.jadwalSholat);
                         break;
                     }
                   },

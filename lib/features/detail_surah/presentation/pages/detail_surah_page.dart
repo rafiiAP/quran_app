@@ -5,7 +5,7 @@ import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/core/widgets/app_button.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/cache_keys.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/services/showcase_service.dart';
 import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
@@ -69,7 +69,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
       locator<ShowcaseService>().showCase(
         context: showcaseContext,
         keys: [_menuKey],
-        cacheKey: config.cacheShowCaseDetail,
+        cacheKey: CacheKeys.showCaseDetail,
       );
     });
   }

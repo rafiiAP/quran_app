@@ -16,14 +16,16 @@ import 'package:quran_app/features/jadwal_sholat/domain/repositories/jadwal_shol
 /// 4. If offline and no cache, return a user-friendly connection failure.
 class JadwalSholatRepositoryImpl implements JadwalSholatRepository {
   const JadwalSholatRepositoryImpl({
-    required this.datasource,
-    required this.localDatasource,
-    required this.connectivityService,
-  });
+    required JadwalSholatDatasource datasource,
+    required JadwalSholatLocalDatasource localDatasource,
+    required ConnectivityService connectivityService,
+  })  : _datasource = datasource,
+        _localDatasource = localDatasource,
+        _connectivityService = connectivityService;
 
-  final JadwalSholatDatasource datasource;
-  final JadwalSholatLocalDatasource localDatasource;
-  final ConnectivityService connectivityService;
+  final JadwalSholatDatasource _datasource;
+  final JadwalSholatLocalDatasource _localDatasource;
+  final ConnectivityService _connectivityService;
 
   @override
   Future<Either<Failure, JadwalSholatEntity>> getJadwalSholat({
@@ -33,13 +35,13 @@ class JadwalSholatRepositoryImpl implements JadwalSholatRepository {
   }) async {
     // Try cache first
     final JadwalSholatModel? cached =
-        localDatasource.getCachedJadwal(date: date);
+        _localDatasource.getCachedJadwal(date: date);
     if (cached != null) {
       return Right(cached.toEntity());
     }
 
     // Cache miss — check connectivity before attempting network call
-    final bool isConnected = await connectivityService.hasConnection();
+    final bool isConnected = await _connectivityService.hasConnection();
     if (!isConnected) {
       return const Left(
         ConnectionFailure('Tidak ada koneksi internet. Periksa jaringan Anda.'),
@@ -48,14 +50,14 @@ class JadwalSholatRepositoryImpl implements JadwalSholatRepository {
 
     // Fetch from remote
     try {
-      final JadwalSholatModel result = await datasource.getJadwalSholat(
+      final JadwalSholatModel result = await _datasource.getJadwalSholat(
         latitude: latitude,
         longitude: longitude,
         date: date,
       );
 
       // Cache the result for next time
-      await localDatasource.cacheJadwal(date: date, jadwal: result);
+      await _localDatasource.cacheJadwal(date: date, jadwal: result);
 
       return Right(result.toEntity());
     } on ConnectionException catch (e) {

@@ -58,7 +58,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
 
   Future<void> deleteBookmark(final BookmarkEntity bookmark) async {
     final result = await _deleteBookmarkUseCase(
-      teksIndonesia: bookmark.teksIndonesia,
+      id: bookmark.id!,
     );
     result.match(
       (final Failure l) => emit(BookmarkState.error(l.message)),

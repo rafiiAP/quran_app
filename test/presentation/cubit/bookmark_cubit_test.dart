@@ -83,7 +83,7 @@ void main() {
       setUp: () {
         when(
           () => mockDeleteBookmarkUseCase(
-            teksIndonesia: kBookmarkEntity.teksIndonesia,
+            id: kBookmarkEntity.id!,
           ),
         ).thenAnswer((_) async => const Right(null));
         when(() => mockGetBookmarksUseCase())
@@ -98,7 +98,7 @@ void main() {
         );
         verify(
           () => mockDeleteBookmarkUseCase(
-            teksIndonesia: kBookmarkEntity.teksIndonesia,
+            id: kBookmarkEntity.id!,
           ),
         ).called(1);
       },

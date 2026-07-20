@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/cache_keys.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
 import 'package:quran_app/features/surah/domain/entities/surah_entity.dart';
 
@@ -16,9 +16,9 @@ class HomeCubit extends Cubit<HomeState> {
 
   void _loadLastRead() {
     final String namaLatin =
-        storageService.getString(key: config.cacheNamaLatin);
-    final int nomorSurah = storageService.getInt(key: config.cacheNomorSurah);
-    final int nomorAyat = storageService.getInt(key: config.cacheNomorAyat);
+        storageService.getString(key: CacheKeys.namaLatin);
+    final int nomorSurah = storageService.getInt(key: CacheKeys.nomorSurah);
+    final int nomorAyat = storageService.getInt(key: CacheKeys.nomorAyat);
 
     emit(
       HomeState.loaded(

@@ -12,6 +12,6 @@ abstract class BookmarkLocalDatasource {
   /// Returns all saved bookmarks as raw maps.
   Future<List<Map<String, dynamic>>> getAllBookmarks();
 
-  /// Deletes the bookmark identified by [teksIndonesia].
-  Future<void> deleteBookmark(String teksIndonesia);
+  /// Deletes the bookmark identified by its database [id].
+  Future<void> deleteBookmark(int id);
 }

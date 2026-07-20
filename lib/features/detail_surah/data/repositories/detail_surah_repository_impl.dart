@@ -16,27 +16,29 @@ import 'package:quran_app/features/detail_surah/domain/repositories/detail_surah
 /// 4. If offline and no cache, return a user-friendly connection failure.
 class DetailSurahRepositoryImpl implements DetailSurahRepository {
   const DetailSurahRepositoryImpl({
-    required this.datasource,
-    required this.localDatasource,
-    required this.connectivityService,
-  });
+    required DetailSurahDatasource datasource,
+    required DetailSurahLocalDatasource localDatasource,
+    required ConnectivityService connectivityService,
+  })  : _datasource = datasource,
+        _localDatasource = localDatasource,
+        _connectivityService = connectivityService;
 
-  final DetailSurahDatasource datasource;
-  final DetailSurahLocalDatasource localDatasource;
-  final ConnectivityService connectivityService;
+  final DetailSurahDatasource _datasource;
+  final DetailSurahLocalDatasource _localDatasource;
+  final ConnectivityService _connectivityService;
 
   @override
   Future<Either<Failure, DetailEntity>> getDetailSurah({
     required final int nomor,
   }) async {
     // Try cache first
-    final DetailModel? cached = localDatasource.getCachedDetail(nomor: nomor);
+    final DetailModel? cached = _localDatasource.getCachedDetail(nomor: nomor);
     if (cached != null) {
       return Right(cached.toEntity());
     }
 
     // Cache miss — check connectivity before attempting network call
-    final bool isConnected = await connectivityService.hasConnection();
+    final bool isConnected = await _connectivityService.hasConnection();
     if (!isConnected) {
       return const Left(
         ConnectionFailure('Tidak ada koneksi internet. Periksa jaringan Anda.'),
@@ -45,10 +47,10 @@ class DetailSurahRepositoryImpl implements DetailSurahRepository {
 
     // Fetch from remote
     try {
-      final DetailModel result = await datasource.getDetailSurah(nomor: nomor);
+      final DetailModel result = await _datasource.getDetailSurah(nomor: nomor);
 
       // Cache the result for next time
-      await localDatasource.cacheDetail(nomor: nomor, detail: result);
+      await _localDatasource.cacheDetail(nomor: nomor, detail: result);
 
       return Right(result.toEntity());
     } on ConnectionException catch (e) {

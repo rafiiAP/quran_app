@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/core/constants/color.dart';
-import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/constants/image.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/services/showcase_service.dart';
@@ -158,7 +157,6 @@ void main() {
       () => _TestAppInputFactory(),
     );
     locator.registerLazySingleton<AppColorConfig>(AppColorConfig.new);
-    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     locator.registerLazySingleton<MyImage>(MyImage.new);
     locator.registerLazySingleton<ShowcaseService>(() => mockShowcaseService);
 

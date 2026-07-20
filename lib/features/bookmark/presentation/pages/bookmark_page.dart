@@ -10,8 +10,6 @@ import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
-import 'package:quran_app/features/bookmark/domain/usecases/delete_bookmark_usecase.dart';
-import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecase.dart';
 import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/bookmark_cubit.dart';
 
 class BookmarkPage extends StatelessWidget {
@@ -23,12 +21,7 @@ class BookmarkPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BookmarkCubit>(
-      create: (_) =>
-          bookmarkCubit ??
-          BookmarkCubit(
-            getBookmarksUseCase: locator<GetBookmarksUseCase>(),
-            deleteBookmarkUseCase: locator<DeleteBookmarkUseCase>(),
-          ),
+      create: (_) => bookmarkCubit ?? locator<BookmarkCubit>(),
       child: const _BookmarkPageBody(),
     );
   }

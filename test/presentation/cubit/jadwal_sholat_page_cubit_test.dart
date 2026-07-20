@@ -1,4 +1,3 @@
-import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/di/injection.dart';
 // ignore_for_file: avoid_dynamic_calls
 
@@ -85,7 +84,6 @@ void main() {
   late MockLocalStorageService mockStorage;
 
   setUp(() {
-    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockNotification = MockNotificationService();
     mockStorage = MockLocalStorageService();
   });

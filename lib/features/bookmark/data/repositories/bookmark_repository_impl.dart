@@ -47,10 +47,10 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
 
   @override
   Future<Either<Failure, void>> deleteBookmark(
-    final String teksIndonesia,
+    final int id,
   ) async {
     try {
-      await _datasource.deleteBookmark(teksIndonesia);
+      await _datasource.deleteBookmark(id);
       return const Right(null);
     } catch (e) {
       return Left(DatabaseFailure(e.toString()));

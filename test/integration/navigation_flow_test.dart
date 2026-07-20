@@ -6,7 +6,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/core/constants/color.dart';
-import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/constants/image.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/router/app_router.dart';
@@ -384,7 +383,6 @@ void main() {
       () => mockAppBottomsheetFactory,
     );
     locator.registerLazySingleton<AppColorConfig>(AppColorConfig.new);
-    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     locator.registerLazySingleton<MyImage>(MyImage.new);
 
     // Bookmark use case for detail page
@@ -401,6 +399,14 @@ void main() {
     );
     locator.registerLazySingleton<DeleteBookmarkUseCase>(
       () => MockDeleteBookmarkUseCase(),
+    );
+
+    // BookmarkCubit — factory so BookmarkPage can pull from DI
+    locator.registerFactory<BookmarkCubit>(
+      () => BookmarkCubit(
+        getBookmarksUseCase: locator(),
+        deleteBookmarkUseCase: locator(),
+      ),
     );
 
     // Create AppRouter with mock storage service (cacheStarted=true → stays on /home)

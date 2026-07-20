@@ -1,6 +1,6 @@
 import 'dart:developer' as dev;
 
-import 'package:quran_app/core/constants/config.dart';
+import 'package:flutter/foundation.dart';
 
 /// Abstract interface for debug logging.
 ///
@@ -12,14 +12,12 @@ abstract class LoggerService {
 
 /// Implementation that uses `dart:developer` log.
 ///
-/// Only logs when [AppConfig.lShowLog] is true.
+/// Only logs when [kDebugMode] is true (automatically disabled in release).
 class LoggerServiceImpl implements LoggerService {
-  LoggerServiceImpl({required this.appConfig});
-
-  final AppConfig appConfig;
+  const LoggerServiceImpl();
 
   @override
   void log(dynamic message) {
-    if (appConfig.lShowLog) dev.log('$message');
+    if (kDebugMode) dev.log('$message');
   }
 }

@@ -1,4 +1,4 @@
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/route_names.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_app/features/bookmark/presentation/pages/bookmark_page.dart';
 import 'package:quran_app/features/dashboard/presentation/pages/dashboard_page.dart';
@@ -9,7 +9,7 @@ import 'package:quran_app/features/surah/presentation/pages/home_page.dart';
 /// Routes for the onboarding screen.
 List<RouteBase> get onboardingRoutes => [
       GoRoute(
-        path: AppConfig.routeStarted,
+        path: RouteNames.started,
         builder: (context, state) => const StartedPage(),
       ),
     ];
@@ -23,19 +23,19 @@ List<RouteBase> get dashboardRoutes => [
         builder: (context, state, child) => DashboardPage(child: child),
         routes: [
           GoRoute(
-            path: AppConfig.routeHome,
+            path: RouteNames.home,
             pageBuilder: (context, state) => const NoTransitionPage(
               child: HomePage(),
             ),
           ),
           GoRoute(
-            path: AppConfig.routeBookmark,
+            path: RouteNames.bookmark,
             pageBuilder: (context, state) => const NoTransitionPage(
               child: BookmarkPage(),
             ),
           ),
           GoRoute(
-            path: AppConfig.routeJadwalSholat,
+            path: RouteNames.jadwalSholat,
             pageBuilder: (context, state) => const NoTransitionPage(
               child: JadwalSholatPage(),
             ),

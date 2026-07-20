@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:quran_app/core/constants/api_endpoints.dart';
 import 'package:quran_app/features/surah/data/datasources/surah_datasource.dart';
 import 'package:quran_app/features/surah/data/datasources/surah_local_datasource.dart';
+import 'package:quran_app/features/surah/data/datasources/surah_local_datasource_impl.dart';
 import 'package:quran_app/features/surah/data/repositories/surah_repository_impl.dart';
 import 'package:quran_app/features/surah/domain/repositories/surah_repository.dart';
 import 'package:quran_app/features/surah/domain/usecases/get_surah_usecase.dart';

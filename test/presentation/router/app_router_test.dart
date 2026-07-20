@@ -1,4 +1,3 @@
-import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'dart:math';
 
@@ -13,7 +12,6 @@ void main() {
   late AppRouter appRouter;
 
   setUp(() {
-    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockStorageService = MockLocalStorageService();
     appRouter = AppRouter(storageService: mockStorageService);
   });

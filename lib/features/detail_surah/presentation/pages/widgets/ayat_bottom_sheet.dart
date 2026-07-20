@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_app/core/constants/color.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/cache_keys.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/services/showcase_service.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
@@ -42,7 +42,7 @@ void showAyatBottomSheet({
             showcaseService.showCase(
               context: showcaseContext,
               keys: [btnTandaiKey, btnBookmarkKey, btnShareKey],
-              cacheKey: config.cacheShowCaseBottomDetail,
+              cacheKey: CacheKeys.showCaseBottomDetail,
             );
           });
           return Column(

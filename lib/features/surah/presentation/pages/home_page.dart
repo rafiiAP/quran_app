@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/core/widgets/app_bottomsheet.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/cache_keys.dart';
+import 'package:quran_app/core/constants/route_names.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:quran_app/core/services/showcase_service.dart';
 import 'package:quran_app/features/surah/domain/usecases/get_surah_usecase.dart';
@@ -49,7 +50,7 @@ class _HomePageBodyState extends State<_HomePageBody> {
         context.read<GetSurahCubit>().getSurah();
         locator<ShowcaseService>().showCase(
           context: context,
-          cacheKey: config.cacheShowCase,
+          cacheKey: CacheKeys.showCase,
           keys: [helpKey, tandaiKey],
         );
       }
@@ -91,7 +92,7 @@ class _HomePageBodyState extends State<_HomePageBody> {
               title: appText.title(text: 'Quran App'),
               actions: [
                 IconButton(
-                  onPressed: () => context.push(AppConfig.routeSearch),
+                  onPressed: () => context.push(RouteNames.search),
                   icon: const Icon(Icons.search_rounded),
                 ),
               ],
@@ -104,7 +105,7 @@ class _HomePageBodyState extends State<_HomePageBody> {
                 onPressed: () {
                   locator<ShowcaseService>().showCase(
                     context: context,
-                    cacheKey: config.cacheShowCase,
+                    cacheKey: CacheKeys.showCase,
                     keys: [tandaiKey],
                     isShowHelp: true,
                   );

@@ -1,4 +1,3 @@
-import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/di/injection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -10,7 +9,6 @@ void main() {
   late MockLocalStorageService mockStorage;
 
   setUp(() {
-    locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockStorage = MockLocalStorageService();
     when(
       () => mockStorage.setBool(

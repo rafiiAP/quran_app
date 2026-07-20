@@ -2,7 +2,7 @@ import 'package:quran_app/features/bookmark/data/models/bookmark_model.dart';
 import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
 
 const Map<String, dynamic> kBookmarkMap = {
-  'id': null,
+  'id': 1,
   'nomor_surah': 1,
   'nama_latin': 'Al-Fatihah',
   'nomor_ayat': 1,
@@ -14,6 +14,7 @@ const Map<String, dynamic> kBookmarkMap = {
 final BookmarkModel kBookmarkModel = BookmarkModel.fromMap(kBookmarkMap);
 
 const BookmarkEntity kBookmarkEntity = BookmarkEntity(
+  id: 1,
   nomorSurah: 1,
   namaLatin: 'Al-Fatihah',
   nomorAyat: 1,

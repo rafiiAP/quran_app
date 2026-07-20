@@ -8,7 +8,7 @@ import 'package:quran_app/core/di/injection_search.dart';
 import 'package:quran_app/core/di/injection_surah.dart';
 import 'package:quran_app/core/di/injection_widgets.dart';
 
-GetIt locator = GetIt.instance;
+final GetIt locator = GetIt.instance;
 
 /// Composes all dependency registration modules.
 ///

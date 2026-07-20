@@ -5,7 +5,7 @@ import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/core/widgets/app_button.dart';
 import 'package:quran_app/core/widgets/app_padding.dart';
 import 'package:quran_app/core/constants/color.dart';
-import 'package:quran_app/core/constants/config.dart';
+import 'package:quran_app/core/constants/route_names.dart';
 import 'package:quran_app/core/constants/image.dart';
 import 'package:quran_app/features/dashboard/presentation/cubits/dashboard_cubit/dashboard_cubit.dart';
 
@@ -76,7 +76,7 @@ class StartedPage extends StatelessWidget {
                         // when the DashboardCubit is first created. We only need to
                         // navigate here; no direct locator<> call needed.
                         context.read<DashboardCubit>().markStarted();
-                        context.go(AppConfig.routeHome);
+                        context.go(RouteNames.home);
                       },
                       child: appText.textBody(
                         text: 'Get Started',
