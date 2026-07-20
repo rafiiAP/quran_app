@@ -20,3 +20,12 @@ class ServerException implements Exception {
   @override
   String toString() => 'ServerException: $message';
 }
+
+/// Thrown when a local cache operation fails (read, write, or parse error).
+class CacheException implements Exception {
+  const CacheException(this.message);
+  final String message;
+
+  @override
+  String toString() => 'CacheException: $message';
+}

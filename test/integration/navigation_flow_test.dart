@@ -295,7 +295,7 @@ void main() {
     mockSearchCubit = MockSearchCubit();
 
     // Stub async cubit methods called by widget initState
-    when(() => mockGetSurahCubit.getPosts()).thenAnswer((_) async {});
+    when(() => mockGetSurahCubit.getSurah()).thenAnswer((_) async {});
     mockLocalStorageService = MockLocalStorageService();
     mockCrashReporter = MockCrashReporter();
     mockShowcaseService = MockShowcaseService();

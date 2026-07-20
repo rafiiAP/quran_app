@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:path/path.dart';
-import 'package:quran_app/core/di/injection.dart';
 import 'package:sqflite/sqflite.dart';
-
-DatabaseHelper get databaseHelper => locator<DatabaseHelper>();
 
 /// Low-level SQLite database helper.
 ///

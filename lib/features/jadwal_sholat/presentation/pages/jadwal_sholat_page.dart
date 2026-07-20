@@ -13,6 +13,7 @@ import 'package:quran_app/core/widgets/app_bottomsheet.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/usecases/get_jadwal_sholat_usecase.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_location_cubit/jadwal_sholat_location_cubit.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_page_cubit/jadwal_sholat_page_cubit.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/pages/view/jadwal_sholat_view.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/pages/view/loading_sholat_view.dart';
@@ -31,11 +32,15 @@ class JadwalSholatPage extends StatelessWidget {
           create: (_) =>
               JadwalSholatCubit(usecase: locator<GetJadwalSholatUseCase>()),
         ),
+        BlocProvider<JadwalSholatLocationCubit>(
+          create: (_) => JadwalSholatLocationCubit(
+            locationService: locator<LocationService>(),
+          ),
+        ),
         BlocProvider<JadwalSholatPageCubit>(
           create: (_) => JadwalSholatPageCubit(
             storageService: locator<LocalStorageService>(),
             notificationService: locator<NotificationService>(),
-            locationService: locator<LocationService>(),
           ),
         ),
       ],
@@ -57,18 +62,7 @@ class _JadwalSholatViewState extends State<_JadwalSholatView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((final _) {
       if (!mounted) return;
-      final pageCubit = context.read<JadwalSholatPageCubit>();
-      final currentState = pageCubit.state;
-
-      currentState.maybeWhen(
-        awaitingSchedule: (city, latitude, longitude) {
-          _triggerFetch(context, latitude, longitude);
-        },
-        orElse: () {
-          pageCubit.init();
-        },
-      );
-
+      context.read<JadwalSholatLocationCubit>().init();
       _handleExactAlarmPermission();
     });
   }
@@ -85,24 +79,30 @@ class _JadwalSholatViewState extends State<_JadwalSholatView> {
     }
   }
 
-  void _onJadwalSholatCubitSuccess(
-    final BuildContext context,
-    final JadwalSholatEntity data,
-  ) {
-    context.read<JadwalSholatPageCubit>().onScheduleReceived(data);
-  }
-
-  void _triggerFetch(
-    final BuildContext context,
+  void _onLocationAcquired(
+    BuildContext context,
+    String city,
+    String timezone,
     double latitude,
     double longitude,
   ) {
+    context.read<JadwalSholatPageCubit>().setLocationContext(
+          city: city,
+          timezone: timezone,
+        );
     final String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
     context.read<JadwalSholatCubit>().getPosts(
           latitude: latitude,
           longitude: longitude,
           date: date,
         );
+  }
+
+  void _onJadwalSholatCubitSuccess(
+    final BuildContext context,
+    final JadwalSholatEntity data,
+  ) {
+    context.read<JadwalSholatPageCubit>().onScheduleReceived(data);
   }
 
   @override
@@ -117,17 +117,19 @@ class _JadwalSholatViewState extends State<_JadwalSholatView> {
         padding: const EdgeInsets.all(16),
         child: MultiBlocListener(
           listeners: [
-            // When page cubit reaches awaitingSchedule, fetch prayer data
-            BlocListener<JadwalSholatPageCubit, JadwalSholatPageState>(
-              listener: (
-                final BuildContext context,
-                final JadwalSholatPageState state,
-              ) {
+            // When location cubit acquires position, trigger schedule fetch
+            BlocListener<JadwalSholatLocationCubit, JadwalSholatLocationState>(
+              listener: (context, state) {
                 state.maybeWhen(
                   orElse: () {},
-                  awaitingSchedule:
-                      (final String _, final double lat, final double lng) {
-                    _triggerFetch(context, lat, lng);
+                  located: (city, timezone, latitude, longitude) {
+                    _onLocationAcquired(
+                      context,
+                      city,
+                      timezone,
+                      latitude,
+                      longitude,
+                    );
                   },
                 );
               },
@@ -150,96 +152,87 @@ class _JadwalSholatViewState extends State<_JadwalSholatView> {
               },
             ),
           ],
-          child: BlocConsumer<JadwalSholatPageCubit, JadwalSholatPageState>(
-            listener: (
-              final BuildContext context,
-              final JadwalSholatPageState state,
-            ) {},
-            builder: (
-              final BuildContext context,
-              final JadwalSholatPageState state,
-            ) {
-              return state.maybeWhen(
-                orElse: () => const LoadingSholatView(jadwalList: []),
-                initial: () => const LoadingSholatView(jadwalList: []),
-                loading: () => const LoadingSholatView(jadwalList: []),
-                awaitingSchedule:
-                    (final String _, final double __, final double ___) =>
-                        const LoadingSholatView(jadwalList: []),
-                locationError: (final String message, final int retryCount) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          message,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () =>
-                              context.read<JadwalSholatPageCubit>().retryInit(),
-                          child: const Text('Coba Lagi'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                locationPermissionError: (final String message) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          message,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () => openAppSettings(),
-                          child: const Text('Buka Pengaturan'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                loaded: (
-                  final String city,
-                  final String timezone,
-                  final jadwalList,
-                  final String countdownText,
-                  final String sholatText,
-                  final String timeText,
-                  final JadwalSholatEntity entity,
-                ) {
-                  return JadwalSholatView(
-                    city: city,
-                    timezone: timezone,
-                    countdownText: countdownText,
-                    sholatText: sholatText,
-                    timeText: timeText,
-                    jadwalList: jadwalList,
-                    data: entity,
-                    onToggleNotif: (final int index, final model) async {
-                      await context
-                          .read<JadwalSholatPageCubit>()
-                          .toggleNotification(index, model);
-                      if (context.mounted) {
-                        final message = model.isAlarmSet
-                            ? 'Alarm ${model.title} dinonaktifkan'
-                            : 'Alarm ${model.title} berhasil diaktifkan';
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(message)),
-                        );
-                      }
-                    },
-                  );
-                },
-              );
-            },
-          ),
+          child: _buildBody(context),
         ),
       ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return BlocBuilder<JadwalSholatLocationCubit, JadwalSholatLocationState>(
+      builder: (context, locationState) {
+        return locationState.maybeWhen(
+          orElse: () => const LoadingSholatView(jadwalList: []),
+          error: (message, retryCount) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(message, textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () =>
+                      context.read<JadwalSholatLocationCubit>().retryInit(),
+                  child: const Text('Coba Lagi'),
+                ),
+              ],
+            ),
+          ),
+          permissionError: (message) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(message, textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => openAppSettings(),
+                  child: const Text('Buka Pengaturan'),
+                ),
+              ],
+            ),
+          ),
+          located: (city, timezone, latitude, longitude) {
+            return BlocBuilder<JadwalSholatPageCubit, JadwalSholatPageState>(
+              builder: (context, pageState) {
+                return pageState.maybeWhen(
+                  orElse: () => const LoadingSholatView(jadwalList: []),
+                  loaded: (
+                    city,
+                    timezone,
+                    jadwalList,
+                    countdownText,
+                    sholatText,
+                    timeText,
+                    entity,
+                  ) {
+                    return JadwalSholatView(
+                      city: city,
+                      timezone: timezone,
+                      countdownText: countdownText,
+                      sholatText: sholatText,
+                      timeText: timeText,
+                      jadwalList: jadwalList,
+                      data: entity,
+                      onToggleNotif: (final int index, final model) async {
+                        await context
+                            .read<JadwalSholatPageCubit>()
+                            .toggleNotification(index, model);
+                        if (context.mounted) {
+                          final message = model.isAlarmSet
+                              ? 'Alarm ${model.title} dinonaktifkan'
+                              : 'Alarm ${model.title} berhasil diaktifkan';
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(message)),
+                          );
+                        }
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

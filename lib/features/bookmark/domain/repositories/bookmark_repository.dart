@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/core/models/bookmark_input.dart';
 import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
-import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
 
 /// Abstract repository contract for bookmark persistence.
 ///
@@ -10,10 +10,7 @@ import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.da
 abstract class BookmarkRepository {
   /// Inserts the bookmark if it doesn't already exist.
   /// Returns `Right(true)` if newly inserted, `Right(false)` if already existed.
-  Future<Either<Failure, bool>> insertOrUpdateBookmark(
-    AyatDetailEntity ayat,
-    DetailEntity detail,
-  );
+  Future<Either<Failure, bool>> insertOrUpdateBookmark(BookmarkInput input);
 
   /// Returns all saved bookmarks as domain entities.
   Future<Either<Failure, List<BookmarkEntity>>> getAllBookmarks();

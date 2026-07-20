@@ -83,13 +83,11 @@ List<SetNotifModel> _buildJadwal() => <SetNotifModel>[
 void main() {
   late MockNotificationService mockNotification;
   late MockLocalStorageService mockStorage;
-  late MockLocationService mockLocation;
 
   setUp(() {
     locator.registerLazySingleton<AppConfig>(AppConfig.new);
     mockNotification = MockNotificationService();
     mockStorage = MockLocalStorageService();
-    mockLocation = MockLocationService();
   });
 
   tearDown(() => locator.reset());
@@ -97,7 +95,6 @@ void main() {
   JadwalSholatPageCubit buildCubit() => JadwalSholatPageCubit(
         storageService: mockStorage,
         notificationService: mockNotification,
-        locationService: mockLocation,
       );
 
   // -------------------------------------------------------------------------
@@ -473,77 +470,6 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // GPS failure retry mechanism
-  // -------------------------------------------------------------------------
-  group('GPS failure retry mechanism', () {
-    test(
-        'locationError state contains message and retryCount — Validates: Requirements 16.1',
-        () {
-      const JadwalSholatPageState state = JadwalSholatPageState.locationError(
-        message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
-        retryCount: 1,
-      );
-
-      final String message = state.maybeWhen(
-        locationError: (msg, _) => msg,
-        orElse: () => '',
-      );
-      final int retryCount = state.maybeWhen(
-        locationError: (_, count) => count,
-        orElse: () => -1,
-      );
-
-      expect(message, 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.');
-      expect(retryCount, 1);
-    });
-
-    test(
-        'locationPermissionError state contains message — Validates: Requirements 16.3',
-        () {
-      const JadwalSholatPageState state =
-          JadwalSholatPageState.locationPermissionError(
-        message:
-            'Gagal mendapatkan lokasi setelah 3 percobaan. Periksa pengaturan lokasi di perangkat Anda.',
-      );
-
-      final String message = state.maybeWhen(
-        locationPermissionError: (msg) => msg,
-        orElse: () => '',
-      );
-
-      expect(
-        message,
-        'Gagal mendapatkan lokasi setelah 3 percobaan. Periksa pengaturan lokasi di perangkat Anda.',
-      );
-    });
-
-    test(
-        'locationError retryCount increments on subsequent failures — Validates: Requirements 16.1',
-        () {
-      const state1 = JadwalSholatPageState.locationError(
-        message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
-        retryCount: 1,
-      );
-      const state2 = JadwalSholatPageState.locationError(
-        message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
-        retryCount: 2,
-      );
-
-      final int count1 = state1.maybeWhen(
-        locationError: (_, count) => count,
-        orElse: () => -1,
-      );
-      final int count2 = state2.maybeWhen(
-        locationError: (_, count) => count,
-        orElse: () => -1,
-      );
-
-      expect(count1, 1);
-      expect(count2, 2);
-    });
-  });
-
-  // -------------------------------------------------------------------------
   // onScheduleReceived()
   // -------------------------------------------------------------------------
   group('onScheduleReceived()', () {
@@ -663,13 +589,6 @@ void main() {
           ).thenReturn(alarmValues[j]);
         }
         final JadwalSholatPageCubit cubit = buildCubit();
-        cubit.emit(
-          const JadwalSholatPageState.awaitingSchedule(
-            city: 'Test City',
-            latitude: -6.2,
-            longitude: 106.8,
-          ),
-        );
         final entity = generateRandomJadwalSholatModel().toEntity();
         cubit.onScheduleReceived(entity);
         await Future<void>.delayed(Duration.zero);

@@ -281,8 +281,8 @@ void main() {
       expect(failure.message, 'Internal server error');
     });
 
-    test('ResponseFailure.props contains message', () {
-      const failure = ResponseFailure('Invalid response format');
+    test('CacheFailure.props contains message', () {
+      const failure = CacheFailure('Invalid response format');
       expect(failure.props, ['Invalid response format']);
       expect(failure.message, 'Invalid response format');
     });

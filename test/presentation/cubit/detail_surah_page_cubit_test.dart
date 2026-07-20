@@ -1,5 +1,6 @@
 import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/di/injection.dart';
+import 'package:quran_app/core/models/bookmark_input.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
@@ -13,6 +14,19 @@ import '../../mocks.dart';
 void main() {
   late MockLocalStorageService mockStorageService;
   late MockSaveBookmarkUseCase mockSaveBookmarkUseCase;
+
+  setUpAll(() {
+    registerFallbackValue(
+      const BookmarkInput(
+        nomorSurah: 0,
+        namaLatin: '',
+        nomorAyat: 0,
+        teksArab: '',
+        teksIndonesia: '',
+        teksLatin: '',
+      ),
+    );
+  });
 
   setUp(() {
     locator.registerLazySingleton<AppConfig>(AppConfig.new);
@@ -106,7 +120,7 @@ void main() {
       'emits actionCompleted("Berhasil disimpan ke bookmark") when insertOrUpdateBookmark returns true',
       setUp: () {
         when(
-          () => mockSaveBookmarkUseCase(ayat: kAyat, detail: kDetail),
+          () => mockSaveBookmarkUseCase(input: any(named: 'input')),
         ).thenAnswer((_) async => const Right(true));
       },
       build: () => DetailSurahPageCubit(
@@ -125,7 +139,7 @@ void main() {
       'emits actionCompleted("Data sudah ada") when insertOrUpdateBookmark returns false',
       setUp: () {
         when(
-          () => mockSaveBookmarkUseCase(ayat: kAyat, detail: kDetail),
+          () => mockSaveBookmarkUseCase(input: any(named: 'input')),
         ).thenAnswer((_) async => const Right(false));
       },
       build: () => DetailSurahPageCubit(

@@ -46,7 +46,7 @@ class _HomePageBodyState extends State<_HomePageBody> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<GetSurahCubit>().getPosts();
+        context.read<GetSurahCubit>().getSurah();
         locator<ShowcaseService>().showCase(
           context: context,
           cacheKey: config.cacheShowCase,

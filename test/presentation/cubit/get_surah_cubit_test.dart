@@ -28,7 +28,7 @@ void main() {
           .thenAnswer((_) async => const Right([kSurahEntity]));
     },
     build: () => GetSurahCubit(usecase: mockUsecase),
-    act: (cubit) => cubit.getPosts(),
+    act: (cubit) => cubit.getSurah(),
     expect: () => [
       const GetSurahState.loading(),
       const GetSurahState.success([kSurahEntity]),
@@ -41,7 +41,7 @@ void main() {
       when(() => mockUsecase.call()).thenAnswer((_) async => const Right([]));
     },
     build: () => GetSurahCubit(usecase: mockUsecase),
-    act: (cubit) => cubit.getPosts(),
+    act: (cubit) => cubit.getSurah(),
     expect: () => [
       const GetSurahState.loading(),
       const GetSurahState.success([]),
@@ -55,7 +55,7 @@ void main() {
           .thenAnswer((_) async => const Left(ServerFailure('Server error')));
     },
     build: () => GetSurahCubit(usecase: mockUsecase),
-    act: (cubit) => cubit.getPosts(),
+    act: (cubit) => cubit.getSurah(),
     expect: () => [
       const GetSurahState.loading(),
       const GetSurahState.error('Server error'),
@@ -77,7 +77,7 @@ void main() {
         final cubit = GetSurahCubit(usecase: mockUsecase);
         final states = <GetSurahState>[];
         final sub = cubit.stream.listen(states.add);
-        cubit.getPosts();
+        cubit.getSurah();
         await Future<void>.delayed(Duration.zero);
         await sub.cancel();
         await cubit.close();
@@ -97,7 +97,7 @@ void main() {
         final failures = [
           ServerFailure(message),
           ConnectionFailure(message),
-          ResponseFailure(message),
+          CacheFailure(message),
         ];
         when(() => mockUsecase.call())
             .thenAnswer((_) async => Left(failures[i % 3]));
@@ -105,7 +105,7 @@ void main() {
         final cubit = GetSurahCubit(usecase: mockUsecase);
         final states = <GetSurahState>[];
         final sub = cubit.stream.listen(states.add);
-        cubit.getPosts();
+        cubit.getSurah();
         await Future<void>.delayed(Duration.zero);
         await sub.cancel();
         await cubit.close();

@@ -141,8 +141,8 @@ void main() {
     mockShowcaseService = MockShowcaseService();
     mockAppBottomsheetFactory = MockAppBottomsheetFactory();
 
-    // Stub getPosts() so initState doesn't throw
-    when(() => mockGetSurahCubit.getPosts()).thenAnswer((_) async {});
+    // Stub getSurah() so initState doesn't throw
+    when(() => mockGetSurahCubit.getSurah()).thenAnswer((_) async {});
 
     // Register test dependencies in GetIt
     locator.registerLazySingleton<AppTextFactory>(TestAppTextFactory.new);

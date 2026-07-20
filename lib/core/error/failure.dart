@@ -16,8 +16,8 @@ class ServerFailure extends Failure {
   const ServerFailure(super.message);
 }
 
-class ResponseFailure extends Failure {
-  const ResponseFailure(super.message);
+class CacheFailure extends Failure {
+  const CacheFailure(super.message);
 }
 
 class DatabaseFailure extends Failure {

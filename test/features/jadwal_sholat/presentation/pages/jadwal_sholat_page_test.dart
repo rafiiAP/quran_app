@@ -14,17 +14,20 @@ import 'package:quran_app/core/widgets/app_text.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/models/set_notif_model.dart';
 import 'package:quran_app/features/jadwal_sholat/domain/entities/jadwal_sholat_entity.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_cubit/jadwal_sholat_cubit.dart';
+import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_location_cubit/jadwal_sholat_location_cubit.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/cubits/jadwal_sholat_page_cubit/jadwal_sholat_page_cubit.dart';
 
 // Mock cubits
 class MockJadwalSholatCubit extends MockCubit<JadwalSholatState>
     implements JadwalSholatCubit {}
 
+class MockJadwalSholatLocationCubit extends MockCubit<JadwalSholatLocationState>
+    implements JadwalSholatLocationCubit {}
+
 class MockJadwalSholatPageCubit extends MockCubit<JadwalSholatPageState>
     implements JadwalSholatPageCubit {}
 
-/// Fake AppTextFactory that returns simple Text widgets without needing
-/// navigatorKey or GoogleFonts.
+/// Fake AppTextFactory for tests.
 class FakeAppTextFactory implements AppTextFactory {
   @override
   Widget textBody({
@@ -63,7 +66,7 @@ class FakeAppTextFactory implements AppTextFactory {
   }
 }
 
-/// Fake AppBottomsheetFactory that does nothing (avoids navigatorKey usage).
+/// Fake AppBottomsheetFactory for tests.
 class FakeAppBottomsheetFactory implements AppBottomsheetFactory {
   @override
   Future<void> showBottomSheet({
@@ -88,10 +91,10 @@ class FakeAppBottomsheetFactory implements AppBottomsheetFactory {
 
 void main() {
   late MockJadwalSholatCubit mockJadwalSholatCubit;
-  late MockJadwalSholatPageCubit mockJadwalSholatPageCubit;
+  late MockJadwalSholatLocationCubit mockLocationCubit;
+  late MockJadwalSholatPageCubit mockPageCubit;
 
   setUpAll(() {
-    // Register GetIt dependencies for widget factories used via locator
     locator.allowReassignment = true;
     locator.registerLazySingleton<AppColorConfig>(AppColorConfig.new);
     locator.registerLazySingleton<MyImage>(MyImage.new);
@@ -105,42 +108,40 @@ void main() {
 
   setUp(() {
     mockJadwalSholatCubit = MockJadwalSholatCubit();
-    mockJadwalSholatPageCubit = MockJadwalSholatPageCubit();
+    mockLocationCubit = MockJadwalSholatLocationCubit();
+    mockPageCubit = MockJadwalSholatPageCubit();
   });
 
   tearDownAll(() {
     locator.reset();
   });
 
-  /// Builds a test widget wrapping the view content with mocked cubits.
-  /// We replicate the inner view's rendering logic to avoid initState GPS
-  /// calls that happen in the real _JadwalSholatView.
   Widget buildTestWidget() {
     return MaterialApp(
       home: MultiBlocProvider(
         providers: [
-          BlocProvider<JadwalSholatCubit>.value(
-            value: mockJadwalSholatCubit,
+          BlocProvider<JadwalSholatCubit>.value(value: mockJadwalSholatCubit),
+          BlocProvider<JadwalSholatLocationCubit>.value(
+            value: mockLocationCubit,
           ),
-          BlocProvider<JadwalSholatPageCubit>.value(
-            value: mockJadwalSholatPageCubit,
-          ),
+          BlocProvider<JadwalSholatPageCubit>.value(value: mockPageCubit),
         ],
-        child: const _TestJadwalSholatBody(),
+        child: const _TestBody(),
       ),
     );
   }
 
   group('JadwalSholatPage', () {
-    testWidgets('shows shimmer when loading state', (tester) async {
+    testWidgets('shows shimmer when location is loading', (tester) async {
       when(() => mockJadwalSholatCubit.state)
           .thenReturn(const JadwalSholatState.initial());
-      when(() => mockJadwalSholatPageCubit.state)
-          .thenReturn(const JadwalSholatPageState.loading());
+      when(() => mockLocationCubit.state)
+          .thenReturn(const JadwalSholatLocationState.loading());
+      when(() => mockPageCubit.state)
+          .thenReturn(const JadwalSholatPageState.initial());
 
       await tester.pumpWidget(buildTestWidget());
 
-      // LoadingSholatView shows Sunrise, Mid night, Sunset labels
       expect(find.text('Sunrise'), findsOneWidget);
       expect(find.text('Mid night'), findsOneWidget);
       expect(find.text('Sunset'), findsOneWidget);
@@ -206,7 +207,15 @@ void main() {
 
       when(() => mockJadwalSholatCubit.state)
           .thenReturn(const JadwalSholatState.initial());
-      when(() => mockJadwalSholatPageCubit.state).thenReturn(
+      when(() => mockLocationCubit.state).thenReturn(
+        const JadwalSholatLocationState.located(
+          city: 'Jakarta',
+          timezone: 'Asia/Jakarta',
+          latitude: -6.2,
+          longitude: 106.8,
+        ),
+      );
+      when(() => mockPageCubit.state).thenReturn(
         JadwalSholatPageState.loaded(
           city: 'Jakarta',
           timezone: 'Asia/Jakarta',
@@ -220,27 +229,26 @@ void main() {
 
       await tester.pumpWidget(buildTestWidget());
 
-      // Verify prayer time entries are shown
       expect(find.text('Subuh'), findsOneWidget);
       expect(find.text('Dzuhur'), findsOneWidget);
       expect(find.text('Ashar'), findsOneWidget);
       expect(find.text('Maghrib'), findsOneWidget);
       expect(find.text('Isya'), findsOneWidget);
-
-      // Verify city and timezone
       expect(find.text('Jakarta'), findsOneWidget);
       expect(find.text('Asia/Jakarta'), findsOneWidget);
     });
 
-    testWidgets('shows retry button when locationError state', (tester) async {
+    testWidgets('shows retry button when location error', (tester) async {
       when(() => mockJadwalSholatCubit.state)
           .thenReturn(const JadwalSholatState.initial());
-      when(() => mockJadwalSholatPageCubit.state).thenReturn(
-        const JadwalSholatPageState.locationError(
+      when(() => mockLocationCubit.state).thenReturn(
+        const JadwalSholatLocationState.error(
           message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
           retryCount: 1,
         ),
       );
+      when(() => mockPageCubit.state)
+          .thenReturn(const JadwalSholatPageState.initial());
 
       await tester.pumpWidget(buildTestWidget());
 
@@ -254,29 +262,29 @@ void main() {
     testWidgets('tap retry button calls retryInit()', (tester) async {
       when(() => mockJadwalSholatCubit.state)
           .thenReturn(const JadwalSholatState.initial());
-      when(() => mockJadwalSholatPageCubit.state).thenReturn(
-        const JadwalSholatPageState.locationError(
+      when(() => mockLocationCubit.state).thenReturn(
+        const JadwalSholatLocationState.error(
           message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
           retryCount: 1,
         ),
       );
-      when(() => mockJadwalSholatPageCubit.retryInit()).thenReturn(null);
+      when(() => mockPageCubit.state)
+          .thenReturn(const JadwalSholatPageState.initial());
+      when(() => mockLocationCubit.retryInit()).thenReturn(null);
 
       await tester.pumpWidget(buildTestWidget());
 
       await tester.tap(find.text('Coba Lagi'));
       await tester.pump();
 
-      verify(() => mockJadwalSholatPageCubit.retryInit()).called(1);
+      verify(() => mockLocationCubit.retryInit()).called(1);
     });
   });
 }
 
-/// A test widget that replicates the body of _JadwalSholatView's build method
-/// without the initState GPS logic. This allows testing rendering based on
-/// cubit states provided via BlocProvider.value.
-class _TestJadwalSholatBody extends StatelessWidget {
-  const _TestJadwalSholatBody();
+/// Test body that mirrors the new page structure using both cubits.
+class _TestBody extends StatelessWidget {
+  const _TestBody();
 
   @override
   Widget build(BuildContext context) {
@@ -288,67 +296,65 @@ class _TestJadwalSholatBody extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: BlocBuilder<JadwalSholatPageCubit, JadwalSholatPageState>(
-          builder: (context, state) {
-            return state.maybeWhen(
+        child:
+            BlocBuilder<JadwalSholatLocationCubit, JadwalSholatLocationState>(
+          builder: (context, locationState) {
+            return locationState.maybeWhen(
               orElse: () => const _LoadingShimmerView(),
-              initial: () => const _LoadingShimmerView(),
-              loading: () => const _LoadingShimmerView(),
-              awaitingSchedule: (_, __, ___) => const _LoadingShimmerView(),
-              locationError: (message, retryCount) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        message,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () =>
-                            context.read<JadwalSholatPageCubit>().retryInit(),
-                        child: const Text('Coba Lagi'),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              locationPermissionError: (message) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        message,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('Buka Pengaturan'),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              loaded: (
-                city,
-                timezone,
-                jadwalList,
-                countdownText,
-                sholatText,
-                timeText,
-                entity,
-              ) {
-                return _LoadedView(
-                  city: city,
-                  timezone: timezone,
-                  jadwalList: jadwalList,
-                  countdownText: countdownText,
-                  sholatText: sholatText,
-                  timeText: timeText,
-                  entity: entity,
+              error: (String message, int retryCount) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(message, textAlign: TextAlign.center),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () =>
+                          context.read<JadwalSholatLocationCubit>().retryInit(),
+                      child: const Text('Coba Lagi'),
+                    ),
+                  ],
+                ),
+              ),
+              permissionError: (String message) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(message, textAlign: TextAlign.center),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Buka Pengaturan'),
+                    ),
+                  ],
+                ),
+              ),
+              located: (city, timezone, latitude, longitude) {
+                return BlocBuilder<JadwalSholatPageCubit,
+                    JadwalSholatPageState>(
+                  builder: (context, pageState) {
+                    return pageState.maybeWhen(
+                      orElse: () => const _LoadingShimmerView(),
+                      loaded: (
+                        city,
+                        timezone,
+                        jadwalList,
+                        countdownText,
+                        sholatText,
+                        timeText,
+                        entity,
+                      ) {
+                        return _LoadedView(
+                          city: city,
+                          timezone: timezone,
+                          jadwalList: jadwalList,
+                          countdownText: countdownText,
+                          sholatText: sholatText,
+                          timeText: timeText,
+                          entity: entity,
+                        );
+                      },
+                    );
+                  },
                 );
               },
             );
@@ -359,7 +365,6 @@ class _TestJadwalSholatBody extends StatelessWidget {
   }
 }
 
-/// Simplified loading view for test (avoids asset image dependencies)
 class _LoadingShimmerView extends StatelessWidget {
   const _LoadingShimmerView();
 
@@ -377,7 +382,6 @@ class _LoadingShimmerView extends StatelessWidget {
   }
 }
 
-/// Simplified loaded view for test (avoids ShowCaseWidget and asset deps)
 class _LoadedView extends StatelessWidget {
   const _LoadedView({
     required this.city,

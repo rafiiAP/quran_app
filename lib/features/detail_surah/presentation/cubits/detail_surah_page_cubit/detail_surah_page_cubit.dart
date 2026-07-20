@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:quran_app/core/constants/config.dart';
 import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/core/models/bookmark_input.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
 import 'package:quran_app/features/bookmark/domain/usecases/save_bookmark_usecase.dart';
 import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
@@ -48,8 +49,16 @@ class DetailSurahPageCubit extends Cubit<DetailSurahPageState> {
     required AyatDetailEntity ayat,
     required DetailEntity detail,
   }) async {
+    final input = BookmarkInput(
+      nomorSurah: detail.nomor,
+      namaLatin: detail.namaLatin,
+      nomorAyat: ayat.nomorAyat,
+      teksArab: ayat.teksArab,
+      teksIndonesia: ayat.teksIndonesia,
+      teksLatin: ayat.teksLatin,
+    );
     final Either<Failure, bool> result =
-        await _saveBookmarkUseCase(ayat: ayat, detail: detail);
+        await _saveBookmarkUseCase(input: input);
     result.match(
       (final Failure l) => emit(
         DetailSurahPageState.actionCompleted(message: l.message),

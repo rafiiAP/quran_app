@@ -1,10 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/core/models/bookmark_input.dart';
 import 'package:quran_app/core/storage/database_helper.dart';
 import 'package:quran_app/features/bookmark/data/models/bookmark_model.dart';
 import 'package:quran_app/features/bookmark/domain/entities/bookmark_entity.dart';
 import 'package:quran_app/features/bookmark/domain/repositories/bookmark_repository.dart';
-import 'package:quran_app/features/detail_surah/domain/entities/detail_entity.dart';
 
 /// [BookmarkRepository] implementation backed by [DatabaseHelper].
 ///
@@ -18,17 +18,16 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
 
   @override
   Future<Either<Failure, bool>> insertOrUpdateBookmark(
-    final AyatDetailEntity ayat,
-    final DetailEntity detail,
+    final BookmarkInput input,
   ) async {
     try {
       final Map<String, dynamic> data = <String, dynamic>{
-        'nomor_surah': detail.nomor,
-        'nama_latin': detail.namaLatin,
-        'nomor_ayat': ayat.nomorAyat,
-        'teks_arab': ayat.teksArab,
-        'teks_indonesia': ayat.teksIndonesia,
-        'teks_latin': ayat.teksLatin,
+        'nomor_surah': input.nomorSurah,
+        'nama_latin': input.namaLatin,
+        'nomor_ayat': input.nomorAyat,
+        'teks_arab': input.teksArab,
+        'teks_indonesia': input.teksIndonesia,
+        'teks_latin': input.teksLatin,
       };
       final bool isNew = await _databaseHelper.insertBookmark(data);
       return Right(isNew);

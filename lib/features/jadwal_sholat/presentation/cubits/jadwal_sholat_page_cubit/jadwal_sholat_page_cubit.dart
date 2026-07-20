@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:quran_app/core/constants/config.dart';
-import 'package:quran_app/core/services/location_service.dart';
 import 'package:quran_app/core/storage/local_storage_service.dart';
 import 'package:quran_app/core/services/notification_service.dart';
 import 'package:quran_app/features/jadwal_sholat/presentation/models/set_notif_model.dart';
@@ -13,71 +12,33 @@ import 'package:quran_app/features/jadwal_sholat/presentation/helpers/prayer_tim
 part 'jadwal_sholat_page_state.dart';
 part 'jadwal_sholat_page_cubit.freezed.dart';
 
+/// Cubit responsible for prayer schedule presentation: countdown timer,
+/// notification toggling, and schedule display.
+///
+/// Location logic is handled by [JadwalSholatLocationCubit].
+/// This cubit receives schedule data via [onScheduleReceived] and
+/// location context via [setLocationContext].
 class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
   JadwalSholatPageCubit({
     required this.storageService,
     required this.notificationService,
-    required this.locationService,
   }) : super(const JadwalSholatPageState.initial());
 
   final LocalStorageService storageService;
   final NotificationService notificationService;
-  final LocationService locationService;
   Timer? _countdownTimer;
-  String _cachedTimezone = '';
+  String _city = '';
+  String _timezone = '';
   JadwalSholatEntity? _cachedEntity;
 
-  int _retryCount = 0;
-  static const int _maxRetries = 3;
-
-  /// Gets GPS position, timezone, city name — then emits [awaitingSchedule]
-  /// or emits [locationError]/[locationPermissionError] if GPS fails.
-  Future<void> init() async {
-    if (state is _Loaded || state is _Loading) return;
-
-    emit(const JadwalSholatPageState.loading());
-
-    _cachedTimezone = await locationService.getLocalTimezone();
-
-    final position = await locationService.getCurrentPosition();
-
-    if (position == null) {
-      _retryCount++;
-      if (_retryCount >= _maxRetries) {
-        emit(
-          const JadwalSholatPageState.locationPermissionError(
-            message:
-                'Gagal mendapatkan lokasi setelah 3 percobaan. Periksa pengaturan lokasi di perangkat Anda.',
-          ),
-        );
-      } else {
-        emit(
-          JadwalSholatPageState.locationError(
-            message: 'Gagal mendapatkan lokasi. Ketuk untuk coba lagi.',
-            retryCount: _retryCount,
-          ),
-        );
-      }
-      return;
-    }
-
-    _retryCount = 0;
-
-    final String city = await locationService.getCityName(
-      position.latitude,
-      position.longitude,
-    );
-    emit(
-      JadwalSholatPageState.awaitingSchedule(
-        city: city,
-        latitude: position.latitude,
-        longitude: position.longitude,
-      ),
-    );
+  /// Sets location context from [JadwalSholatLocationCubit].
+  void setLocationContext({
+    required String city,
+    required String timezone,
+  }) {
+    _city = city;
+    _timezone = timezone;
   }
-
-  /// Retries GPS location acquisition after a failure.
-  void retryInit() => init();
 
   /// Called when [JadwalSholatCubit] emits a success state with new data.
   void onScheduleReceived(final JadwalSholatEntity data) {
@@ -143,40 +104,10 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
 
     final DateTime now = DateTime.now();
 
-    final String city = state.maybeWhen(
-      awaitingSchedule: (final String city, final double _, final double __) =>
-          city,
-      loaded: (
-        final String city,
-        final String _,
-        final List<SetNotifModel> __,
-        final String ___,
-        final String ____,
-        final String _____,
-        final JadwalSholatEntity ______,
-      ) =>
-          city,
-      orElse: () => 'Tidak diketahui',
-    );
-
-    final String timezone = state.maybeWhen(
-      loaded: (
-        final String _,
-        final String timezone,
-        final List<SetNotifModel> __,
-        final String ___,
-        final String ____,
-        final String _____,
-        final JadwalSholatEntity ______,
-      ) =>
-          timezone,
-      orElse: () => _cachedTimezone,
-    );
-
     emit(
       JadwalSholatPageState.loaded(
-        city: city,
-        timezone: timezone,
+        city: _city,
+        timezone: _timezone,
         jadwalList: updatedList,
         countdownText: PrayerTimeHelpers.calculateCountdown(updatedList, now),
         sholatText: PrayerTimeHelpers.getSholatText(updatedList, now),
@@ -185,14 +116,10 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
       ),
     );
 
-    _startCountdownTimer(updatedList, city, timezone);
+    _startCountdownTimer(updatedList);
   }
 
-  void _startCountdownTimer(
-    final List<SetNotifModel> jadwalList,
-    final String city,
-    final String timezone,
-  ) {
+  void _startCountdownTimer(final List<SetNotifModel> jadwalList) {
     _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(
       const Duration(seconds: 1),
@@ -200,8 +127,8 @@ class JadwalSholatPageCubit extends Cubit<JadwalSholatPageState> {
         final DateTime now = DateTime.now();
         emit(
           JadwalSholatPageState.loaded(
-            city: city,
-            timezone: timezone,
+            city: _city,
+            timezone: _timezone,
             jadwalList: jadwalList,
             countdownText:
                 PrayerTimeHelpers.calculateCountdown(jadwalList, now),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:quran_app/core/di/injection.dart';
 
 AppConfig get config => locator<AppConfig>();
@@ -10,7 +11,9 @@ class AppConfig {
   final String cAppName = 'Component App';
   final String cAppVersion = '1.0.0';
 
-  final bool lShowLog = true;
+  /// Whether to log debug messages. Defaults to [kDebugMode] so logs
+  /// are automatically disabled in release builds.
+  final bool lShowLog = kDebugMode;
 
   final int nAppVersion = 1;
 

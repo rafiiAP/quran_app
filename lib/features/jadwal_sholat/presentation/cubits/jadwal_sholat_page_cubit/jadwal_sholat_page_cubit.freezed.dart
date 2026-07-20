@@ -19,9 +19,6 @@ mixin _$JadwalSholatPageState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String city, double latitude, double longitude)
-        awaitingSchedule,
     required TResult Function(
             String city,
             String timezone,
@@ -31,16 +28,11 @@ mixin _$JadwalSholatPageState {
             String timeText,
             JadwalSholatEntity entity)
         loaded,
-    required TResult Function(String message, int retryCount) locationError,
-    required TResult Function(String message) locationPermissionError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
     TResult? Function(
             String city,
             String timezone,
@@ -50,16 +42,11 @@ mixin _$JadwalSholatPageState {
             String timeText,
             JadwalSholatEntity entity)?
         loaded,
-    TResult? Function(String message, int retryCount)? locationError,
-    TResult? Function(String message)? locationPermissionError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
     TResult Function(
             String city,
             String timezone,
@@ -69,40 +56,25 @@ mixin _$JadwalSholatPageState {
             String timeText,
             JadwalSholatEntity entity)?
         loaded,
-    TResult Function(String message, int retryCount)? locationError,
-    TResult Function(String message)? locationPermissionError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_AwaitingSchedule value) awaitingSchedule,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_LocationError value) locationError,
-    required TResult Function(_LocationPermissionError value)
-        locationPermissionError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_AwaitingSchedule value)? awaitingSchedule,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_LocationError value)? locationError,
-    TResult? Function(_LocationPermissionError value)? locationPermissionError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_AwaitingSchedule value)? awaitingSchedule,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_LocationError value)? locationError,
-    TResult Function(_LocationPermissionError value)? locationPermissionError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -172,9 +144,6 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String city, double latitude, double longitude)
-        awaitingSchedule,
     required TResult Function(
             String city,
             String timezone,
@@ -184,8 +153,6 @@ class _$InitialImpl implements _Initial {
             String timeText,
             JadwalSholatEntity entity)
         loaded,
-    required TResult Function(String message, int retryCount) locationError,
-    required TResult Function(String message) locationPermissionError,
   }) {
     return initial();
   }
@@ -194,9 +161,6 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
     TResult? Function(
             String city,
             String timezone,
@@ -206,8 +170,6 @@ class _$InitialImpl implements _Initial {
             String timeText,
             JadwalSholatEntity entity)?
         loaded,
-    TResult? Function(String message, int retryCount)? locationError,
-    TResult? Function(String message)? locationPermissionError,
   }) {
     return initial?.call();
   }
@@ -216,9 +178,6 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
     TResult Function(
             String city,
             String timezone,
@@ -228,8 +187,6 @@ class _$InitialImpl implements _Initial {
             String timeText,
             JadwalSholatEntity entity)?
         loaded,
-    TResult Function(String message, int retryCount)? locationError,
-    TResult Function(String message)? locationPermissionError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -242,12 +199,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_AwaitingSchedule value) awaitingSchedule,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_LocationError value) locationError,
-    required TResult Function(_LocationPermissionError value)
-        locationPermissionError,
   }) {
     return initial(this);
   }
@@ -256,11 +208,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_AwaitingSchedule value)? awaitingSchedule,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_LocationError value)? locationError,
-    TResult? Function(_LocationPermissionError value)? locationPermissionError,
   }) {
     return initial?.call(this);
   }
@@ -269,11 +217,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_AwaitingSchedule value)? awaitingSchedule,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_LocationError value)? locationError,
-    TResult Function(_LocationPermissionError value)? locationPermissionError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -285,380 +229,6 @@ class _$InitialImpl implements _Initial {
 
 abstract class _Initial implements JadwalSholatPageState {
   const factory _Initial() = _$InitialImpl;
-}
-
-/// @nodoc
-abstract class _$$LoadingImplCopyWith<$Res> {
-  factory _$$LoadingImplCopyWith(
-          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
-      __$$LoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$JadwalSholatPageStateCopyWithImpl<$Res, _$LoadingImpl>
-    implements _$$LoadingImplCopyWith<$Res> {
-  __$$LoadingImplCopyWithImpl(
-      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$LoadingImpl implements _Loading {
-  const _$LoadingImpl();
-
-  @override
-  String toString() {
-    return 'JadwalSholatPageState.loading()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadingImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String city, double latitude, double longitude)
-        awaitingSchedule,
-    required TResult Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)
-        loaded,
-    required TResult Function(String message, int retryCount) locationError,
-    required TResult Function(String message) locationPermissionError,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
-    TResult? Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)?
-        loaded,
-    TResult? Function(String message, int retryCount)? locationError,
-    TResult? Function(String message)? locationPermissionError,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
-    TResult Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)?
-        loaded,
-    TResult Function(String message, int retryCount)? locationError,
-    TResult Function(String message)? locationPermissionError,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_AwaitingSchedule value) awaitingSchedule,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_LocationError value) locationError,
-    required TResult Function(_LocationPermissionError value)
-        locationPermissionError,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_AwaitingSchedule value)? awaitingSchedule,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_LocationError value)? locationError,
-    TResult? Function(_LocationPermissionError value)? locationPermissionError,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_AwaitingSchedule value)? awaitingSchedule,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_LocationError value)? locationError,
-    TResult Function(_LocationPermissionError value)? locationPermissionError,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Loading implements JadwalSholatPageState {
-  const factory _Loading() = _$LoadingImpl;
-}
-
-/// @nodoc
-abstract class _$$AwaitingScheduleImplCopyWith<$Res> {
-  factory _$$AwaitingScheduleImplCopyWith(_$AwaitingScheduleImpl value,
-          $Res Function(_$AwaitingScheduleImpl) then) =
-      __$$AwaitingScheduleImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String city, double latitude, double longitude});
-}
-
-/// @nodoc
-class __$$AwaitingScheduleImplCopyWithImpl<$Res>
-    extends _$JadwalSholatPageStateCopyWithImpl<$Res, _$AwaitingScheduleImpl>
-    implements _$$AwaitingScheduleImplCopyWith<$Res> {
-  __$$AwaitingScheduleImplCopyWithImpl(_$AwaitingScheduleImpl _value,
-      $Res Function(_$AwaitingScheduleImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? city = null,
-    Object? latitude = null,
-    Object? longitude = null,
-  }) {
-    return _then(_$AwaitingScheduleImpl(
-      city: null == city
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as String,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$AwaitingScheduleImpl implements _AwaitingSchedule {
-  const _$AwaitingScheduleImpl(
-      {required this.city, required this.latitude, required this.longitude});
-
-  @override
-  final String city;
-  @override
-  final double latitude;
-  @override
-  final double longitude;
-
-  @override
-  String toString() {
-    return 'JadwalSholatPageState.awaitingSchedule(city: $city, latitude: $latitude, longitude: $longitude)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AwaitingScheduleImpl &&
-            (identical(other.city, city) || other.city == city) &&
-            (identical(other.latitude, latitude) ||
-                other.latitude == latitude) &&
-            (identical(other.longitude, longitude) ||
-                other.longitude == longitude));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, city, latitude, longitude);
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$AwaitingScheduleImplCopyWith<_$AwaitingScheduleImpl> get copyWith =>
-      __$$AwaitingScheduleImplCopyWithImpl<_$AwaitingScheduleImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String city, double latitude, double longitude)
-        awaitingSchedule,
-    required TResult Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)
-        loaded,
-    required TResult Function(String message, int retryCount) locationError,
-    required TResult Function(String message) locationPermissionError,
-  }) {
-    return awaitingSchedule(city, latitude, longitude);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
-    TResult? Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)?
-        loaded,
-    TResult? Function(String message, int retryCount)? locationError,
-    TResult? Function(String message)? locationPermissionError,
-  }) {
-    return awaitingSchedule?.call(city, latitude, longitude);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
-    TResult Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)?
-        loaded,
-    TResult Function(String message, int retryCount)? locationError,
-    TResult Function(String message)? locationPermissionError,
-    required TResult orElse(),
-  }) {
-    if (awaitingSchedule != null) {
-      return awaitingSchedule(city, latitude, longitude);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_AwaitingSchedule value) awaitingSchedule,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_LocationError value) locationError,
-    required TResult Function(_LocationPermissionError value)
-        locationPermissionError,
-  }) {
-    return awaitingSchedule(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_AwaitingSchedule value)? awaitingSchedule,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_LocationError value)? locationError,
-    TResult? Function(_LocationPermissionError value)? locationPermissionError,
-  }) {
-    return awaitingSchedule?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_AwaitingSchedule value)? awaitingSchedule,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_LocationError value)? locationError,
-    TResult Function(_LocationPermissionError value)? locationPermissionError,
-    required TResult orElse(),
-  }) {
-    if (awaitingSchedule != null) {
-      return awaitingSchedule(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _AwaitingSchedule implements JadwalSholatPageState {
-  const factory _AwaitingSchedule(
-      {required final String city,
-      required final double latitude,
-      required final double longitude}) = _$AwaitingScheduleImpl;
-
-  String get city;
-  double get latitude;
-  double get longitude;
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AwaitingScheduleImplCopyWith<_$AwaitingScheduleImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -812,9 +382,6 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String city, double latitude, double longitude)
-        awaitingSchedule,
     required TResult Function(
             String city,
             String timezone,
@@ -824,8 +391,6 @@ class _$LoadedImpl implements _Loaded {
             String timeText,
             JadwalSholatEntity entity)
         loaded,
-    required TResult Function(String message, int retryCount) locationError,
-    required TResult Function(String message) locationPermissionError,
   }) {
     return loaded(city, timezone, jadwalList, countdownText, sholatText,
         timeText, entity);
@@ -835,9 +400,6 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
     TResult? Function(
             String city,
             String timezone,
@@ -847,8 +409,6 @@ class _$LoadedImpl implements _Loaded {
             String timeText,
             JadwalSholatEntity entity)?
         loaded,
-    TResult? Function(String message, int retryCount)? locationError,
-    TResult? Function(String message)? locationPermissionError,
   }) {
     return loaded?.call(city, timezone, jadwalList, countdownText, sholatText,
         timeText, entity);
@@ -858,9 +418,6 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
     TResult Function(
             String city,
             String timezone,
@@ -870,8 +427,6 @@ class _$LoadedImpl implements _Loaded {
             String timeText,
             JadwalSholatEntity entity)?
         loaded,
-    TResult Function(String message, int retryCount)? locationError,
-    TResult Function(String message)? locationPermissionError,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -885,12 +440,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_AwaitingSchedule value) awaitingSchedule,
     required TResult Function(_Loaded value) loaded,
-    required TResult Function(_LocationError value) locationError,
-    required TResult Function(_LocationPermissionError value)
-        locationPermissionError,
   }) {
     return loaded(this);
   }
@@ -899,11 +449,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_AwaitingSchedule value)? awaitingSchedule,
     TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_LocationError value)? locationError,
-    TResult? Function(_LocationPermissionError value)? locationPermissionError,
   }) {
     return loaded?.call(this);
   }
@@ -912,11 +458,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_AwaitingSchedule value)? awaitingSchedule,
     TResult Function(_Loaded value)? loaded,
-    TResult Function(_LocationError value)? locationError,
-    TResult Function(_LocationPermissionError value)? locationPermissionError,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -949,405 +491,4 @@ abstract class _Loaded implements JadwalSholatPageState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$LocationErrorImplCopyWith<$Res> {
-  factory _$$LocationErrorImplCopyWith(
-          _$LocationErrorImpl value, $Res Function(_$LocationErrorImpl) then) =
-      __$$LocationErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String message, int retryCount});
-}
-
-/// @nodoc
-class __$$LocationErrorImplCopyWithImpl<$Res>
-    extends _$JadwalSholatPageStateCopyWithImpl<$Res, _$LocationErrorImpl>
-    implements _$$LocationErrorImplCopyWith<$Res> {
-  __$$LocationErrorImplCopyWithImpl(
-      _$LocationErrorImpl _value, $Res Function(_$LocationErrorImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? retryCount = null,
-  }) {
-    return _then(_$LocationErrorImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      retryCount: null == retryCount
-          ? _value.retryCount
-          : retryCount // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$LocationErrorImpl implements _LocationError {
-  const _$LocationErrorImpl({required this.message, required this.retryCount});
-
-  @override
-  final String message;
-  @override
-  final int retryCount;
-
-  @override
-  String toString() {
-    return 'JadwalSholatPageState.locationError(message: $message, retryCount: $retryCount)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LocationErrorImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.retryCount, retryCount) ||
-                other.retryCount == retryCount));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, retryCount);
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LocationErrorImplCopyWith<_$LocationErrorImpl> get copyWith =>
-      __$$LocationErrorImplCopyWithImpl<_$LocationErrorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String city, double latitude, double longitude)
-        awaitingSchedule,
-    required TResult Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)
-        loaded,
-    required TResult Function(String message, int retryCount) locationError,
-    required TResult Function(String message) locationPermissionError,
-  }) {
-    return locationError(message, retryCount);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
-    TResult? Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)?
-        loaded,
-    TResult? Function(String message, int retryCount)? locationError,
-    TResult? Function(String message)? locationPermissionError,
-  }) {
-    return locationError?.call(message, retryCount);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
-    TResult Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)?
-        loaded,
-    TResult Function(String message, int retryCount)? locationError,
-    TResult Function(String message)? locationPermissionError,
-    required TResult orElse(),
-  }) {
-    if (locationError != null) {
-      return locationError(message, retryCount);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_AwaitingSchedule value) awaitingSchedule,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_LocationError value) locationError,
-    required TResult Function(_LocationPermissionError value)
-        locationPermissionError,
-  }) {
-    return locationError(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_AwaitingSchedule value)? awaitingSchedule,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_LocationError value)? locationError,
-    TResult? Function(_LocationPermissionError value)? locationPermissionError,
-  }) {
-    return locationError?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_AwaitingSchedule value)? awaitingSchedule,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_LocationError value)? locationError,
-    TResult Function(_LocationPermissionError value)? locationPermissionError,
-    required TResult orElse(),
-  }) {
-    if (locationError != null) {
-      return locationError(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _LocationError implements JadwalSholatPageState {
-  const factory _LocationError(
-      {required final String message,
-      required final int retryCount}) = _$LocationErrorImpl;
-
-  String get message;
-  int get retryCount;
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LocationErrorImplCopyWith<_$LocationErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$LocationPermissionErrorImplCopyWith<$Res> {
-  factory _$$LocationPermissionErrorImplCopyWith(
-          _$LocationPermissionErrorImpl value,
-          $Res Function(_$LocationPermissionErrorImpl) then) =
-      __$$LocationPermissionErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String message});
-}
-
-/// @nodoc
-class __$$LocationPermissionErrorImplCopyWithImpl<$Res>
-    extends _$JadwalSholatPageStateCopyWithImpl<$Res,
-        _$LocationPermissionErrorImpl>
-    implements _$$LocationPermissionErrorImplCopyWith<$Res> {
-  __$$LocationPermissionErrorImplCopyWithImpl(
-      _$LocationPermissionErrorImpl _value,
-      $Res Function(_$LocationPermissionErrorImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-  }) {
-    return _then(_$LocationPermissionErrorImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$LocationPermissionErrorImpl implements _LocationPermissionError {
-  const _$LocationPermissionErrorImpl({required this.message});
-
-  @override
-  final String message;
-
-  @override
-  String toString() {
-    return 'JadwalSholatPageState.locationPermissionError(message: $message)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LocationPermissionErrorImpl &&
-            (identical(other.message, message) || other.message == message));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LocationPermissionErrorImplCopyWith<_$LocationPermissionErrorImpl>
-      get copyWith => __$$LocationPermissionErrorImplCopyWithImpl<
-          _$LocationPermissionErrorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String city, double latitude, double longitude)
-        awaitingSchedule,
-    required TResult Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)
-        loaded,
-    required TResult Function(String message, int retryCount) locationError,
-    required TResult Function(String message) locationPermissionError,
-  }) {
-    return locationPermissionError(message);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
-    TResult? Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)?
-        loaded,
-    TResult? Function(String message, int retryCount)? locationError,
-    TResult? Function(String message)? locationPermissionError,
-  }) {
-    return locationPermissionError?.call(message);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String city, double latitude, double longitude)?
-        awaitingSchedule,
-    TResult Function(
-            String city,
-            String timezone,
-            List<SetNotifModel> jadwalList,
-            String countdownText,
-            String sholatText,
-            String timeText,
-            JadwalSholatEntity entity)?
-        loaded,
-    TResult Function(String message, int retryCount)? locationError,
-    TResult Function(String message)? locationPermissionError,
-    required TResult orElse(),
-  }) {
-    if (locationPermissionError != null) {
-      return locationPermissionError(message);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_AwaitingSchedule value) awaitingSchedule,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_LocationError value) locationError,
-    required TResult Function(_LocationPermissionError value)
-        locationPermissionError,
-  }) {
-    return locationPermissionError(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_AwaitingSchedule value)? awaitingSchedule,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_LocationError value)? locationError,
-    TResult? Function(_LocationPermissionError value)? locationPermissionError,
-  }) {
-    return locationPermissionError?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_AwaitingSchedule value)? awaitingSchedule,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_LocationError value)? locationError,
-    TResult Function(_LocationPermissionError value)? locationPermissionError,
-    required TResult orElse(),
-  }) {
-    if (locationPermissionError != null) {
-      return locationPermissionError(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _LocationPermissionError implements JadwalSholatPageState {
-  const factory _LocationPermissionError({required final String message}) =
-      _$LocationPermissionErrorImpl;
-
-  String get message;
-
-  /// Create a copy of JadwalSholatPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LocationPermissionErrorImplCopyWith<_$LocationPermissionErrorImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
