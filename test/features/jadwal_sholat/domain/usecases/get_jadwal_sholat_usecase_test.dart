@@ -16,9 +16,11 @@ void main() {
     useCase = GetJadwalSholatUseCase(mockRepository);
   });
 
-  const tLatitude = -6.2;
-  const tLongitude = 106.8;
-  const tDate = '08-07-2026';
+  const tParams = JadwalSholatParams(
+    latitude: -6.2,
+    longitude: 106.8,
+    date: '08-07-2026',
+  );
 
   const tJadwalSholatEntity = JadwalSholatEntity(
     fajr: '04:30',
@@ -40,28 +42,24 @@ void main() {
         () async {
       when(
         () => mockRepository.getJadwalSholat(
-          latitude: tLatitude,
-          longitude: tLongitude,
-          date: tDate,
+          latitude: tParams.latitude,
+          longitude: tParams.longitude,
+          date: tParams.date,
         ),
       ).thenAnswer(
         (_) async => const Right(tJadwalSholatEntity),
       );
 
-      final result = await useCase.call(
-        latitude: tLatitude,
-        longitude: tLongitude,
-        date: tDate,
-      );
+      final result = await useCase.call(tParams);
 
       expect(result.isRight(), isTrue);
       final entity = result.match((_) => null, (d) => d);
       expect(entity, tJadwalSholatEntity);
       verify(
         () => mockRepository.getJadwalSholat(
-          latitude: tLatitude,
-          longitude: tLongitude,
-          date: tDate,
+          latitude: tParams.latitude,
+          longitude: tParams.longitude,
+          date: tParams.date,
         ),
       ).called(1);
     });
@@ -71,19 +69,15 @@ void main() {
         () async {
       when(
         () => mockRepository.getJadwalSholat(
-          latitude: tLatitude,
-          longitude: tLongitude,
-          date: tDate,
+          latitude: tParams.latitude,
+          longitude: tParams.longitude,
+          date: tParams.date,
         ),
       ).thenAnswer(
         (_) async => const Left(ConnectionFailure('No internet connection')),
       );
 
-      final result = await useCase.call(
-        latitude: tLatitude,
-        longitude: tLongitude,
-        date: tDate,
-      );
+      final result = await useCase.call(tParams);
 
       expect(result.isLeft(), isTrue);
       final failure = result.match((f) => f, (_) => null);
@@ -91,39 +85,37 @@ void main() {
       expect(failure!.message, 'No internet connection');
       verify(
         () => mockRepository.getJadwalSholat(
-          latitude: tLatitude,
-          longitude: tLongitude,
-          date: tDate,
+          latitude: tParams.latitude,
+          longitude: tParams.longitude,
+          date: tParams.date,
         ),
       ).called(1);
     });
 
     test('passes all parameters correctly to repository', () async {
-      const customLat = 35.6762;
-      const customLng = 139.6503;
-      const customDate = '25-12-2025';
+      const customParams = JadwalSholatParams(
+        latitude: 35.6762,
+        longitude: 139.6503,
+        date: '25-12-2025',
+      );
 
       when(
         () => mockRepository.getJadwalSholat(
-          latitude: customLat,
-          longitude: customLng,
-          date: customDate,
+          latitude: customParams.latitude,
+          longitude: customParams.longitude,
+          date: customParams.date,
         ),
       ).thenAnswer(
         (_) async => const Right(tJadwalSholatEntity),
       );
 
-      await useCase.call(
-        latitude: customLat,
-        longitude: customLng,
-        date: customDate,
-      );
+      await useCase.call(customParams);
 
       verify(
         () => mockRepository.getJadwalSholat(
-          latitude: customLat,
-          longitude: customLng,
-          date: customDate,
+          latitude: customParams.latitude,
+          longitude: customParams.longitude,
+          date: customParams.date,
         ),
       ).called(1);
       verifyNoMoreInteractions(mockRepository);

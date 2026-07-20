@@ -219,6 +219,7 @@ void main() {
     registerFallbackValue(_FakeBuildContext());
     registerFallbackValue(_FakeStackTrace());
     registerFallbackValue(<GlobalKey>[]);
+    registerFallbackValue(0); // fallback for int params (GetDetailSurahUseCase)
   });
 
   late MockGetSurahCubit mockGetSurahCubit;
@@ -331,7 +332,7 @@ void main() {
         .thenAnswer((_) async {});
 
     // Stub GetDetailSurahUseCase — return test detail for surah 1
-    when(() => mockGetDetailSurahUseCase.call(nomor: any(named: 'nomor')))
+    when(() => mockGetDetailSurahUseCase.call(any()))
         .thenAnswer((_) async => const Right(testDetailEntity));
 
     // Stub ShowcaseService

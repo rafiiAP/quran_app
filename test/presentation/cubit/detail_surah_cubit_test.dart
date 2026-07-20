@@ -44,7 +44,7 @@ void main() {
   blocTest<DetailSurahCubit, DetailSurahState>(
     'emits [loading, success] when usecase returns Right(DetailEntity)',
     setUp: () {
-      when(() => mockUsecase.call(nomor: 36))
+      when(() => mockUsecase.call(36))
           .thenAnswer((_) async => const Right(tDetailEntity));
     },
     build: () => DetailSurahCubit(usecase: mockUsecase),
@@ -58,7 +58,7 @@ void main() {
   blocTest<DetailSurahCubit, DetailSurahState>(
     'emits [loading, error] when usecase returns Left(ServerFailure)',
     setUp: () {
-      when(() => mockUsecase.call(nomor: 36))
+      when(() => mockUsecase.call(36))
           .thenAnswer((_) async => const Left(ServerFailure('Server error')));
     },
     build: () => DetailSurahCubit(usecase: mockUsecase),
@@ -72,13 +72,13 @@ void main() {
   blocTest<DetailSurahCubit, DetailSurahState>(
     'forwards nomor argument to usecase without modification',
     setUp: () {
-      when(() => mockUsecase.call(nomor: 36))
+      when(() => mockUsecase.call(36))
           .thenAnswer((_) async => const Right(tDetailEntity));
     },
     build: () => DetailSurahCubit(usecase: mockUsecase),
     act: (cubit) => cubit.getPosts(number: 36),
     verify: (_) {
-      verify(() => mockUsecase.call(nomor: 36)).called(1);
+      verify(() => mockUsecase.call(36)).called(1);
     },
   );
 
@@ -93,7 +93,7 @@ void main() {
         final entity = model.toEntity();
         final nomor = model.nomor;
 
-        when(() => mockUsecase.call(nomor: nomor))
+        when(() => mockUsecase.call(nomor))
             .thenAnswer((_) async => Right(entity));
 
         final cubit = DetailSurahCubit(usecase: mockUsecase);
@@ -108,7 +108,7 @@ void main() {
           const DetailSurahState.loading(),
           DetailSurahState.success(entity),
         ]);
-        verify(() => mockUsecase.call(nomor: nomor)).called(1);
+        verify(() => mockUsecase.call(nomor)).called(1);
       }
     });
   });

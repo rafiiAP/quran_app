@@ -21,8 +21,13 @@ class JadwalSholatCubit extends Cubit<JadwalSholatState> {
   }) async {
     emit(const JadwalSholatState.loading());
 
-    final Either<Failure, JadwalSholatEntity> result =
-        await usecase(latitude: latitude, longitude: longitude, date: date);
+    final Either<Failure, JadwalSholatEntity> result = await usecase(
+      JadwalSholatParams(
+        latitude: latitude,
+        longitude: longitude,
+        date: date,
+      ),
+    );
 
     result.match(
       (final Failure l) => emit(JadwalSholatState.error(l.message)),

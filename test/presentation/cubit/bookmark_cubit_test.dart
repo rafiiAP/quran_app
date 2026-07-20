@@ -82,9 +82,7 @@ void main() {
       'calls deleteBookmarkUseCase then reloads — final state is loaded without deleted item',
       setUp: () {
         when(
-          () => mockDeleteBookmarkUseCase(
-            id: kBookmarkEntity.id!,
-          ),
+          () => mockDeleteBookmarkUseCase(kBookmarkEntity.id!),
         ).thenAnswer((_) async => const Right(null));
         when(() => mockGetBookmarksUseCase())
             .thenAnswer((_) async => const Right(<BookmarkEntity>[]));
@@ -97,9 +95,7 @@ void main() {
           orElse: () => fail('Expected loaded state'),
         );
         verify(
-          () => mockDeleteBookmarkUseCase(
-            id: kBookmarkEntity.id!,
-          ),
+          () => mockDeleteBookmarkUseCase(kBookmarkEntity.id!),
         ).called(1);
       },
     );
@@ -137,44 +133,47 @@ void main() {
     });
   });
 
-  // Requirements: 5.4 — navigateToDetail emits event via stream (not state)
+  // Requirements: 5.4 — navigateToDetail emits navigateToDetail state
   group('navigateToDetail', () {
-    test(
-        'emits BookmarkNavigationEvent on navigationEvents stream and does not change state',
-        () async {
-      final cubit = buildCubit();
+    blocTest<BookmarkCubit, BookmarkState>(
+      'emits BookmarkState.navigateToDetail with correct nomorSurah and nomorAyat',
+      build: buildCubit,
+      act: (cubit) => cubit.navigateToDetail(kBookmarkEntity),
+      expect: () => [
+        BookmarkState.navigateToDetail(
+          nomorSurah: kBookmarkEntity.nomorSurah,
+          nomorAyat: kBookmarkEntity.nomorAyat,
+        ),
+      ],
+    );
 
-      final events = <BookmarkNavigationEvent>[];
-      final sub = cubit.navigationEvents.listen(events.add);
-
-      cubit.navigateToDetail(kBookmarkEntity);
-      await Future<void>.delayed(Duration.zero);
-
-      expect(events.length, 1);
-      expect(events.first.nomorSurah, kBookmarkEntity.nomorSurah);
-      expect(events.first.nomorAyat, kBookmarkEntity.nomorAyat);
-
-      // State should remain initial (not overwritten)
-      expect(cubit.state, const BookmarkState.initial());
-
-      await sub.cancel();
-      await cubit.close();
-    });
-
-    test('multiple navigateToDetail calls emit multiple events', () async {
-      final cubit = buildCubit();
-
-      final events = <BookmarkNavigationEvent>[];
-      final sub = cubit.navigationEvents.listen(events.add);
-
-      cubit.navigateToDetail(kBookmarkEntity);
-      cubit.navigateToDetail(kBookmarkEntity);
-      await Future<void>.delayed(Duration.zero);
-
-      expect(events.length, 2);
-
-      await sub.cancel();
-      await cubit.close();
-    });
+    blocTest<BookmarkCubit, BookmarkState>(
+      'multiple navigateToDetail calls emit multiple states',
+      build: buildCubit,
+      act: (cubit) {
+        cubit.navigateToDetail(kBookmarkEntity);
+        cubit.navigateToDetail(
+          const BookmarkEntity(
+            id: 2,
+            nomorSurah: 2,
+            namaLatin: 'Al-Baqarah',
+            nomorAyat: 255,
+            teksArab: 'اللّٰهُ لَآ اِلٰهَ اِلَّا هُوَۚ',
+            teksIndonesia: 'Allah, tidak ada tuhan selain Dia',
+            teksLatin: 'Allāhu lā ilāha illā huw',
+          ),
+        );
+      },
+      expect: () => [
+        BookmarkState.navigateToDetail(
+          nomorSurah: kBookmarkEntity.nomorSurah,
+          nomorAyat: kBookmarkEntity.nomorAyat,
+        ),
+        const BookmarkState.navigateToDetail(
+          nomorSurah: 2,
+          nomorAyat: 255,
+        ),
+      ],
+    );
   });
 }

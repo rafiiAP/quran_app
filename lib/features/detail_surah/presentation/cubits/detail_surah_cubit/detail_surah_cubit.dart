@@ -16,7 +16,7 @@ class DetailSurahCubit extends Cubit<DetailSurahState> {
   Future<void> getPosts({final int number = 0}) async {
     emit(const DetailSurahState.loading());
 
-    final Either<Failure, DetailEntity> result = await usecase(nomor: number);
+    final Either<Failure, DetailEntity> result = await usecase(number);
     result.match(
       (final Failure l) => emit(DetailSurahState.error(l.message)),
       (final DetailEntity r) => emit(DetailSurahState.success(r)),

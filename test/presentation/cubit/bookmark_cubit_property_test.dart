@@ -71,7 +71,7 @@ void main() {
         });
         when(
           () => mockDeleteBookmarkUseCase(
-            id: any(named: 'id'),
+            any(),
           ),
         ).thenAnswer((_) async => const Right(null));
 
@@ -102,7 +102,7 @@ void main() {
 
         verify(
           () => mockDeleteBookmarkUseCase(
-            id: targetItem.id!,
+            targetItem.id!,
           ),
         ).called(1);
 

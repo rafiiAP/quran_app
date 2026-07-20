@@ -44,7 +44,7 @@ void main() {
         (_) async => const Right(tDetailEntity),
       );
 
-      final result = await useCase.call(nomor: 1);
+      final result = await useCase.call(1);
 
       expect(result.isRight(), isTrue);
       final entity = result.match((_) => null, (d) => d);
@@ -59,7 +59,7 @@ void main() {
         (_) async => const Left(ServerFailure('Server error')),
       );
 
-      final result = await useCase.call(nomor: 5);
+      final result = await useCase.call(5);
 
       expect(result.isLeft(), isTrue);
       final failure = result.match((f) => f, (_) => null);
@@ -73,7 +73,7 @@ void main() {
         (_) async => const Right(tDetailEntity),
       );
 
-      await useCase.call(nomor: 114);
+      await useCase.call(114);
 
       verify(() => mockRepository.getDetailSurah(nomor: 114)).called(1);
       verifyNoMoreInteractions(mockRepository);

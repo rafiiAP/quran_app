@@ -11,32 +11,9 @@ import 'package:quran_app/features/bookmark/domain/usecases/get_bookmarks_usecas
 part 'bookmark_state.dart';
 part 'bookmark_cubit.freezed.dart';
 
-/// Navigation event emitted as a one-shot action.
-///
-/// Consumed via [BookmarkCubit.navigationEvents] stream, ensuring the event
-/// is never lost due to state overwrites (unlike navigation-as-state).
-class BookmarkNavigationEvent {
-  const BookmarkNavigationEvent({
-    required this.nomorSurah,
-    required this.nomorAyat,
-  });
-
-  final int nomorSurah;
-  final int nomorAyat;
-}
-
 class BookmarkCubit extends Cubit<BookmarkState> {
   final GetBookmarksUseCase _getBookmarksUseCase;
   final DeleteBookmarkUseCase _deleteBookmarkUseCase;
-
-  final StreamController<BookmarkNavigationEvent> _navigationController =
-      StreamController<BookmarkNavigationEvent>.broadcast();
-
-  /// Stream of one-shot navigation events.
-  /// Listen in the widget layer to trigger navigation without risking
-  /// state-overwrite race conditions.
-  Stream<BookmarkNavigationEvent> get navigationEvents =>
-      _navigationController.stream;
 
   BookmarkCubit({
     required GetBookmarksUseCase getBookmarksUseCase,
@@ -57,9 +34,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   }
 
   Future<void> deleteBookmark(final BookmarkEntity bookmark) async {
-    final result = await _deleteBookmarkUseCase(
-      id: bookmark.id!,
-    );
+    final result = await _deleteBookmarkUseCase(bookmark.id!);
     result.match(
       (final Failure l) => emit(BookmarkState.error(l.message)),
       (_) => loadBookmarks(),
@@ -72,20 +47,14 @@ class BookmarkCubit extends Cubit<BookmarkState> {
         '${bookmark.teksIndonesia}';
   }
 
-  /// Emits a navigation event via the [navigationEvents] stream.
-  /// Does NOT modify cubit state — avoids race conditions.
+  /// Emits a [BookmarkState.navigateToDetail] state, then immediately
+  /// re-emits the previous loaded state so BlocListener fires once.
   void navigateToDetail(final BookmarkEntity bookmark) {
-    _navigationController.add(
-      BookmarkNavigationEvent(
+    emit(
+      BookmarkState.navigateToDetail(
         nomorSurah: bookmark.nomorSurah,
         nomorAyat: bookmark.nomorAyat,
       ),
     );
-  }
-
-  @override
-  Future<void> close() {
-    _navigationController.close();
-    return super.close();
   }
 }
