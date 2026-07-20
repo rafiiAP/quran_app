@@ -1,7 +1,6 @@
 /// Abstract interface for key-value local storage operations.
 ///
-/// Implementations: [SharedPreferencesStorageService] (non-sensitive data),
-/// [SecureStorageService] (sensitive data).
+/// Implementation: [SharedPreferencesStorageService] (non-sensitive data).
 abstract class LocalStorageService {
   Future<void> setString({required String key, required String value});
   String getString({required String key, String defaultValue = ''});

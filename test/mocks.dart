@@ -3,6 +3,7 @@ import 'package:quran_app/core/cache/cache_service.dart';
 import 'package:quran_app/core/network/http_client.dart';
 import 'package:quran_app/core/services/connectivity_service.dart';
 import 'package:quran_app/core/services/crash_reporter.dart';
+import 'package:quran_app/features/jadwal_sholat/data/datasources/jadwal_sholat_local_datasource.dart';
 import 'package:quran_app/core/services/datetime_service.dart';
 import 'package:quran_app/core/services/location_service.dart';
 import 'package:quran_app/core/services/logger_service.dart';
@@ -91,3 +92,7 @@ class MockDetailSurahLocalDatasource extends Mock
 
 // Connectivity
 class MockConnectivityService extends Mock implements ConnectivityService {}
+
+// Jadwal Sholat Local
+class MockJadwalSholatLocalDatasource extends Mock
+    implements JadwalSholatLocalDatasource {}

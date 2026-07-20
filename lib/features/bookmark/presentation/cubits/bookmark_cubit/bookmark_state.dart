@@ -8,8 +8,4 @@ class BookmarkState with _$BookmarkState {
     required List<BookmarkEntity> bookmarks,
   }) = _Loaded;
   const factory BookmarkState.error(String message) = _Error;
-  const factory BookmarkState.navigateToDetail({
-    required int nomorSurah,
-    required int nomorAyat,
-  }) = _NavigateToDetail;
 }

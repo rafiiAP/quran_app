@@ -10,18 +10,33 @@ import '../../../../mocks.dart';
 
 void main() {
   late MockJadwalSholatDatasource mockDatasource;
+  late MockJadwalSholatLocalDatasource mockLocalDatasource;
   late MockConnectivityService mockConnectivityService;
   late JadwalSholatRepositoryImpl repository;
 
+  setUpAll(() {
+    registerFallbackValue(kJadwalSholatModel);
+  });
+
   setUp(() {
     mockDatasource = MockJadwalSholatDatasource();
+    mockLocalDatasource = MockJadwalSholatLocalDatasource();
     mockConnectivityService = MockConnectivityService();
     repository = JadwalSholatRepositoryImpl(
       datasource: mockDatasource,
+      localDatasource: mockLocalDatasource,
       connectivityService: mockConnectivityService,
     );
 
-    // Default: online
+    // Default: no cache, online
+    when(() => mockLocalDatasource.getCachedJadwal(date: any(named: 'date')))
+        .thenReturn(null);
+    when(
+      () => mockLocalDatasource.cacheJadwal(
+        date: any(named: 'date'),
+        jadwal: any(named: 'jadwal'),
+      ),
+    ).thenAnswer((_) async {});
     when(() => mockConnectivityService.hasConnection())
         .thenAnswer((_) async => true);
   });

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quran_app/core/error/exceptions.dart';
 import 'package:quran_app/core/error/failure.dart';
+import 'package:quran_app/features/jadwal_sholat/data/models/jadwal_sholat_model.dart';
 import 'package:quran_app/features/jadwal_sholat/data/repositories/jadwal_sholat_repository_impl.dart';
 import 'package:quran_app/features/surah/data/repositories/surah_repository_impl.dart';
 
@@ -18,6 +19,24 @@ import '../../mocks.dart';
 void main() {
   late MockSurahDatasource mockSurahDatasource;
   late MockJadwalSholatDatasource mockJadwalSholatDatasource;
+
+  setUpAll(() {
+    registerFallbackValue(
+      const JadwalSholatModel(
+        fajr: '',
+        sunrise: '',
+        dhuhr: '',
+        asr: '',
+        sunset: '',
+        maghrib: '',
+        isha: '',
+        imsak: '',
+        midnight: '',
+        firstthird: '',
+        lastthird: '',
+      ),
+    );
+  });
   late SurahRepositoryImpl surahRepository;
   late JadwalSholatRepositoryImpl jadwalSholatRepository;
 
@@ -38,8 +57,23 @@ void main() {
       localDatasource: mockLocalDatasource,
       connectivityService: mockConnectivityService,
     );
+
+    final mockJadwalSholatLocalDatasource = MockJadwalSholatLocalDatasource();
+    when(
+      () => mockJadwalSholatLocalDatasource.getCachedJadwal(
+        date: any(named: 'date'),
+      ),
+    ).thenReturn(null);
+    when(
+      () => mockJadwalSholatLocalDatasource.cacheJadwal(
+        date: any(named: 'date'),
+        jadwal: any(named: 'jadwal'),
+      ),
+    ).thenAnswer((_) async {});
+
     jadwalSholatRepository = JadwalSholatRepositoryImpl(
       datasource: mockJadwalSholatDatasource,
+      localDatasource: mockJadwalSholatLocalDatasource,
       connectivityService: mockConnectivityService,
     );
   });

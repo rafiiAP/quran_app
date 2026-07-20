@@ -137,33 +137,44 @@ void main() {
     });
   });
 
-  // Requirements: 5.4 — navigateToDetail emits navigation state then reloads
+  // Requirements: 5.4 — navigateToDetail emits event via stream (not state)
   group('navigateToDetail', () {
-    blocTest<BookmarkCubit, BookmarkState>(
-      'emits [navigateToDetail, loading, loaded] when navigateToDetail is called',
-      setUp: () {
-        when(() => mockGetBookmarksUseCase())
-            .thenAnswer((_) async => const Right([kBookmarkEntity]));
-      },
-      build: buildCubit,
-      act: (cubit) => cubit.navigateToDetail(kBookmarkEntity),
-      expect: () => [
-        BookmarkState.navigateToDetail(
-          nomorSurah: kBookmarkEntity.nomorSurah,
-          nomorAyat: kBookmarkEntity.nomorAyat,
-        ),
-        const BookmarkState.loading(),
-        isA<BookmarkState>(),
-      ],
-      verify: (cubit) {
-        cubit.state.maybeWhen(
-          loaded: (bookmarks) {
-            expect(bookmarks.length, 1);
-            expect(bookmarks.first, kBookmarkEntity);
-          },
-          orElse: () => fail('Expected loaded state'),
-        );
-      },
-    );
+    test(
+        'emits BookmarkNavigationEvent on navigationEvents stream and does not change state',
+        () async {
+      final cubit = buildCubit();
+
+      final events = <BookmarkNavigationEvent>[];
+      final sub = cubit.navigationEvents.listen(events.add);
+
+      cubit.navigateToDetail(kBookmarkEntity);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(events.length, 1);
+      expect(events.first.nomorSurah, kBookmarkEntity.nomorSurah);
+      expect(events.first.nomorAyat, kBookmarkEntity.nomorAyat);
+
+      // State should remain initial (not overwritten)
+      expect(cubit.state, const BookmarkState.initial());
+
+      await sub.cancel();
+      await cubit.close();
+    });
+
+    test('multiple navigateToDetail calls emit multiple events', () async {
+      final cubit = buildCubit();
+
+      final events = <BookmarkNavigationEvent>[];
+      final sub = cubit.navigationEvents.listen(events.add);
+
+      cubit.navigateToDetail(kBookmarkEntity);
+      cubit.navigateToDetail(kBookmarkEntity);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(events.length, 2);
+
+      await sub.cancel();
+      await cubit.close();
+    });
   });
 }

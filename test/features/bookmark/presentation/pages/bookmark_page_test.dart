@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +14,19 @@ import 'package:quran_app/features/bookmark/presentation/cubits/bookmark_cubit/b
 import 'package:quran_app/features/bookmark/presentation/pages/bookmark_page.dart';
 
 class MockBookmarkCubit extends MockCubit<BookmarkState>
-    implements BookmarkCubit {}
+    implements BookmarkCubit {
+  final StreamController<BookmarkNavigationEvent> _navController =
+      StreamController<BookmarkNavigationEvent>.broadcast();
+
+  @override
+  Stream<BookmarkNavigationEvent> get navigationEvents => _navController.stream;
+
+  @override
+  Future<void> close() {
+    _navController.close();
+    return super.close();
+  }
+}
 
 class _FakeBookmarkEntity extends Fake implements BookmarkEntity {}
 

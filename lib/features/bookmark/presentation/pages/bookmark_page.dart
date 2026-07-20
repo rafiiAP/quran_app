@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,10 +42,34 @@ class _BookmarkPageBody extends StatefulWidget {
 }
 
 class _BookmarkPageBodyState extends State<_BookmarkPageBody> {
+  StreamSubscription<BookmarkNavigationEvent>? _navSubscription;
+
   @override
   void initState() {
     super.initState();
     context.read<BookmarkCubit>().loadBookmarks();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _navSubscription ??=
+        context.read<BookmarkCubit>().navigationEvents.listen((event) {
+      if (!mounted) return;
+      context
+          .push('/detail-surah/${event.nomorSurah}?ayat=${event.nomorAyat}')
+          .then((_) {
+        if (mounted) {
+          context.read<BookmarkCubit>().loadBookmarks();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _navSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -56,13 +82,6 @@ class _BookmarkPageBodyState extends State<_BookmarkPageBody> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(message)),
             );
-          },
-          navigateToDetail: (nomorSurah, nomorAyat) {
-            context.push('/detail-surah/$nomorSurah?ayat=$nomorAyat').then((_) {
-              if (context.mounted) {
-                context.read<BookmarkCubit>().loadBookmarks();
-              }
-            });
           },
         );
       },
